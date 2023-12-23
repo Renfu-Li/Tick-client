@@ -2,12 +2,10 @@ import { Grid } from "@mui/material";
 
 import Lists from "../components/Lists";
 import Tasks from "../components/Tasks";
-import TaskDetails from "../components/TaskDetails";
 import SideBar from "../components/SideBar";
 import taskService from "../services/taskService";
 import { useEffect, useState } from "react";
 import listService from "../services/listService";
-import TaskForm from "../components/TaskForm";
 
 export default function Home({ token, setToken }) {
   const [allTasks, setAllTasks] = useState([]);
@@ -51,14 +49,7 @@ export default function Home({ token, setToken }) {
           token={token}
         ></Lists>
       </Grid>
-      <Grid item xs={4}>
-        <TaskForm
-          allTasks={allTasks}
-          setAllTasks={setAllTasks}
-          allLists={allLists}
-          setAllLists={setAllLists}
-          token={token}
-        ></TaskForm>
+      <Grid item xs={8}>
         <Tasks
           listToShow={listToShow}
           token={token}
@@ -67,9 +58,6 @@ export default function Home({ token, setToken }) {
           allLists={allLists}
           setAllLists={setAllLists}
         ></Tasks>
-      </Grid>
-      <Grid item xs={4}>
-        <TaskDetails></TaskDetails>
       </Grid>
     </Grid>
   );

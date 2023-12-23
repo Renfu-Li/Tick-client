@@ -1,4 +1,11 @@
-import { TextField, IconButton, Popover, Menu, MenuItem } from "@mui/material";
+import {
+  TextField,
+  IconButton,
+  Popover,
+  Menu,
+  MenuItem,
+  Box,
+} from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -67,7 +74,7 @@ export default function NewTaskForm({
   // console.log("allLists in NewTaskForm: ", allLists);
 
   return (
-    <>
+    <Box>
       <TextField
         variant="outlined"
         size="small"
@@ -135,6 +142,6 @@ export default function NewTaskForm({
       <IconButton onClick={handleCreateTask}>
         <AddCircleIcon></AddCircleIcon>
       </IconButton>
-    </>
+    </Box>
   );
 }

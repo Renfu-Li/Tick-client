@@ -1,22 +1,22 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import {
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Checkbox,
   Collapse,
-  // FormControlLabel,
-  // IconButton,
-  Button,
+  List,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+  Grid,
 } from "@mui/material";
 // import { useState, useEffect } from "react";
 import taskService from "../services/taskService";
+import TaskDetails from "./TaskDetails";
+import TaskForm from "./TaskForm";
 import { useState } from "react";
+// import AddCircle from "@mui/icons-material/AddCircle";
 
-export default function Tasks({
+function Tasks({
   token,
   listToShow,
   allTasks,
@@ -51,6 +51,10 @@ export default function Tasks({
   const incompletedTasks = tasksToShow.filter((task) => !task.completed);
   const completedTasks = tasksToShow.filter((task) => task.completed);
 
+  const [selectedTaskId, setSelectedTaskId] = useState(
+    incompletedTasks[0]?.id || null
+  );
+
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };
     await taskService.updateTask(task.id, newTask, token);
@@ -74,77 +78,85 @@ export default function Tasks({
   };
 
   return (
-    <>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell>Task</TableCell>
-            <TableCell>Due Date</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {incompletedTasks &&
-            incompletedTasks.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell>
-                  <Checkbox
-                    checked={task.completed}
-                    onChange={() => handleCheck(task)}
-                    inputProps={{
-                      "aria-label": "Checkbox for task completion",
-                    }}
-                    size="small"
-                  ></Checkbox>
-                </TableCell>
-                <TableCell>{task.taskName}</TableCell>
+    <Grid container justifyContent="space-evenly">
+      <Grid item xs={6}>
+        <TaskForm
+          allTasks={allTasks}
+          setAllTasks={setAllTasks}
+          allLists={allLists}
+          setAllLists={setAllLists}
+          token={token}
+        ></TaskForm>
 
-                <TableCell>
-                  {new Date(task.dueDate).toLocaleDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
+        <List dense>
+          {/* <ListItemButton>
+          <ListItemText primary="Tasks"></ListItemText>
+        </ListItemButton> */}
 
-      <Button
-        onClick={() => setShowCompleted(!showCompleted)}
-        endIcon={showCompleted ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      >
-        Completed
-      </Button>
-      <Collapse in={showCompleted}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Status</TableCell>
-              <TableCell>Task</TableCell>
-              <TableCell>Due Date</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+          {incompletedTasks.map((task) => (
+            <ListItemButton
+              key={task.id}
+              selected={selectedTaskId === task.id}
+              onClick={() => setSelectedTaskId(task.id)}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  checked={task.completed}
+                  onChange={() => handleCheck(task)}
+                  inputProps={{
+                    "aria-label": "Checkbox for task completion",
+                  }}
+                ></Checkbox>
+              </ListItemIcon>
+              <ListItemText
+                primary={task.taskName}
+                secondary={`due on ${new Date(
+                  task.dueDate
+                ).toLocaleDateString()}`}
+              ></ListItemText>
+            </ListItemButton>
+          ))}
+
+          <ListItemButton onClick={() => setShowCompleted(!showCompleted)}>
+            <ListItemIcon>
+              {showCompleted ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </ListItemIcon>
+            <ListItemText primary="Completed"></ListItemText>
+          </ListItemButton>
+
+          <Collapse in={showCompleted}>
             {completedTasks.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell>
+              <ListItemButton
+                key={task.id}
+                selected={selectedTaskId === task.id}
+                onClick={() => setSelectedTaskId(task.id)}
+              >
+                <ListItemIcon>
                   <Checkbox
                     checked={task.completed}
                     onChange={() => handleCheck(task)}
                     inputProps={{
                       "aria-label": "Checkbox for task completion",
                     }}
-                    size="small"
                   ></Checkbox>
-                </TableCell>
-                <TableCell>{task.taskName}</TableCell>
-
-                <TableCell>
-                  {new Date(task.dueDate).toLocaleDateString()}
-                </TableCell>
-              </TableRow>
+                </ListItemIcon>
+                <ListItemText
+                  primary={task.taskName}
+                  secondary={`due on ${new Date(
+                    task.dueDate
+                  ).toLocaleDateString()}`}
+                ></ListItemText>
+              </ListItemButton>
             ))}
-          </TableBody>
-        </Table>
-      </Collapse>
-    </>
+          </Collapse>
+        </List>
+      </Grid>
+
+      <Grid item xs={6}>
+        <TaskDetails></TaskDetails>
+      </Grid>
+    </Grid>
   );
 }
+
+export default Tasks;
