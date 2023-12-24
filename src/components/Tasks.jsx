@@ -51,9 +51,7 @@ function Tasks({
   const incompletedTasks = tasksToShow.filter((task) => !task.completed);
   const completedTasks = tasksToShow.filter((task) => task.completed);
 
-  const [selectedTaskId, setSelectedTaskId] = useState(
-    incompletedTasks[0]?.id || null
-  );
+  const [selectedTask, setSelectedTask] = useState(incompletedTasks[0] || null);
 
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };
@@ -77,6 +75,8 @@ function Tasks({
     setAllLists(newAllLists);
   };
 
+  // console.log(selectedTask);
+
   return (
     <Grid container justifyContent="space-evenly">
       <Grid item xs={6}>
@@ -96,8 +96,8 @@ function Tasks({
           {incompletedTasks.map((task) => (
             <ListItemButton
               key={task.id}
-              selected={selectedTaskId === task.id}
-              onClick={() => setSelectedTaskId(task.id)}
+              selected={selectedTask?.id === task.id}
+              onClick={() => setSelectedTask(task)}
             >
               <ListItemIcon>
                 <Checkbox
@@ -128,8 +128,8 @@ function Tasks({
             {completedTasks.map((task) => (
               <ListItemButton
                 key={task.id}
-                selected={selectedTaskId === task.id}
-                onClick={() => setSelectedTaskId(task.id)}
+                selected={selectedTask?.id === task.id}
+                onClick={() => setSelectedTask(task)}
               >
                 <ListItemIcon>
                   <Checkbox
@@ -153,7 +153,14 @@ function Tasks({
       </Grid>
 
       <Grid item xs={6}>
-        <TaskDetails></TaskDetails>
+        <TaskDetails
+          token={token}
+          selectedTask={selectedTask}
+          allTasks={allTasks}
+          setAllTasks={setAllTasks}
+          allLists={allLists}
+          setAllLists={setAllLists}
+        ></TaskDetails>
       </Grid>
     </Grid>
   );

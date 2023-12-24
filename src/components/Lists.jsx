@@ -20,7 +20,7 @@ import {
 import { useState } from "react";
 import listService from "../services/listService";
 
-export default function Lists({ allLists, setAllLists, setListToShow, token }) {
+function Lists({ allLists, setAllLists, setListToShow, token }) {
   const [selectedList, setSelectedList] = useState("today");
   const [listAddition, setListAddition] = useState(false);
   const [listName, setListName] = useState("");
@@ -36,6 +36,8 @@ export default function Lists({ allLists, setAllLists, setListToShow, token }) {
     const updatedAllLists = await listService.createList(token, listName);
     setAllLists(updatedAllLists);
   };
+
+  // console.log(allLists);
 
   return (
     <>
@@ -127,3 +129,5 @@ export default function Lists({ allLists, setAllLists, setListToShow, token }) {
     </>
   );
 }
+
+export default Lists;
