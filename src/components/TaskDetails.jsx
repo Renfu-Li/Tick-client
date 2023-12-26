@@ -29,6 +29,9 @@ function TaskDetails({
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const availableLists = allLists.filter(
+    (list) => list.listName !== selectedTask.listName
+  );
   // const [selectedList, setSelectedList] = useState(null);
 
   const handleChangeDue = async (date) => {
@@ -66,9 +69,9 @@ function TaskDetails({
       task.id === selectedTask.id ? updatedTask : task
     );
 
-    console.log("selectedTask.id", selectedTask.id);
-    console.log("allTasks", allTasks);
-    console.log("updatedTask", updatedTask);
+    // console.log("selectedTask.id", selectedTask.id);
+    // console.log("allTasks", allTasks);
+    // console.log("updatedTask", updatedTask);
     setAllTasks(updatedAllTasks);
   };
 
@@ -116,7 +119,7 @@ function TaskDetails({
           transformOrigin={{ vertical: "top", horizontal: "left" }}
           onClose={() => setMenuAnchorEl(null)}
         >
-          {allLists.map((list) => (
+          {availableLists.map((list) => (
             <MenuItem key={list.id} onClick={() => handleChangeList(list)}>
               {list.listName}
             </MenuItem>
