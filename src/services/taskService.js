@@ -15,9 +15,8 @@ const getAllTasks = async (token) => {
   return response.data;
 };
 
-const createTask = async (taskInfo, token) => {
-  // console.log("task and token from task service", task, token);
-  const response = await axios.post(baseURL, taskInfo, generateConfig(token));
+const createTask = async (newTask, token) => {
+  const response = await axios.post(baseURL, newTask, generateConfig(token));
   return response.data;
 };
 

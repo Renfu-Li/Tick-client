@@ -46,7 +46,7 @@ function Tasks({
       ? next7DaysTasks
       : listToShow === "all"
       ? allTasks
-      : allLists.find((list) => list.listName === listToShow).tasks;
+      : allTasks.filter((task) => task.listName === listToShow);
 
   const incompletedTasks = tasksToShow.filter((task) => !task.completed);
   const completedTasks = tasksToShow.filter((task) => task.completed);
@@ -60,19 +60,6 @@ function Tasks({
     // update allTasks state
     const newAllTasks = allTasks.map((t) => (t.id === task.id ? newTask : t));
     setAllTasks(newAllTasks);
-
-    // update allLists state
-    const listToUpdate = allLists.find(
-      (list) => list.listName === task.listName
-    );
-    const newListTasks = listToUpdate.tasks.map((t) =>
-      t.id === task.id ? newTask : t
-    );
-    const updatedList = { ...listToUpdate, tasks: newListTasks };
-    const newAllLists = allLists.map((list) =>
-      list.listName === task.listName ? updatedList : list
-    );
-    setAllLists(newAllLists);
   };
 
   // console.log(selectedTask);

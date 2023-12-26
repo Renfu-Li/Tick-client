@@ -28,13 +28,21 @@ export default function Home({ token, setToken }) {
       listService
         .getAllList(token)
         .then((lists) => {
-          setAllLists(lists);
+          const listInfo = lists.map((list) => {
+            return {
+              listName: list.listName,
+              id: list.id,
+            };
+          });
+          setAllLists(listInfo);
         })
         .catch((error) => {
           console.log("error from listService in Home: ", error.message);
         });
     }
   }, [token]);
+
+  console.log(allLists);
 
   return (
     <Grid container>

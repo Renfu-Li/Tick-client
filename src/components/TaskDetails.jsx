@@ -17,6 +17,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
+import listService from "../services/listService";
 
 function TaskDetails({
   token,
@@ -43,74 +44,35 @@ function TaskDetails({
       token
     );
 
+    // update allTasks state
     const updatedAllTasks = allTasks.map((task) =>
       task.id === selectedTask.id ? updatedTask : task
     );
     setAllTasks(updatedAllTasks);
-
-    const listToUpdate = allLists.find(
-      (list) => list.listName === selectedTask.listName
-    );
-    const newListTasks = listToUpdate.tasks.map((task) =>
-      task.id === selectedTask.id ? newTask : task
-    );
-    const updatedList = { ...listToUpdate, tasks: newListTasks };
-    const updatedAllLists = allLists.map((list) =>
-      list._id === listToUpdate._id ? updatedList : list
-    );
-    setAllLists(updatedAllLists);
   };
 
   const handleChangeList = async (selectedList) => {
     setMenuAnchorEl(null);
 
-    // update task in Task
-    const newTask = { ...selectedTask, listName: selectedList.listName };
-    const updatedTask = await taskService.updateTask(
-      selectedTask.id,
-      newTask,
-      token
+    // replace the task in Task collection and update the task in List collection
+    const updatedTask = await listService.moveTask(
+      token,
+      selectedTask,
+      selectedList.listName
     );
 
-    // update task in User
-
-    // update allTasks
+    // update allTasks state
     const updatedAllTasks = allTasks.map((task) =>
       task.id === selectedTask.id ? updatedTask : task
     );
+
+    console.log("selectedTask.id", selectedTask.id);
+    console.log("allTasks", allTasks);
+    console.log("updatedTask", updatedTask);
     setAllTasks(updatedAllTasks);
-
-    // update allLists
-    const listToDeleteTask = allLists.find(
-      (list) => list.listName === selectedTask.listName
-    );
-    const tasksAfterDeletion = listToDeleteTask.tasks.filter(
-      (task) => task.id !== selectedTask.id
-    );
-    const updatedListAfterDeletion = {
-      ...listToDeleteTask,
-      tasks: tasksAfterDeletion,
-    };
-    const allListsAfterDeletion = allLists.map((list) =>
-      list.listName === selectedTask.listName ? updatedListAfterDeletion : list
-    );
-    setAllLists(allListsAfterDeletion);
-
-    const listToAddTask = allLists.find(
-      (list) => list.listName === selectedList.listName
-    );
-    const tasksAfterAddition = listToAddTask.tasks.concat(updatedTask);
-    const updatedListAfterAddition = {
-      ...listToAddTask,
-      tasks: tasksAfterAddition,
-    };
-    const allListsAfterAddition = allLists.map((list) =>
-      list.listName === selectedList.listName ? updatedListAfterAddition : list
-    );
-    setAllLists(allListsAfterAddition);
   };
 
-  console.log(allLists);
+  // console.log(allLists);
 
   return (
     <Box>
@@ -155,7 +117,7 @@ function TaskDetails({
           onClose={() => setMenuAnchorEl(null)}
         >
           {allLists.map((list) => (
-            <MenuItem key={list._id} onClick={() => handleChangeList(list)}>
+            <MenuItem key={list.id} onClick={() => handleChangeList(list)}>
               {list.listName}
             </MenuItem>
           ))}

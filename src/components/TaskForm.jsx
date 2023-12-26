@@ -37,17 +37,16 @@ export default function NewTaskForm({
 
   // create new task
   const handleCreateTask = async () => {
-    const taskInfo = {
+    const newTask = {
       taskName,
       dueDate,
       listName: selectedList.listName,
-      listId: selectedList._id,
       completed: false,
       taskNote: "",
     };
 
     try {
-      const createdTask = await taskService.createTask(taskInfo, token);
+      const createdTask = await taskService.createTask(newTask, token);
 
       // update allTasks state
       const updatedAllTasks = allTasks.concat(createdTask);
@@ -132,7 +131,7 @@ export default function NewTaskForm({
           }}
         >
           {allLists.map((list) => (
-            <MenuItem key={list._id} onClick={() => handleSelectList(list)}>
+            <MenuItem key={list.id} onClick={() => handleSelectList(list)}>
               {list.listName}
             </MenuItem>
           ))}

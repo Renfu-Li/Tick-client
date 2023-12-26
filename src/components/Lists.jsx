@@ -32,9 +32,10 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
 
   const handleAddList = async () => {
     setListAddition(false);
-    setListName("");
     const updatedAllLists = await listService.createList(token, listName);
     setAllLists(updatedAllLists);
+
+    setListName("");
   };
 
   // console.log(allLists);
@@ -109,7 +110,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         </ListItem>
 
         {allLists.map((list) => (
-          <ListItem key={list._id}>
+          <ListItem key={list.id}>
             <ListItemButton
               selected={selectedList === list.listName}
               onClick={() => handleSelect(list.listName)}
