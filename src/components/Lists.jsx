@@ -80,7 +80,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         </ListItem>
       </List>
 
-      <Divider></Divider>
+      <Divider variant="middle"></Divider>
 
       <List dense>
         <ListItem>
@@ -126,7 +126,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         ))}
       </List>
 
-      <Divider></Divider>
+      <Divider variant="middle"></Divider>
     </>
   );
 }

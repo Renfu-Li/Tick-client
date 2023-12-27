@@ -13,7 +13,7 @@ import {
 import taskService from "../services/taskService";
 import TaskDetails from "./TaskDetails";
 import TaskForm from "./TaskForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import AddCircle from "@mui/icons-material/AddCircle";
 
 function Tasks({
@@ -50,8 +50,9 @@ function Tasks({
 
   const incompletedTasks = tasksToShow.filter((task) => !task.completed);
   const completedTasks = tasksToShow.filter((task) => task.completed);
+  // console.log(incompletedTasks);
 
-  const [selectedTask, setSelectedTask] = useState(incompletedTasks[0] || null);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };
@@ -62,10 +63,9 @@ function Tasks({
     setAllTasks(newAllTasks);
   };
 
-  // console.log(selectedTask);
-
+  console.log(selectedTask);
   return (
-    <Grid container justifyContent="space-evenly">
+    <Grid container justifyContent="space-evenly" spacing={2}>
       <Grid item xs={6}>
         <TaskForm
           allTasks={allTasks}
@@ -143,6 +143,7 @@ function Tasks({
         <TaskDetails
           token={token}
           selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
           allTasks={allTasks}
           setAllTasks={setAllTasks}
           allLists={allLists}

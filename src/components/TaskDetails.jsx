@@ -1,5 +1,7 @@
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CalendarMonth from "@mui/icons-material/CalendarMonth";
+import AdsClickIcon from "@mui/icons-material/AdsClick";
+import CheckIcon from "@mui/icons-material/Check";
 import {
   Box,
   Button,
@@ -10,6 +12,7 @@ import {
   Popover,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
@@ -22,17 +25,18 @@ import listService from "../services/listService";
 function TaskDetails({
   token,
   selectedTask,
+  setSelectedTask,
   allTasks,
   setAllTasks,
   allLists,
-  setAllLists,
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-  const availableLists = allLists.filter(
-    (list) => list.listName !== selectedTask.listName
-  );
-  // const [selectedList, setSelectedList] = useState(null);
+  const [note, setNote] = useState("");
+
+  const availableLists = selectedTask
+    ? allLists.filter((list) => list.listName !== selectedTask.listName)
+    : [];
 
   const handleChangeDue = async (date) => {
     setCalendarAnchorEl(null);
@@ -69,17 +73,34 @@ function TaskDetails({
       task.id === selectedTask.id ? updatedTask : task
     );
 
-    // console.log("selectedTask.id", selectedTask.id);
-    // console.log("allTasks", allTasks);
-    // console.log("updatedTask", updatedTask);
+    setAllTasks(updatedAllTasks);
+  };
+
+  const handleEditNote = async () => {
+    const newTask = {
+      ...selectedTask,
+      taskNote: note,
+    };
+
+    const updatedTask = await taskService.updateTask(
+      selectedTask.id,
+      newTask,
+      token
+    );
+
+    // update allTasks state
+    const updatedAllTasks = allTasks.map((task) =>
+      task.id === selectedTask.id ? updatedTask : task
+    );
     setAllTasks(updatedAllTasks);
   };
 
   // console.log(allLists);
 
-  return (
-    <Box>
-      <Stack direction="row">
+  return selectedTask ? (
+    <Box sx={{ textAlign: "center" }}>
+      {/* <Typography>{selectedTask.taskName}</Typography> */}
+      <Stack direction="row" justifyContent="space-between">
         <Button
           onClick={(e) => {
             setCalendarAnchorEl(e.currentTarget);
@@ -126,7 +147,33 @@ function TaskDetails({
           ))}
         </Menu>
       </Stack>
+
+      <TextField
+        id="outlined-multiline-flexible"
+        label="Task note"
+        multiline
+        value={selectedTask.taskNote}
+        onChange={(e) =>
+          setSelectedTask({ ...selectedTask, taskNote: e.target.value })
+        }
+        rows={10}
+        fullWidth
+        sx={{ mt: "1em" }}
+      ></TextField>
+      <Button
+        variant="contained"
+        endIcon={<CheckIcon />}
+        onClick={handleEditNote}
+        sx={{ mt: "1em" }}
+      >
+        Change Note
+      </Button>
     </Box>
+  ) : (
+    <Stack justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
+      <AdsClickIcon fontSize="large"></AdsClickIcon>
+      <Typography>Click task title to view the detail or edit</Typography>
+    </Stack>
   );
 }
 

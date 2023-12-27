@@ -42,7 +42,7 @@ export default function Home({ token, setToken }) {
     }
   }, [token]);
 
-  console.log(allLists);
+  // console.log(allLists);
 
   return (
     <Grid container>
