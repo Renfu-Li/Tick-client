@@ -39,13 +39,15 @@ function Tasks({
         {listToShow}
       </Typography>
 
-      <TaskForm
-        allTasks={allTasks}
-        setAllTasks={setAllTasks}
-        allLists={allLists}
-        listToShow={listToShow}
-        token={token}
-      ></TaskForm>
+      {listToShow !== "Completed" && listToShow !== "Trash" && (
+        <TaskForm
+          allTasks={allTasks}
+          setAllTasks={setAllTasks}
+          allLists={allLists}
+          listToShow={listToShow}
+          token={token}
+        ></TaskForm>
+      )}
 
       <TaskItems
         token={token}
