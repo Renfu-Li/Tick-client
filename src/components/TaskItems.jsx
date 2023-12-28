@@ -25,7 +25,6 @@ function TaskItems({
   // find existing and deleted tasks
   const allExistingTasks = allTasks.filter((task) => !task.deleted);
   const deletedTasks = allTasks.filter((task) => task.deleted);
-
   // find and set today's tasks
   const todayTasks = allExistingTasks.filter(
     (task) => new Date(task.dueDate) <= new Date()

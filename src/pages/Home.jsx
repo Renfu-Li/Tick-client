@@ -44,6 +44,8 @@ export default function Home({ token, setToken }) {
     }
   }, [token]);
 
+  useEffect(() => setSelectedTask(null), [listToShow]);
+
   // console.log(allLists);
 
   return (
