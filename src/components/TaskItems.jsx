@@ -66,12 +66,13 @@ function TaskItems({
     setAllTasks(newAllTasks);
   };
   return (
-    <List dense sx={{ mt: "0.5em" }}>
+    <List dense sx={{ mt: "0.5em", p: 0 }}>
       {incompletedTasksInList.map((task) => (
-        <ListItem key={task.id}>
+        <ListItem key={task.id} disablePadding>
           <ListItemButton
             selected={selectedTask?.id === task.id}
             onClick={() => setSelectedTask(task)}
+            sx={{ borderRadius: 1.5 }}
           >
             <ListItemIcon>
               <Checkbox
@@ -93,22 +94,26 @@ function TaskItems({
       ))}
 
       {listToShow !== "completed" && (
-        <ListItem>
-          <ListItemButton onClick={() => setShowCompleted(!showCompleted)}>
-            <ListItemIcon>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => setShowCompleted(!showCompleted)}
+            sx={{ borderRadius: 1.5 }}
+          >
+            <ListItemIcon sx={{ position: "relative", left: "9px" }}>
               {showCompleted ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </ListItemIcon>
-            <ListItemText primary="Completed"></ListItemText>
+            <ListItemText secondary="Completed"></ListItemText>
           </ListItemButton>
         </ListItem>
       )}
 
       <Collapse in={showCompleted}>
         {completedTasksInList.map((task) => (
-          <ListItem key={task.id}>
+          <ListItem key={task.id} disablePadding>
             <ListItemButton
               selected={selectedTask?.id === task.id}
               onClick={() => setSelectedTask(task)}
+              sx={{ borderRadius: 1.5 }}
             >
               <ListItemIcon>
                 <Checkbox

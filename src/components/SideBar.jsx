@@ -1,4 +1,4 @@
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { Box, IconButton, Menu, MenuItem } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ export default function SideBar({ setToken }) {
   };
 
   return (
-    <>
+    <Box sx={{ height: "100vh" }}>
       <IconButton
         aria-label="account of current user"
         aria-controls="menu-account"
@@ -34,8 +34,8 @@ export default function SideBar({ setToken }) {
       <Menu
         id="menu-account"
         anchorEl={anchorEl}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
@@ -44,6 +44,6 @@ export default function SideBar({ setToken }) {
           Log out
         </MenuItem>
       </Menu>
-    </>
+    </Box>
   );
 }

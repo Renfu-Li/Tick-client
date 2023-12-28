@@ -1,3 +1,4 @@
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import {
   TextField,
   IconButton,
@@ -5,6 +6,9 @@ import {
   Menu,
   MenuItem,
   Box,
+  Stack,
+  Paper,
+  InputBase,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -55,79 +59,77 @@ function TaskForm({ allTasks, setAllTasks, allLists, listToShow, token }) {
   };
 
   return (
-    <Box>
-      <TextField
-        variant="outlined"
-        size="small"
-        // fullWidth
-        value={taskName}
-        onChange={(e) => setTaskName(e.target.value)}
-      ></TextField>
+    <Paper
+      component="form"
+      sx={{
+        p: "2px 4px",
+        display: "flex",
+        alignItems: "center",
+        mb: "1em",
+      }}
+    >
+      <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Add task"></InputBase>
 
-      <div style={{ display: "inline" }}>
-        <IconButton
-          onClick={(e) => {
-            setCalendarAnchorEl(e.currentTarget);
-          }}
-        >
-          <CalendarMonthIcon></CalendarMonthIcon>
-        </IconButton>
+      <IconButton
+        onClick={(e) => {
+          setCalendarAnchorEl(e.currentTarget);
+        }}
+      >
+        <CalendarMonthIcon></CalendarMonthIcon>
+      </IconButton>
 
-        <Popover
-          open={Boolean(calendarAnchorEl)}
-          anchorEl={calendarAnchorEl}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          transformOrigin={{ vertical: "top", horizontal: "left" }}
-          onClose={() => {
-            setCalendarAnchorEl(null);
-          }}
-        >
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar
-              value={dueDate}
-              onChange={(date) => {
-                setDueDate(date);
-                setCalendarAnchorEl(null);
-              }}
-            ></DateCalendar>
-          </LocalizationProvider>
-        </Popover>
-      </div>
+      <Popover
+        open={Boolean(calendarAnchorEl)}
+        anchorEl={calendarAnchorEl}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+        onClose={() => {
+          setCalendarAnchorEl(null);
+        }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DateCalendar
+            value={dueDate}
+            onChange={(date) => {
+              setDueDate(date);
+              setCalendarAnchorEl(null);
+            }}
+          ></DateCalendar>
+        </LocalizationProvider>
+      </Popover>
 
-      <div style={{ display: "inline" }}>
-        <IconButton
-          onClick={(e) => {
-            setListAnchorEl(e.currentTarget);
-          }}
-        >
-          <FormatListBulletedIcon></FormatListBulletedIcon>
-        </IconButton>
+      <IconButton
+        onClick={(e) => {
+          setListAnchorEl(e.currentTarget);
+        }}
+      >
+        <FormatListBulletedIcon></FormatListBulletedIcon>
+      </IconButton>
 
-        <Menu
-          open={Boolean(listAnchorEl)}
-          anchorEl={listAnchorEl}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          transformOrigin={{ vertical: "top", horizontal: "left" }}
-          onClose={() => {
-            setListAnchorEl(null);
-          }}
-        >
-          {allLists.map((list) => (
-            <MenuItem
-              key={list.id}
-              selected={listToShow === list.listName}
-              onClick={() => handleSelectList(list.listName)}
-            >
-              {list.listName}
-            </MenuItem>
-          ))}
-        </Menu>
-      </div>
+      <Menu
+        open={Boolean(listAnchorEl)}
+        anchorEl={listAnchorEl}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "top", horizontal: "left" }}
+        onClose={() => {
+          setListAnchorEl(null);
+        }}
+      >
+        {allLists.map((list) => (
+          <MenuItem
+            key={list.id}
+            selected={listToShow === list.listName}
+            onClick={() => handleSelectList(list.listName)}
+          >
+            {list.listName}
+          </MenuItem>
+        ))}
+      </Menu>
 
       <IconButton onClick={handleCreateTask}>
-        <AddCircleIcon></AddCircleIcon>
+        <SendRoundedIcon></SendRoundedIcon>
       </IconButton>
-    </Box>
+    </Paper>
   );
 }
 

@@ -111,7 +111,12 @@ function TaskDetails({
   };
 
   return selectedTask ? (
-    <Box sx={{ textAlign: "center" }}>
+    <Box
+      paddingLeft="16px"
+      paddingRight="16px"
+      paddingTop="2px"
+      sx={{ textAlign: "center", height: "100%" }}
+    >
       {/* <Typography>{selectedTask.taskName}</Typography> */}
       <Stack direction="row" justifyContent="space-between">
         <Button
@@ -178,7 +183,7 @@ function TaskDetails({
         sx={{ mt: "1em" }}
       ></TextField>
       <Button
-        variant="contained"
+        variant="outlined"
         endIcon={<CheckIcon />}
         onClick={handleEditNote}
         sx={{ mt: "1em" }}
@@ -187,7 +192,12 @@ function TaskDetails({
       </Button>
     </Box>
   ) : (
-    <Stack justifyContent="center" alignItems="center" sx={{ height: "100%" }}>
+    <Stack
+      justifyContent="center"
+      alignItems="center"
+      spacing={2}
+      sx={{ height: "100%" }}
+    >
       <AdsClickIcon fontSize="large"></AdsClickIcon>
       <Typography>Click task title to view the detail or edit</Typography>
     </Stack>

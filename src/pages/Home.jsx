@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 
 import Lists from "../components/Lists";
 import Tasks from "../components/Tasks";
@@ -49,41 +49,41 @@ export default function Home({ token, setToken }) {
   // console.log(allLists);
 
   return (
-    <Grid container>
-      <Grid item xs={1}>
-        <SideBar setToken={setToken}></SideBar>
+    <Stack direction="row" height="100vh">
+      <SideBar setToken={setToken}></SideBar>
+
+      <Lists
+        allLists={allLists}
+        setAllLists={setAllLists}
+        setListToShow={setListToShow}
+        token={token}
+      ></Lists>
+
+      <Grid container sx={{ height: "100vh" }}>
+        <Grid item xs={6} sx={{ height: "100vh" }}>
+          <Tasks
+            listToShow={listToShow}
+            token={token}
+            allTasks={allTasks}
+            setAllTasks={setAllTasks}
+            allLists={allLists}
+            setAllLists={setAllLists}
+            selectedTask={selectedTask}
+            setSelectedTask={setSelectedTask}
+          ></Tasks>
+        </Grid>
+        <Grid item xs={6} sx={{ height: "100vh" }}>
+          <TaskDetails
+            token={token}
+            selectedTask={selectedTask}
+            setSelectedTask={setSelectedTask}
+            allTasks={allTasks}
+            setAllTasks={setAllTasks}
+            allLists={allLists}
+            setAllLists={setAllLists}
+          ></TaskDetails>
+        </Grid>
       </Grid>
-      <Grid item xs={3}>
-        <Lists
-          allLists={allLists}
-          setAllLists={setAllLists}
-          setListToShow={setListToShow}
-          token={token}
-        ></Lists>
-      </Grid>
-      <Grid item xs={4}>
-        <Tasks
-          listToShow={listToShow}
-          token={token}
-          allTasks={allTasks}
-          setAllTasks={setAllTasks}
-          allLists={allLists}
-          setAllLists={setAllLists}
-          selectedTask={selectedTask}
-          setSelectedTask={setSelectedTask}
-        ></Tasks>
-      </Grid>
-      <Grid item xs={4}>
-        <TaskDetails
-          token={token}
-          selectedTask={selectedTask}
-          setSelectedTask={setSelectedTask}
-          allTasks={allTasks}
-          setAllTasks={setAllTasks}
-          allLists={allLists}
-          setAllLists={setAllLists}
-        ></TaskDetails>
-      </Grid>
-    </Grid>
+    </Stack>
   );
 }

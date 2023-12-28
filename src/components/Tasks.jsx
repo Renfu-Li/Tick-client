@@ -10,6 +10,7 @@ import {
   Grid,
   ListItem,
   Typography,
+  Box,
 } from "@mui/material";
 // import { useState, useEffect } from "react";
 import taskService from "../services/taskService";
@@ -29,8 +30,14 @@ function Tasks({
   setSelectedTask,
 }) {
   return (
-    <>
-      <Typography variant="h5">{listToShow}</Typography>
+    <Box
+      paddingX="16px"
+      paddingY="8px"
+      sx={{ borderRight: 0.5, borderColor: "lightgray", height: "100%" }}
+    >
+      <Typography ml={1.4} mb="0.5em" variant="h5">
+        {listToShow}
+      </Typography>
 
       <TaskForm
         allTasks={allTasks}
@@ -48,7 +55,7 @@ function Tasks({
         selectedTask={selectedTask}
         setSelectedTask={setSelectedTask}
       ></TaskItems>
-    </>
+    </Box>
   );
 }
 

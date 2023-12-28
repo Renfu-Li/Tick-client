@@ -5,11 +5,13 @@ import InboxIcon from "@mui/icons-material/Inbox";
 import MenuIcon from "@mui/icons-material/Menu";
 import AddIcon from "@mui/icons-material/Add";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
   Collapse,
   Divider,
+  IconButton,
   // IconButton,
   List,
   ListItem,
@@ -45,11 +47,23 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
   // console.log(allLists);
 
   return (
-    <List dense>
+    <List
+      dense
+      sx={{
+        borderLeft: 0.5,
+        borderRight: 0.5,
+        borderColor: "lightgray",
+        height: "100%",
+        minWidth: "280px",
+        paddingY: "8px",
+        display: "inline-block",
+      }}
+    >
       <ListItem>
         <ListItemButton
           selected={selectedList === "today"}
           onClick={() => handleSelect("today")}
+          sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
             <TodayIcon></TodayIcon>
@@ -62,6 +76,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         <ListItemButton
           selected={selectedList === "next7Days"}
           onClick={() => handleSelect("next7Days")}
+          sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
             <ViewWeekIcon></ViewWeekIcon>
@@ -74,6 +89,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         <ListItemButton
           selected={selectedList === "all"}
           onClick={() => handleSelect("all")}
+          sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
             <InboxIcon></InboxIcon>
@@ -82,29 +98,33 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         </ListItemButton>
       </ListItem>
 
-      <Divider variant="middle"></Divider>
+      <Divider variant="middle" sx={{ paddingY: "4px" }}></Divider>
 
       <ListItem>
-        <ListItemButton onClick={() => setListAddition(!listAddition)}>
-          <ListItemText primary="Lists"></ListItemText>
+        <ListItemButton
+          onClick={() => setListAddition(!listAddition)}
+          sx={{ borderRadius: 1.5 }}
+        >
+          <ListItemText secondary="Lists"></ListItemText>
           <ListItemIcon>
             <AddIcon fontSize="small"></AddIcon>
           </ListItemIcon>
         </ListItemButton>
       </ListItem>
 
-      <ListItem>
+      <ListItem sx={{ paddingY: 0 }}>
         <Collapse in={listAddition}>
           <Stack spacing={1} direction="row">
             <TextField
               size="small"
               value={listName}
               onChange={(e) => setListName(e.target.value)}
+              fullWidth
             ></TextField>
 
-            <Button variant="contained" onClick={handleAddList}>
-              Add
-            </Button>
+            <IconButton variant="outlined" onClick={handleAddList}>
+              <AddCircleOutlineOutlinedIcon></AddCircleOutlineOutlinedIcon>
+            </IconButton>
           </Stack>
         </Collapse>
       </ListItem>
@@ -114,6 +134,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           <ListItemButton
             selected={selectedList === list.listName}
             onClick={() => handleSelect(list.listName)}
+            sx={{ borderRadius: 1.5 }}
           >
             <ListItemIcon>
               <MenuIcon></MenuIcon>
@@ -123,12 +144,13 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         </ListItem>
       ))}
 
-      <Divider variant="middle"></Divider>
+      <Divider variant="middle" sx={{ paddingY: "4px" }}></Divider>
 
       <ListItem>
         <ListItemButton
           selected={selectedList === "completed"}
           onClick={() => handleSelect("completed")}
+          sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
             <CheckBoxIcon></CheckBoxIcon>
@@ -140,6 +162,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         <ListItemButton
           selected={selectedList === "deleted"}
           onClick={() => handleSelect("deleted")}
+          sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
             <DeleteIcon></DeleteIcon>
