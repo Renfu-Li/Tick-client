@@ -16,21 +16,16 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
 
-export default function NewTaskForm({
-  allTasks,
-  setAllTasks,
-  allLists,
-  token,
-}) {
+function TaskForm({ allTasks, setAllTasks, allLists, listToShow, token }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [listAnchorEl, setListAnchorEl] = useState(null);
 
   const [taskName, setTaskName] = useState("");
   const [dueDate, setDueDate] = useState(dayjs(new Date()));
-  const [selectedList, setSelectedList] = useState(allLists[0]);
+  const [selectedList, setSelectedList] = useState(null);
 
-  const handleSelectList = (list) => {
-    setSelectedList(list);
+  const handleSelectList = (listName) => {
+    setSelectedList(listName);
     setListAnchorEl(null);
   };
 
@@ -39,7 +34,7 @@ export default function NewTaskForm({
     const newTask = {
       taskName,
       dueDate,
-      listName: selectedList.listName,
+      listName: selectedList || listToShow,
       completed: false,
       deleted: false,
       taskNote: "",
@@ -58,8 +53,6 @@ export default function NewTaskForm({
       console.log("error from handleCreateTask: ", error.message);
     }
   };
-
-  // console.log("allLists in NewTaskForm: ", allLists);
 
   return (
     <Box>
@@ -120,7 +113,11 @@ export default function NewTaskForm({
           }}
         >
           {allLists.map((list) => (
-            <MenuItem key={list.id} onClick={() => handleSelectList(list)}>
+            <MenuItem
+              key={list.id}
+              selected={listToShow === list.listName}
+              onClick={() => handleSelectList(list.listName)}
+            >
               {list.listName}
             </MenuItem>
           ))}
@@ -133,3 +130,5 @@ export default function NewTaskForm({
     </Box>
   );
 }
+
+export default TaskForm;

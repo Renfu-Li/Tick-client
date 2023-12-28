@@ -31,10 +31,12 @@ function Tasks({
   return (
     <>
       <Typography variant="h5">{listToShow}</Typography>
+
       <TaskForm
         allTasks={allTasks}
         setAllTasks={setAllTasks}
         allLists={allLists}
+        listToShow={listToShow}
         token={token}
       ></TaskForm>
 
