@@ -75,7 +75,7 @@ function Tasks({
           token={token}
         ></TaskForm>
 
-        <List dense>
+        <List dense sx={{ mt: "0.5em" }}>
           {/* <ListItemButton>
           <ListItemText primary="Tasks"></ListItemText>
         </ListItemButton> */}

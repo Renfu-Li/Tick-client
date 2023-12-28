@@ -2,6 +2,7 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CalendarMonth from "@mui/icons-material/CalendarMonth";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import CheckIcon from "@mui/icons-material/Check";
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   Button,
@@ -32,7 +33,6 @@ function TaskDetails({
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-  const [note, setNote] = useState("");
 
   const availableLists = selectedTask
     ? allLists.filter((list) => list.listName !== selectedTask.listName)
@@ -79,7 +79,7 @@ function TaskDetails({
   const handleEditNote = async () => {
     const newTask = {
       ...selectedTask,
-      taskNote: note,
+      taskNote: selectedTask.taskNote,
     };
 
     const updatedTask = await taskService.updateTask(
@@ -95,7 +95,15 @@ function TaskDetails({
     setAllTasks(updatedAllTasks);
   };
 
-  // console.log(allLists);
+  const handleDeleteTask = async () => {
+    const deletedTask = await taskService.deleteTask(selectedTask.id, token);
+
+    // update allTasks state
+    const updatedAllTasks = allTasks.filter(
+      (task) => task.id !== deletedTask.id
+    );
+    setAllTasks(updatedAllTasks);
+  };
 
   return selectedTask ? (
     <Box sx={{ textAlign: "center" }}>
@@ -128,7 +136,7 @@ function TaskDetails({
         </Popover>
 
         <Button
-          endIcon={<FormatListBulletedIcon />}
+          startIcon={<FormatListBulletedIcon />}
           onClick={(e) => setMenuAnchorEl(e.currentTarget)}
         >
           Move to
@@ -146,6 +154,10 @@ function TaskDetails({
             </MenuItem>
           ))}
         </Menu>
+
+        <IconButton onClick={handleDeleteTask}>
+          <DeleteIcon color="primary"></DeleteIcon>
+        </IconButton>
       </Stack>
 
       <TextField
