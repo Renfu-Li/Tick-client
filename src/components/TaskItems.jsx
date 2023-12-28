@@ -22,20 +22,22 @@ function TaskItems({
 }) {
   const [showCompleted, setShowCompleted] = useState(false);
 
+  // find existing and deleted tasks
+  const allExistingTasks = allTasks.filter((task) => !task.deleted);
+  const deletedTasks = allTasks.filter((task) => task.deleted);
+
   // find and set today's tasks
-  const todayTasks = allTasks.filter(
+  const todayTasks = allExistingTasks.filter(
     (task) => new Date(task.dueDate) <= new Date()
   );
   // find and set next 7 days' tasks
   const sevenDaysLater = new Date();
   sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
-  const next7DaysTasks = allTasks.filter(
+  const next7DaysTasks = allExistingTasks.filter(
     (task) => new Date(task.dueDate) <= sevenDaysLater
   );
   // find existing tasks, completed tasks and deleted tasks
-  const allExistingTasks = allTasks.filter((task) => !task.deleted);
-  const completedTasks = allTasks.filter((task) => task.completed);
-  const deletedTasks = allTasks.filter((task) => task.deleted);
+  const completedTasks = allExistingTasks.filter((task) => task.completed);
 
   // compute the tasktoShow from props
   const tasksToShow =
@@ -53,7 +55,7 @@ function TaskItems({
           (task) => task.listName === listToShow && !task.deleted
         );
 
-  const incompletedTasks = tasksToShow.filter((task) => !task.completed);
+  const incompletedTasksInList = tasksToShow.filter((task) => !task.completed);
   const completedTasksInList = tasksToShow.filter((task) => task.completed);
 
   const handleCheck = async (task) => {
@@ -66,7 +68,7 @@ function TaskItems({
   };
   return (
     <List dense sx={{ mt: "0.5em" }}>
-      {incompletedTasks.map((task) => (
+      {incompletedTasksInList.map((task) => (
         <ListItem key={task.id}>
           <ListItemButton
             selected={selectedTask?.id === task.id}
