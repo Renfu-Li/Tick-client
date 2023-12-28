@@ -8,6 +8,7 @@ import {
   ListItemText,
   ListItemButton,
   Grid,
+  ListItem,
 } from "@mui/material";
 // import { useState, useEffect } from "react";
 import taskService from "../services/taskService";
@@ -27,6 +28,7 @@ function Tasks({
   const [showCompleted, setShowCompleted] = useState(false);
 
   // find and set today's tasks
+  const allExistingTasks = allTasks.filter((task) => !task.deleted);
   const todayTasks = allTasks.filter(
     (task) => new Date(task.dueDate) <= new Date()
   );
@@ -37,6 +39,8 @@ function Tasks({
   const next7DaysTasks = allTasks.filter(
     (task) => new Date(task.dueDate) <= sevenDaysLater
   );
+  const completedTasks = allTasks.filter((task) => task.completed);
+  const deletedTasks = allTasks.filter((task) => task.deleted);
 
   // compute the tasktoShow from props
   const tasksToShow =
@@ -45,11 +49,17 @@ function Tasks({
       : listToShow === "next7Days"
       ? next7DaysTasks
       : listToShow === "all"
-      ? allTasks
-      : allTasks.filter((task) => task.listName === listToShow);
+      ? allExistingTasks
+      : listToShow === "completed"
+      ? completedTasks
+      : listToShow === "deleted"
+      ? deletedTasks
+      : allTasks.filter(
+          (task) => task.listName === listToShow && !task.deleted
+        );
 
   const incompletedTasks = tasksToShow.filter((task) => !task.completed);
-  const completedTasks = tasksToShow.filter((task) => task.completed);
+  const completedTasksInList = tasksToShow.filter((task) => task.completed);
   // console.log(incompletedTasks);
 
   const [selectedTask, setSelectedTask] = useState(null);
@@ -63,7 +73,7 @@ function Tasks({
     setAllTasks(newAllTasks);
   };
 
-  console.log(selectedTask);
+  // console.log(selectedTask);
   return (
     <Grid container justifyContent="space-evenly" spacing={2}>
       <Grid item xs={6}>
@@ -76,45 +86,9 @@ function Tasks({
         ></TaskForm>
 
         <List dense sx={{ mt: "0.5em" }}>
-          {/* <ListItemButton>
-          <ListItemText primary="Tasks"></ListItemText>
-        </ListItemButton> */}
-
           {incompletedTasks.map((task) => (
-            <ListItemButton
-              key={task.id}
-              selected={selectedTask?.id === task.id}
-              onClick={() => setSelectedTask(task)}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  checked={task.completed}
-                  onChange={() => handleCheck(task)}
-                  inputProps={{
-                    "aria-label": "Checkbox for task completion",
-                  }}
-                ></Checkbox>
-              </ListItemIcon>
-              <ListItemText
-                primary={task.taskName}
-                secondary={`due on ${new Date(
-                  task.dueDate
-                ).toLocaleDateString()}`}
-              ></ListItemText>
-            </ListItemButton>
-          ))}
-
-          <ListItemButton onClick={() => setShowCompleted(!showCompleted)}>
-            <ListItemIcon>
-              {showCompleted ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            </ListItemIcon>
-            <ListItemText primary="Completed"></ListItemText>
-          </ListItemButton>
-
-          <Collapse in={showCompleted}>
-            {completedTasks.map((task) => (
+            <ListItem key={task.id}>
               <ListItemButton
-                key={task.id}
                 selected={selectedTask?.id === task.id}
                 onClick={() => setSelectedTask(task)}
               >
@@ -134,6 +108,44 @@ function Tasks({
                   ).toLocaleDateString()}`}
                 ></ListItemText>
               </ListItemButton>
+            </ListItem>
+          ))}
+
+          {listToShow !== "completed" && (
+            <ListItem>
+              <ListItemButton onClick={() => setShowCompleted(!showCompleted)}>
+                <ListItemIcon>
+                  {showCompleted ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </ListItemIcon>
+                <ListItemText primary="Completed"></ListItemText>
+              </ListItemButton>
+            </ListItem>
+          )}
+
+          <Collapse in={showCompleted}>
+            {completedTasksInList.map((task) => (
+              <ListItem key={task.id}>
+                <ListItemButton
+                  selected={selectedTask?.id === task.id}
+                  onClick={() => setSelectedTask(task)}
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      checked={task.completed}
+                      onChange={() => handleCheck(task)}
+                      inputProps={{
+                        "aria-label": "Checkbox for task completion",
+                      }}
+                    ></Checkbox>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={task.taskName}
+                    secondary={`due on ${new Date(
+                      task.dueDate
+                    ).toLocaleDateString()}`}
+                  ></ListItemText>
+                </ListItemButton>
+              </ListItem>
             ))}
           </Collapse>
         </List>

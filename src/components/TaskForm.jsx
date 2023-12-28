@@ -42,6 +42,7 @@ export default function NewTaskForm({
       dueDate,
       listName: selectedList.listName,
       completed: false,
+      deleted: false,
       taskNote: "",
     };
 
@@ -51,17 +52,6 @@ export default function NewTaskForm({
       // update allTasks state
       const updatedAllTasks = allTasks.concat(createdTask);
       setAllTasks(updatedAllTasks);
-
-      // update allLists state
-      const listToUpdate = allLists.find(
-        (list) => list.listName === selectedList.listName
-      );
-      const updatedListTasks = listToUpdate.tasks.concat(createdTask);
-      const updatedList = { ...listToUpdate, tasks: updatedListTasks };
-      const updatedAllLists = allLists.map((list) =>
-        list.listName === selectedList.listName ? updatedList : list
-      );
-      setAllLists(updatedAllLists);
 
       setTaskName("");
       setDueDate(dayjs(new Date()));

@@ -96,11 +96,16 @@ function TaskDetails({
   };
 
   const handleDeleteTask = async () => {
-    const deletedTask = await taskService.deleteTask(selectedTask.id, token);
+    const newTask = { ...selectedTask, deleted: true };
+    const updatedTask = await taskService.updateTask(
+      selectedTask.id,
+      newTask,
+      token
+    );
 
     // update allTasks state
-    const updatedAllTasks = allTasks.filter(
-      (task) => task.id !== deletedTask.id
+    const updatedAllTasks = allTasks.map((task) =>
+      task.id === updatedTask.id ? updatedTask : task
     );
     setAllTasks(updatedAllTasks);
   };
