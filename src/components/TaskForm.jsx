@@ -20,7 +20,6 @@ export default function NewTaskForm({
   allTasks,
   setAllTasks,
   allLists,
-  setAllLists,
   token,
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);

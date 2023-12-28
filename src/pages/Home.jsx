@@ -6,11 +6,13 @@ import SideBar from "../components/SideBar";
 import taskService from "../services/taskService";
 import { useEffect, useState } from "react";
 import listService from "../services/listService";
+import TaskDetails from "../components/TaskDetails";
 
 export default function Home({ token, setToken }) {
   const [allTasks, setAllTasks] = useState([]);
   const [allLists, setAllLists] = useState([]);
   const [listToShow, setListToShow] = useState("today");
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     if (token) {
@@ -57,7 +59,7 @@ export default function Home({ token, setToken }) {
           token={token}
         ></Lists>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={4}>
         <Tasks
           listToShow={listToShow}
           token={token}
@@ -65,7 +67,20 @@ export default function Home({ token, setToken }) {
           setAllTasks={setAllTasks}
           allLists={allLists}
           setAllLists={setAllLists}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
         ></Tasks>
+      </Grid>
+      <Grid item xs={4}>
+        <TaskDetails
+          token={token}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
+          allTasks={allTasks}
+          setAllTasks={setAllTasks}
+          allLists={allLists}
+          setAllLists={setAllLists}
+        ></TaskDetails>
       </Grid>
     </Grid>
   );
