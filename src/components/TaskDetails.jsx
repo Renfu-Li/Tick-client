@@ -34,6 +34,14 @@ function TaskDetails({
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
+  const dateStr = new Date(selectedTask?.dueDate).toLocaleDateString(
+    undefined,
+    {
+      month: "short",
+      day: "numeric",
+    }
+  );
+
   const availableLists = selectedTask
     ? allLists.filter((list) => list.listName !== selectedTask.listName)
     : [];
@@ -117,7 +125,6 @@ function TaskDetails({
       paddingTop="2px"
       sx={{ textAlign: "center", height: "100%" }}
     >
-      {/* <Typography>{selectedTask.taskName}</Typography> */}
       <Stack direction="row" justifyContent="space-between">
         <Button
           onClick={(e) => {
@@ -125,7 +132,7 @@ function TaskDetails({
           }}
           startIcon={<CalendarMonthIcon />}
         >
-          New Due
+          {dateStr}
         </Button>
 
         <Popover
