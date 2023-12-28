@@ -11,7 +11,7 @@ import TaskDetails from "../components/TaskDetails";
 export default function Home({ token, setToken }) {
   const [allTasks, setAllTasks] = useState([]);
   const [allLists, setAllLists] = useState([]);
-  const [listToShow, setListToShow] = useState("today");
+  const [listToShow, setListToShow] = useState("Today");
   const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {

@@ -27,7 +27,7 @@ import listService from "../services/listService";
 import CheckBox from "@mui/icons-material/CheckBox";
 
 function Lists({ allLists, setAllLists, setListToShow, token }) {
-  const [selectedList, setSelectedList] = useState("today");
+  const [selectedList, setSelectedList] = useState("Today");
   const [listAddition, setListAddition] = useState(false);
   const [listName, setListName] = useState("");
 
@@ -61,8 +61,8 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
     >
       <ListItem>
         <ListItemButton
-          selected={selectedList === "today"}
-          onClick={() => handleSelect("today")}
+          selected={selectedList === "Today"}
+          onClick={() => handleSelect("Today")}
           sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
@@ -74,8 +74,8 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
 
       <ListItem>
         <ListItemButton
-          selected={selectedList === "next7Days"}
-          onClick={() => handleSelect("next7Days")}
+          selected={selectedList === "Next 7 Days"}
+          onClick={() => handleSelect("Next 7 Days")}
           sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
@@ -87,8 +87,8 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
 
       <ListItem>
         <ListItemButton
-          selected={selectedList === "all"}
-          onClick={() => handleSelect("all")}
+          selected={selectedList === "All"}
+          onClick={() => handleSelect("All")}
           sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
@@ -148,8 +148,8 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
 
       <ListItem>
         <ListItemButton
-          selected={selectedList === "completed"}
-          onClick={() => handleSelect("completed")}
+          selected={selectedList === "Completed"}
+          onClick={() => handleSelect("Completed")}
           sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>
@@ -160,8 +160,8 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
       </ListItem>
       <ListItem>
         <ListItemButton
-          selected={selectedList === "deleted"}
-          onClick={() => handleSelect("deleted")}
+          selected={selectedList === "Trash"}
+          onClick={() => handleSelect("Trash")}
           sx={{ borderRadius: 1.5 }}
         >
           <ListItemIcon>

@@ -40,15 +40,15 @@ function TaskItems({
 
   // compute the tasktoShow from props
   const tasksToShow =
-    listToShow === "today"
+    listToShow === "Today"
       ? todayTasks
-      : listToShow === "next7Days"
+      : listToShow === "Next 7 Days"
       ? next7DaysTasks
-      : listToShow === "all"
+      : listToShow === "All"
       ? allExistingTasks
-      : listToShow === "completed"
+      : listToShow === "Completed"
       ? completedTasks
-      : listToShow === "deleted"
+      : listToShow === "Trash"
       ? deletedTasks
       : allTasks.filter(
           (task) => task.listName === listToShow && !task.deleted
