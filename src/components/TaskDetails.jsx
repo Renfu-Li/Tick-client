@@ -103,7 +103,7 @@ function TaskDetails({
     setAllTasks(updatedAllTasks);
   };
 
-  const handleDeleteTask = async () => {
+  const handleRemoveTask = async () => {
     const newTask = { ...selectedTask, deleted: true };
     const updatedTask = await taskService.updateTask(
       selectedTask.id,
@@ -172,7 +172,7 @@ function TaskDetails({
           ))}
         </Menu>
 
-        <IconButton onClick={handleDeleteTask}>
+        <IconButton onClick={handleRemoveTask}>
           <DeleteIcon color="primary"></DeleteIcon>
         </IconButton>
       </Stack>

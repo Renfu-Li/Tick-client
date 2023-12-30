@@ -195,7 +195,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               </Stack>
 
               <Typography fontSize="0.8em" color="grey">
-                3
+                {list.count}
               </Typography>
             </Stack>
           </ListItemButton>
