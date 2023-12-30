@@ -101,7 +101,9 @@ function TaskItems({
               </Stack>
 
               <Stack direction="row" spacing={1}>
-                <Typography fontSize="0.8em">{task.listName}</Typography>
+                <Typography fontSize="0.8em" color="grey">
+                  {task.listName}
+                </Typography>
                 <Typography
                   fontSize="0.8em"
                   color={calDateDiff(task.dueDate) >= 0 ? "primary" : "red"}
@@ -154,7 +156,9 @@ function TaskItems({
                 </Stack>
 
                 <Stack direction="row" spacing={1}>
-                  <Typography fontSize="0.8em">{task.listName}</Typography>
+                  <Typography fontSize="0.8em" color="grey">
+                    {task.listName}
+                  </Typography>
                   <Typography
                     fontSize="0.8em"
                     color={calDateDiff(task.dueDate) >= 0 ? "primary" : "red"}

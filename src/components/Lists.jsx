@@ -65,10 +65,22 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           onClick={() => handleSelect("Today")}
           sx={{ borderRadius: 1.5 }}
         >
-          <ListItemIcon>
-            <TodayIcon></TodayIcon>
-          </ListItemIcon>
-          <ListItemText primary="Today"></ListItemText>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+            paddingRight="0.5em"
+          >
+            <Stack direction="row" alignItems="center">
+              <TodayIcon color="action" sx={{ mr: "0.3em" }}></TodayIcon>
+              <Typography fontSize="0.9em">Today</Typography>
+            </Stack>
+
+            <Typography fontSize="0.8em" color="grey">
+              3
+            </Typography>
+          </Stack>
         </ListItemButton>
       </ListItem>
 
@@ -78,10 +90,22 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           onClick={() => handleSelect("Next 7 Days")}
           sx={{ borderRadius: 1.5 }}
         >
-          <ListItemIcon>
-            <ViewWeekIcon></ViewWeekIcon>
-          </ListItemIcon>
-          <ListItemText primary="Next 7 days"></ListItemText>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+            paddingRight="0.5em"
+          >
+            <Stack direction="row" alignItems="center">
+              <ViewWeekIcon color="action" sx={{ mr: "0.3em" }}></ViewWeekIcon>
+              <Typography fontSize="0.9em">Nest 7 Days</Typography>
+            </Stack>
+
+            <Typography fontSize="0.8em" color="grey">
+              3
+            </Typography>
+          </Stack>
         </ListItemButton>
       </ListItem>
 
@@ -91,10 +115,22 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           onClick={() => handleSelect("All")}
           sx={{ borderRadius: 1.5 }}
         >
-          <ListItemIcon>
-            <InboxIcon></InboxIcon>
-          </ListItemIcon>
-          <ListItemText primary="All"></ListItemText>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+            paddingRight="0.5em"
+          >
+            <Stack direction="row" alignItems="center">
+              <InboxIcon color="action" sx={{ mr: "0.3em" }}></InboxIcon>
+              <Typography fontSize="0.9em">All</Typography>
+            </Stack>
+
+            <Typography fontSize="0.8em" color="grey">
+              3
+            </Typography>
+          </Stack>
         </ListItemButton>
       </ListItem>
 
@@ -105,10 +141,16 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           onClick={() => setListAddition(!listAddition)}
           sx={{ borderRadius: 1.5 }}
         >
-          <ListItemText secondary="Lists"></ListItemText>
-          <ListItemIcon>
-            <AddIcon fontSize="small"></AddIcon>
-          </ListItemIcon>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+          >
+            <Typography fontSize="0.9em">Lists</Typography>
+
+            <AddIcon color="action"></AddIcon>
+          </Stack>
         </ListItemButton>
       </ListItem>
 
@@ -122,7 +164,11 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               fullWidth
             ></TextField>
 
-            <IconButton variant="outlined" onClick={handleAddList}>
+            <IconButton
+              variant="outlined"
+              onClick={handleAddList}
+              sx={{ paddingLeft: "0.2em" }}
+            >
               <AddCircleOutlineOutlinedIcon></AddCircleOutlineOutlinedIcon>
             </IconButton>
           </Stack>
@@ -136,10 +182,22 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
             onClick={() => handleSelect(list.listName)}
             sx={{ borderRadius: 1.5 }}
           >
-            <ListItemIcon>
-              <MenuIcon></MenuIcon>
-            </ListItemIcon>
-            <ListItemText primary={list.listName}></ListItemText>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              width="100%"
+              paddingRight="0.5em"
+            >
+              <Stack direction="row" alignItems="center">
+                <MenuIcon color="action" sx={{ mr: "0.3em" }}></MenuIcon>
+                <Typography fontSize="0.9em">{list.listName}</Typography>
+              </Stack>
+
+              <Typography fontSize="0.8em" color="grey">
+                3
+              </Typography>
+            </Stack>
           </ListItemButton>
         </ListItem>
       ))}
@@ -152,22 +210,47 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           onClick={() => handleSelect("Completed")}
           sx={{ borderRadius: 1.5 }}
         >
-          <ListItemIcon>
-            <CheckBoxIcon></CheckBoxIcon>
-          </ListItemIcon>
-          <ListItemText primary="Completed"></ListItemText>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+            paddingRight="0.5em"
+          >
+            <Stack direction="row" alignItems="center">
+              <CheckBoxIcon color="action" sx={{ mr: "0.3em" }}></CheckBoxIcon>
+              <Typography fontSize="0.9em">Completed</Typography>
+            </Stack>
+
+            <Typography fontSize="0.8em" color="grey">
+              3
+            </Typography>
+          </Stack>
         </ListItemButton>
       </ListItem>
+
       <ListItem>
         <ListItemButton
           selected={selectedList === "Trash"}
           onClick={() => handleSelect("Trash")}
           sx={{ borderRadius: 1.5 }}
         >
-          <ListItemIcon>
-            <DeleteIcon></DeleteIcon>
-          </ListItemIcon>
-          <ListItemText primary="Trash"></ListItemText>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width="100%"
+            paddingRight="0.5em"
+          >
+            <Stack direction="row" alignItems="center">
+              <DeleteIcon color="action" sx={{ mr: "0.3em" }}></DeleteIcon>
+              <Typography fontSize="0.9em">Trash</Typography>
+            </Stack>
+
+            <Typography fontSize="0.8em" color="grey">
+              3
+            </Typography>
+          </Stack>
         </ListItemButton>
       </ListItem>
     </List>
