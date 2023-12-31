@@ -1,4 +1,3 @@
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import TodayIcon from "@mui/icons-material/Today";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
 import InboxIcon from "@mui/icons-material/Inbox";
@@ -8,23 +7,18 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
-  Button,
   Collapse,
   Divider,
   IconButton,
-  // IconButton,
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import listService from "../services/listService";
-import CheckBox from "@mui/icons-material/CheckBox";
 
 function Lists({ allLists, setAllLists, setListToShow, token }) {
   const [selectedList, setSelectedList] = useState("Today");
@@ -77,9 +71,9 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <Typography fontSize="0.9em">Today</Typography>
             </Stack>
 
-            <Typography fontSize="0.8em" color="grey">
+            {/* <Typography fontSize="0.8em" color="grey">
               3
-            </Typography>
+            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -102,9 +96,9 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <Typography fontSize="0.9em">Nest 7 Days</Typography>
             </Stack>
 
-            <Typography fontSize="0.8em" color="grey">
+            {/* <Typography fontSize="0.8em" color="grey">
               3
-            </Typography>
+            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -127,9 +121,9 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <Typography fontSize="0.9em">All</Typography>
             </Stack>
 
-            <Typography fontSize="0.8em" color="grey">
+            {/* <Typography fontSize="0.8em" color="grey">
               3
-            </Typography>
+            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -222,9 +216,9 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <Typography fontSize="0.9em">Completed</Typography>
             </Stack>
 
-            <Typography fontSize="0.8em" color="grey">
+            {/* <Typography fontSize="0.8em" color="grey">
               3
-            </Typography>
+            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -247,9 +241,9 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <Typography fontSize="0.9em">Trash</Typography>
             </Stack>
 
-            <Typography fontSize="0.8em" color="grey">
+            {/* <Typography fontSize="0.8em" color="grey">
               3
-            </Typography>
+            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
