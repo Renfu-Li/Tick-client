@@ -76,7 +76,7 @@ function TaskItems({
     const newAllTasks = allTasks.map((t) => (t.id === task.id ? newTask : t));
     setAllTasks(newAllTasks);
 
-    // update allLists state
+    // update task counts in allLists state
     const updatedAllLists = task.completed
       ? allLists.map((list) =>
           list.listName === task.listName
@@ -109,6 +109,7 @@ function TaskItems({
                 <Checkbox
                   checked={task.completed}
                   onChange={() => handleCheck(task)}
+                  disabled={listToShow === "Trash"}
                   inputProps={{
                     "aria-label": "Checkbox for task completion",
                   }}
@@ -164,6 +165,7 @@ function TaskItems({
                   <Checkbox
                     checked={task.completed}
                     onChange={() => handleCheck(task)}
+                    disabled={listToShow === "Trash"}
                     inputProps={{
                       "aria-label": "Checkbox for task completion",
                     }}
