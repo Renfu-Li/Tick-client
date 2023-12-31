@@ -77,11 +77,17 @@ function TaskItems({
     setAllTasks(newAllTasks);
 
     // update allLists state
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === task.listName
-        ? { ...list, count: list.count - 1 }
-        : list
-    );
+    const updatedAllLists = task.completed
+      ? allLists.map((list) =>
+          list.listName === task.listName
+            ? { ...list, count: list.count + 1 }
+            : list
+        )
+      : allLists.map((list) =>
+          list.listName === task.listName
+            ? { ...list, count: list.count - 1 }
+            : list
+        );
     setAllLists(updatedAllLists);
   };
   return (
