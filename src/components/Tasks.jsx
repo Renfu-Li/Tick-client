@@ -26,6 +26,7 @@ function Tasks({
   allTasks,
   setAllTasks,
   allLists,
+  setAllLists,
   selectedTask,
   setSelectedTask,
 }) {
@@ -44,6 +45,7 @@ function Tasks({
           allTasks={allTasks}
           setAllTasks={setAllTasks}
           allLists={allLists}
+          setAllLists={setAllLists}
           listToShow={listToShow}
           token={token}
         ></TaskForm>

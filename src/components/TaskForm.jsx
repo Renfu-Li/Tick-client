@@ -20,7 +20,14 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
 
-function TaskForm({ allTasks, setAllTasks, allLists, listToShow, token }) {
+function TaskForm({
+  allTasks,
+  setAllTasks,
+  allLists,
+  setAllLists,
+  listToShow,
+  token,
+}) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [listAnchorEl, setListAnchorEl] = useState(null);
 
@@ -51,6 +58,14 @@ function TaskForm({ allTasks, setAllTasks, allLists, listToShow, token }) {
       const updatedAllTasks = allTasks.concat(createdTask);
       setAllTasks(updatedAllTasks);
 
+      // update allLists state
+      const updatedAllLists = allLists.map((list) =>
+        list.listName === selectedList
+          ? { ...list, count: list.count + 1 }
+          : list
+      );
+      setAllLists(updatedAllLists);
+
       setTaskName("");
       setDueDate(dayjs(new Date()));
     } catch (error) {
@@ -68,7 +83,12 @@ function TaskForm({ allTasks, setAllTasks, allLists, listToShow, token }) {
         mb: "1em",
       }}
     >
-      <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Add task"></InputBase>
+      <InputBase
+        value={taskName}
+        onChange={(e) => setTaskName(e.target.value)}
+        sx={{ ml: 1, flex: 1 }}
+        placeholder="Add task"
+      ></InputBase>
 
       <IconButton
         onClick={(e) => {
