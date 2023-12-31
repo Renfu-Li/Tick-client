@@ -31,7 +31,7 @@ const updateTask = async (id, newTask, token) => {
 
 // remove a task to trash (not really deletion in Task collection)
 const removeTask = async (id, task, list, token) => {
-  const updatedTask = { ...task, deleted: true };
+  const updatedTask = { ...task, removed: true };
   const response = await axios.put(
     `${baseURL}/${id}`,
     updatedTask,

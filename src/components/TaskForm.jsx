@@ -43,7 +43,7 @@ function TaskForm({
       dueDate,
       listName: selectedList || listToShow,
       completed: false,
-      deleted: false,
+      removed: false,
       taskNote: "",
     };
 

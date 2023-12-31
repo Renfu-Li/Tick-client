@@ -114,7 +114,7 @@ function TaskDetails({
   };
 
   const handleRemoveTask = async () => {
-    const newTask = { ...selectedTask, deleted: true };
+    const newTask = { ...selectedTask, removed: true };
     const updatedTask = await taskService.updateTask(
       selectedTask.id,
       newTask,
