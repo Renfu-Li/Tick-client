@@ -1,23 +1,7 @@
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import {
-  Checkbox,
-  Collapse,
-  List,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Grid,
-  ListItem,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Typography, Box } from "@mui/material";
 // import { useState, useEffect } from "react";
-import taskService from "../services/taskService";
-import TaskDetails from "./TaskDetails";
 import TaskForm from "./TaskForm";
 import TaskItems from "./TaskItems";
-import { useEffect, useState } from "react";
 // import AddCircle from "@mui/icons-material/AddCircle";
 
 function Tasks({
@@ -56,6 +40,8 @@ function Tasks({
         listToShow={listToShow}
         allTasks={allTasks}
         setAllTasks={setAllTasks}
+        allLists={allLists}
+        setAllLists={setAllLists}
         selectedTask={selectedTask}
         setSelectedTask={setSelectedTask}
       ></TaskItems>

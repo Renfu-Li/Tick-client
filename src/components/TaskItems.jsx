@@ -19,6 +19,8 @@ function TaskItems({
   listToShow,
   allTasks,
   setAllTasks,
+  allLists,
+  setAllLists,
   selectedTask,
   setSelectedTask,
 }) {
@@ -73,6 +75,14 @@ function TaskItems({
     // update allTasks state
     const newAllTasks = allTasks.map((t) => (t.id === task.id ? newTask : t));
     setAllTasks(newAllTasks);
+
+    // update allLists state
+    const updatedAllLists = allLists.map((list) =>
+      list.listName === task.listName
+        ? { ...list, count: list.count - 1 }
+        : list
+    );
+    setAllLists(updatedAllLists);
   };
   return (
     <List dense sx={{ mt: "0.5em", p: 0 }}>

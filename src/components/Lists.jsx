@@ -93,7 +93,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
           >
             <Stack direction="row" alignItems="center">
               <ViewWeekIcon color="action" sx={{ mr: "0.3em" }}></ViewWeekIcon>
-              <Typography fontSize="0.9em">Nest 7 Days</Typography>
+              <Typography fontSize="0.9em">Next 7 Days</Typography>
             </Stack>
 
             {/* <Typography fontSize="0.8em" color="grey">

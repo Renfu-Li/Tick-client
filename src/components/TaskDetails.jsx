@@ -1,12 +1,10 @@
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import CalendarMonth from "@mui/icons-material/CalendarMonth";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
   Button,
-  Checkbox,
   IconButton,
   Menu,
   MenuItem,
@@ -30,6 +28,7 @@ function TaskDetails({
   allTasks,
   setAllTasks,
   allLists,
+  setAllLists,
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -80,8 +79,19 @@ function TaskDetails({
     const updatedAllTasks = allTasks.map((task) =>
       task.id === selectedTask.id ? updatedTask : task
     );
-
     setAllTasks(updatedAllTasks);
+
+    // update allLists state
+    const listsAfterRemoval = allLists.map((list) =>
+      list.listName === selectedTask.listName
+        ? { ...list, count: list.count - 1 }
+        : list
+    );
+
+    const listsAfterAddition = listsAfterRemoval.map((list) =>
+      list.listName === selectedList ? { ...list, count: list.count + 1 } : list
+    );
+    setAllLists(listsAfterAddition);
   };
 
   const handleEditNote = async () => {
@@ -116,6 +126,14 @@ function TaskDetails({
       task.id === updatedTask.id ? updatedTask : task
     );
     setAllTasks(updatedAllTasks);
+
+    // update task count in allLists state
+    const updatedAllLists = allLists.map((list) =>
+      list.listName === selectedTask.listName
+        ? { ...list, count: list.count - 1 }
+        : list
+    );
+    setAllLists(updatedAllLists);
   };
 
   return selectedTask ? (
