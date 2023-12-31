@@ -34,7 +34,7 @@ export default function Home({ token, setToken }) {
             return {
               listName: list.listName,
               id: list.id,
-              count: list.count,
+              count: list.tasks.length,
             };
           });
 

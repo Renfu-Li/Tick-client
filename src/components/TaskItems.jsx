@@ -26,9 +26,9 @@ function TaskItems({
 }) {
   const [showCompleted, setShowCompleted] = useState(false);
 
-  // find existing and deleted tasks
-  const allExistingTasks = allTasks.filter((task) => !task.deleted);
-  const deletedTasks = allTasks.filter((task) => task.deleted);
+  // find existing and removed tasks
+  const allExistingTasks = allTasks.filter((task) => !task.removed);
+  const removedTasks = allTasks.filter((task) => task.removed);
   // find and set today's tasks
   const todayTasks = allExistingTasks.filter(
     (task) => new Date(task.dueDate) <= new Date()
@@ -39,7 +39,7 @@ function TaskItems({
   const next7DaysTasks = allExistingTasks.filter(
     (task) => new Date(task.dueDate) <= sevenDaysLater
   );
-  // find existing tasks, completed tasks and deleted tasks
+  // find existing tasks, completed tasks and removed tasks
   const completedTasks = allExistingTasks.filter((task) => task.completed);
 
   // compute the tasktoShow from props
@@ -53,9 +53,9 @@ function TaskItems({
       : listToShow === "Completed"
       ? completedTasks
       : listToShow === "Trash"
-      ? deletedTasks
+      ? removedTasks
       : allTasks.filter(
-          (task) => task.listName === listToShow && !task.deleted
+          (task) => task.listName === listToShow && !task.removed
         );
 
   const incompletedTasksInList = tasksToShow.filter((task) => !task.completed);
@@ -133,7 +133,7 @@ function TaskItems({
         </ListItem>
       ))}
 
-      {listToShow !== "completed" && (
+      {listToShow !== "Completed" && (
         <ListItem disablePadding>
           <ListItemButton
             onClick={() => setShowCompleted(!showCompleted)}
@@ -147,7 +147,7 @@ function TaskItems({
         </ListItem>
       )}
 
-      <Collapse in={showCompleted}>
+      <Collapse in={showCompleted || listToShow === "Completed"}>
         {completedTasksInList.map((task) => (
           <ListItem key={task.id} disablePadding>
             <ListItemButton

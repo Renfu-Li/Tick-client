@@ -19,7 +19,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
-import listService from "../services/listService";
 
 function TaskDetails({
   token,
@@ -69,10 +68,14 @@ function TaskDetails({
     setMenuAnchorEl(null);
 
     // replace the task in Task collection and update the task in List collection
-    const updatedTask = await listService.moveTask(
-      token,
-      selectedTask,
-      selectedList.listName
+    const sourceListId = allLists.find(
+      (list) => list.listName === selectedTask.listName
+    ).id;
+    const newListId = allLists.find((list) => list.listName === selectedList);
+    const updatedTask = await taskService.moveTask(
+      selectedTask.id,
+      sourceListId,
+      newListId
     );
 
     // update allTasks state
@@ -114,7 +117,7 @@ function TaskDetails({
   };
 
   const handleRemoveTask = async () => {
-    const newTask = { ...selectedTask, deleted: true };
+    const newTask = { ...selectedTask, removed: true };
     const updatedTask = await taskService.updateTask(
       selectedTask.id,
       newTask,

@@ -29,19 +29,22 @@ const updateTask = async (id, newTask, token) => {
   return response.data;
 };
 
+const moveTask = async (taskId, sourceListId, newListId, token) => {
+  const response = await axios.put(
+    `${baseURL}/${taskId}/move`,
+    { sourceListId, newListId },
+    token
+  );
+
+  return response.data;
+};
+
 // remove a task to trash (not really deletion in Task collection)
 const removeTask = async (id, task, list, token) => {
-  const updatedTask = { ...task, deleted: true };
+  const updatedTask = { ...task, removed: true };
   const response = await axios.put(
     `${baseURL}/${id}`,
     updatedTask,
-    generateConfig(token)
-  );
-
-  const updatedList = { ...list, count: list.count-- };
-  await axios.put(
-    `http://localhost:3003/api/lists/${list.id}`,
-    updatedList,
     generateConfig(token)
   );
 
@@ -53,7 +56,15 @@ const deleteTask = async (id, token) => {
     `${baseURL}/${id}`,
     generateConfig(token)
   );
+
   return response.data;
 };
 
-export default { getAllTasks, createTask, updateTask, removeTask, deleteTask };
+export default {
+  getAllTasks,
+  createTask,
+  updateTask,
+  moveTask,
+  removeTask,
+  deleteTask,
+};
