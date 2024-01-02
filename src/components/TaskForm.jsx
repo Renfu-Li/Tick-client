@@ -15,6 +15,7 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
+import listService from "../services/listService";
 
 function TaskForm({
   allTasks,
@@ -38,10 +39,12 @@ function TaskForm({
 
   // create new task
   const handleCreateTask = async () => {
+    const listName = selectedList || listToShow;
+
     const newTask = {
       taskName,
       dueDate,
-      listName: selectedList || listToShow,
+      listName,
       completed: false,
       removed: false,
       taskNote: "",
@@ -49,6 +52,12 @@ function TaskForm({
 
     try {
       const createdTask = await taskService.createTask(newTask, token);
+
+      const listToUpdate = allLists.find((list) => list.listName === listName);
+      await listService.updateList(token, {
+        ...listToUpdate,
+        count: listToUpdate.count + 1,
+      });
 
       // update allTasks state
       const updatedAllTasks = allTasks.concat(createdTask);

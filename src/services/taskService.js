@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const baseURL = "http://localhost:3003/api/tasks";
+const listURL = "http://localhost:3003/api/lists";
 
 const generateConfig = (token) => {
   return {
@@ -29,11 +30,23 @@ const updateTask = async (id, newTask, token) => {
   return response.data;
 };
 
-const moveTask = async (taskId, sourceListId, newListId, token) => {
+const moveTask = async (token, task, sourceList, targetList) => {
   const response = await axios.put(
-    `${baseURL}/${taskId}/move`,
-    { sourceListId, newListId },
-    token
+    `${baseURL}/${task.id}`,
+    { ...task, listName: targetList.listName },
+    generateConfig(token)
+  );
+
+  await axios.put(
+    `${listURL}/${sourceList.id}`,
+    { ...sourceList, count: sourceList.count - 1 },
+    generateConfig(token)
+  );
+
+  await axios.put(
+    `${listURL}/${targetList.id}`,
+    { ...targetList, count: targetList.count + 1 },
+    generateConfig(token)
   );
 
   return response.data;
@@ -48,12 +61,22 @@ const removeTask = async (id, task, list, token) => {
     generateConfig(token)
   );
 
+  const updatedList = { ...list, count: list.count - 1 };
+  await axios.put(`${listURL}/${list.id}`, updatedList, generateConfig(token));
+
   return response.data;
 };
 
-const deleteTask = async (id, token) => {
+const deleteTask = async (id, list, token) => {
   const response = await axios.delete(
     `${baseURL}/${id}`,
+    generateConfig(token)
+  );
+
+  const updatedList = { ...list, count: list.count - 1 };
+  await axios.put(
+    `http://localhost:3003/api/lists/${list.id}`,
+    updatedList,
     generateConfig(token)
   );
 

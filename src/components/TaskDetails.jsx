@@ -19,6 +19,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
+import listService from "../services/listService";
 
 function TaskDetails({
   token,
@@ -67,15 +68,15 @@ function TaskDetails({
   const handleChangeList = async (selectedList) => {
     setMenuAnchorEl(null);
 
-    // replace the task in Task collection and update the task in List collection
-    const sourceListId = allLists.find(
+    // update the task count in List collection
+    const sourceList = allLists.find(
       (list) => list.listName === selectedTask.listName
-    ).id;
-    const newListId = allLists.find((list) => list.listName === selectedList);
+    );
     const updatedTask = await taskService.moveTask(
-      selectedTask.id,
-      sourceListId,
-      newListId
+      token,
+      selectedTask,
+      sourceList,
+      selectedList
     );
 
     // update allTasks state
@@ -92,7 +93,9 @@ function TaskDetails({
     );
 
     const listsAfterAddition = listsAfterRemoval.map((list) =>
-      list.listName === selectedList ? { ...list, count: list.count + 1 } : list
+      list.listName === selectedList.listName
+        ? { ...list, count: list.count + 1 }
+        : list
     );
     setAllLists(listsAfterAddition);
   };
@@ -130,11 +133,15 @@ function TaskDetails({
     );
     setAllTasks(updatedAllTasks);
 
+    const listToUpdate = allLists.find(
+      (list) => list.listName === selectedTask.listName
+    );
+    const updatedList = { ...listToUpdate, count: listToUpdate.count - 1 };
+    const returnedList = await listService.updateList(token, updatedList);
+
     // update task count in allLists state
     const updatedAllLists = allLists.map((list) =>
-      list.listName === selectedTask.listName
-        ? { ...list, count: list.count - 1 }
-        : list
+      list.listName === selectedTask.listName ? returnedList : list
     );
     setAllLists(updatedAllLists);
   };

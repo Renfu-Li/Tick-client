@@ -29,7 +29,7 @@ const createList = async (token, listName) => {
 const updateList = async (token, newList) => {
   const response = await axios.put(
     `${baseURL}/${newList.id}`,
-    { newList },
+    newList,
     generateConfig(token)
   );
 
@@ -38,7 +38,7 @@ const updateList = async (token, newList) => {
 
 // delete a list and return all lists
 const deleteList = async (token, listId) => {
-  const response = await axios.post(
+  const response = await axios.delete(
     `${baseURL}/${listId}`,
     generateConfig(token)
   );

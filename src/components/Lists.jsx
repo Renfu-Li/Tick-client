@@ -32,7 +32,8 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
 
   const handleAddList = async () => {
     setListAddition(false);
-    const updatedAllLists = await listService.createList(token, listName);
+    const createdList = await listService.createList(token, listName);
+    const updatedAllLists = allLists.concat(createdList);
     setAllLists(updatedAllLists);
 
     setListName("");
