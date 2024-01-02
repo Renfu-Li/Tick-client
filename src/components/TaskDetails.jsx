@@ -68,11 +68,15 @@ function TaskDetails({
   const handleChangeList = async (selectedList) => {
     setMenuAnchorEl(null);
 
-    // replace the task in Task collection and update the task in List collection
-    const updatedTask = await listService.moveTask(
+    // update the task count in List collection
+    const sourceList = allLists.find(
+      (list) => list.listName === selectedTask.listName
+    );
+    const updatedTask = await taskService.moveTask(
       token,
       selectedTask,
-      selectedList.listName
+      sourceList,
+      selectedList
     );
 
     // update allTasks state
@@ -89,7 +93,9 @@ function TaskDetails({
     );
 
     const listsAfterAddition = listsAfterRemoval.map((list) =>
-      list.listName === selectedList ? { ...list, count: list.count + 1 } : list
+      list.listName === selectedList.listName
+        ? { ...list, count: list.count + 1 }
+        : list
     );
     setAllLists(listsAfterAddition);
   };

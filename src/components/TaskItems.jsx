@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 import taskService from "../services/taskService";
+import listService from "../services/listService";
 
 function TaskItems({
   token,
@@ -76,18 +77,21 @@ function TaskItems({
     const newAllTasks = allTasks.map((t) => (t.id === task.id ? newTask : t));
     setAllTasks(newAllTasks);
 
+    const listToUpdate = allLists.find(
+      (list) => list.listName === task.listName
+    );
+    const updatedList = task.completed
+      ? { ...listToUpdate, count: listToUpdate.count + 1 }
+      : { ...listToUpdate, count: listToUpdate.count - 1 };
+
+    // update count in List collection
+    await listService.updateList(token, updatedList);
+
     // update task counts in allLists state
-    const updatedAllLists = task.completed
-      ? allLists.map((list) =>
-          list.listName === task.listName
-            ? { ...list, count: list.count + 1 }
-            : list
-        )
-      : allLists.map((list) =>
-          list.listName === task.listName
-            ? { ...list, count: list.count - 1 }
-            : list
-        );
+    const updatedAllLists = allLists.map((list) =>
+      list.listName === task.listName ? updatedList : list
+    );
+
     setAllLists(updatedAllLists);
   };
   return (
