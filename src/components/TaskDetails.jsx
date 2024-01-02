@@ -6,8 +6,10 @@ import {
   Box,
   Button,
   IconButton,
+  InputBase,
   Menu,
   MenuItem,
+  Paper,
   Popover,
   Stack,
   TextField,
@@ -205,7 +207,26 @@ function TaskDetails({
         </IconButton>
       </Stack>
 
-      <TextField
+      <Paper
+        sx={{
+          padding: 0.5,
+          mt: "0.6em",
+        }}
+      >
+        <InputBase
+          value={selectedTask.taskNote}
+          onChange={(e) =>
+            setSelectedTask({ ...selectedTask, taskNote: e.target.value })
+          }
+          placeholder="Task note"
+          minRows={12}
+          multiline
+          fullWidth
+          sx={{ ml: 1 }}
+        ></InputBase>
+      </Paper>
+
+      {/* <TextField
         id="outlined-multiline-flexible"
         label="Task note"
         multiline
@@ -216,7 +237,8 @@ function TaskDetails({
         rows={10}
         fullWidth
         sx={{ mt: "1em" }}
-      ></TextField>
+      ></TextField> */}
+
       <Button
         variant="outlined"
         endIcon={<CheckIcon />}
