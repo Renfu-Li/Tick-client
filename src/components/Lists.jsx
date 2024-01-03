@@ -157,12 +157,14 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               value={listName}
               onChange={(e) => setListName(e.target.value)}
               fullWidth
+              id="new-list-input"
             ></TextField>
 
             <IconButton
               variant="outlined"
               onClick={handleAddList}
               sx={{ paddingLeft: "0.2em" }}
+              id="add-list"
             >
               <AddCircleOutlineOutlinedIcon></AddCircleOutlineOutlinedIcon>
             </IconButton>

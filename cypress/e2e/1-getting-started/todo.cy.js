@@ -1,0 +1,42 @@
+/// <reference types="cypress" />
+
+describe("user can login and signup", () => {
+  it("user can login", () => {
+    cy.visit("http://localhost:5173/");
+    cy.get("input:first").clear();
+    cy.get("input:first").type("public_user");
+    cy.get("input:last").clear();
+    cy.get("input:last").type("password");
+    cy.contains("Log in").click();
+    cy.contains("Today");
+  });
+
+  // it("user can sign up and login with the new account", () => {
+  //   cy.get("button:last").click();
+  //   cy.get("input:first").clear();
+  //   cy.get("input:first").type("newUser");
+  //   cy.get("input:last").clear();
+  //   cy.get("input:last").type("pass");
+  //   cy.contains("Sign up").click();
+  //   cy.contains("Today");
+  // });
+
+  describe("when logged in", () => {
+    beforeEach(() => {
+      cy.request("POST", "http://localhost:3003/api/user/login", {
+        username: "newUser",
+        password: "pass",
+      }).then((response) => {
+        localStorage.setItem("token", response.body.token);
+        cy.visit("http://localhost:5173/home");
+      });
+    });
+
+    it("user can create a list", () => {
+      cy.contains("Lists").click();
+      cy.get("#new-list-input").type("magic");
+      cy.get("#add-list").click();
+      cy.get("ul > li").contains("magic");
+    });
+  });
+});
