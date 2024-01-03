@@ -23,3 +23,29 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add("signupByUI", () => {
+  cy.visit("http://localhost:5173/");
+  cy.get("button:last").click();
+  cy.get("input:first").clear();
+  cy.get("input:first").type("newUser");
+  cy.get("input:last").clear();
+  cy.get("input:last").type("pass");
+  cy.contains("Sign up").click();
+});
+
+Cypress.Commands.add("signupByAPI", () => {
+  cy.request("POST", "http://localhost:3003/api/user/signup", {
+    username: "newUser",
+    password: "pass",
+  });
+});
+
+Cypress.Commands.add("loginByAPI", () => {
+  cy.request("POST", "http://localhost:3003/api/user/login", {
+    username: "newUser",
+    password: "pass",
+  }).then((response) => {
+    localStorage.setItem("token", response.body.token);
+  });
+});
