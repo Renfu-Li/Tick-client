@@ -49,3 +49,13 @@ Cypress.Commands.add("loginByAPI", () => {
     localStorage.setItem("token", response.body.token);
   });
 });
+
+Cypress.Commands.add("createList", (listName) => {
+  cy.contains("Lists").click();
+  cy.get("#new-list-input")
+    .should("be.visible")
+    .type(listName)
+    .should("have.value", listName);
+  cy.get("#add-list").click();
+  cy.get("#new-list-input").should("not.be.visible");
+});

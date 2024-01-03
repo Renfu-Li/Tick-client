@@ -93,6 +93,7 @@ function TaskForm({
         onChange={(e) => setTaskName(e.target.value)}
         sx={{ ml: 1, flex: 1 }}
         placeholder="Add task"
+        id="task-input"
       ></InputBase>
 
       <IconButton
@@ -127,6 +128,7 @@ function TaskForm({
         onClick={(e) => {
           setListAnchorEl(e.currentTarget);
         }}
+        id="select-list-button"
       >
         <FormatListBulletedIcon></FormatListBulletedIcon>
       </IconButton>
@@ -139,6 +141,7 @@ function TaskForm({
         onClose={() => {
           setListAnchorEl(null);
         }}
+        id="list-menu-in-task-form"
       >
         {allLists.map((list) => (
           <MenuItem
@@ -151,7 +154,7 @@ function TaskForm({
         ))}
       </Menu>
 
-      <IconButton onClick={handleCreateTask}>
+      <IconButton onClick={handleCreateTask} id="submit-task-button">
         <SendRoundedIcon></SendRoundedIcon>
       </IconButton>
     </Paper>
