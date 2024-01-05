@@ -38,10 +38,12 @@ describe("when logged in", () => {
 
     it("user can create a new task with slef-chosen date", () => {
       cy.get('[data-cy="task-input"]').type("add E2E testing");
+
       cy.get('[data-cy="calendar-button"]').click();
       cy.get('[data-cy="date-input-in-task-form"]')
         .should("be.visible")
         .type("2024-12-25");
+
       cy.get('[data-cy="select-list-button"]').click();
       cy.get('[data-cy="list-menu-in-task-form"]').contains("magic").click();
       cy.get('[data-cy="submit-task-button"]').click();

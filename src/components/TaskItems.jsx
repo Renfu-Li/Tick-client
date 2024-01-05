@@ -27,18 +27,27 @@ function TaskItems({
 }) {
   const [showCompleted, setShowCompleted] = useState(false);
 
+  let today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
+
+  let dayInMs = 1000 * 60 * 60 * 24;
   // find existing and removed tasks
   const allExistingTasks = allTasks.filter((task) => !task.removed);
   const removedTasks = allTasks.filter((task) => task.removed);
   // find and set today's tasks
   const todayTasks = allExistingTasks.filter(
-    (task) => new Date(task.dueDate) <= new Date()
+    (task) => new Date(task.dueDate) < tomorrow
   );
   // find and set next 7 days' tasks
   const sevenDaysLater = new Date();
   sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+  sevenDaysLater.setHours(0, 0, 0, 0);
   const next7DaysTasks = allExistingTasks.filter(
-    (task) => new Date(task.dueDate) <= sevenDaysLater
+    (task) => new Date(task.dueDate) < sevenDaysLater
   );
   // find existing tasks, completed tasks and removed tasks
   const completedTasks = allExistingTasks.filter((task) => task.completed);
@@ -63,7 +72,9 @@ function TaskItems({
   const completedTasksInList = tasksToShow.filter((task) => task.completed);
 
   const calDateDiff = (date) => {
-    const diffInMs = new Date(date) - new Date();
+    const formattedDate = new Date(date);
+    const zeroHourDate = formattedDate.setHours(0, 0, 0, 0);
+    const diffInMs = new Date(date) - today;
     const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
     return diffInDays;
