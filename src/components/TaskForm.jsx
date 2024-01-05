@@ -121,6 +121,7 @@ function TaskForm({
               setDueDate(date);
               setCalendarAnchorEl(null);
             }}
+            disablePast
             data-cy="date-input-in-task-form"
           ></DateCalendar>
         </LocalizationProvider>
