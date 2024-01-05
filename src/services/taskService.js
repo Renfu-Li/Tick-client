@@ -67,18 +67,19 @@ const removeTask = async (id, task, list, token) => {
   return response.data;
 };
 
-const deleteTask = async (id, list, token) => {
+const deleteTask = async (token, id) => {
   const response = await axios.delete(
     `${baseURL}/${id}`,
     generateConfig(token)
   );
 
-  const updatedList = { ...list, count: list.count - 1 };
-  await axios.put(
-    `http://localhost:3003/api/lists/${list.id}`,
-    updatedList,
-    generateConfig(token)
-  );
+  // no need to update List since the count was decreased when the task was removed
+  // const updatedList = { ...list, count: list.count - 1 };
+  // await axios.put(
+  //   `http://localhost:3003/api/lists/${list.id}`,
+  //   updatedList,
+  //   generateConfig(token)
+  // );
 
   return response.data;
 };

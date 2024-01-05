@@ -22,9 +22,11 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
 import listService from "../services/listService";
+import AlertDialog from "./AlertDialog";
 
 function TaskDetails({
   token,
+  listToShow,
   selectedTask,
   setSelectedTask,
   allTasks,
@@ -34,6 +36,7 @@ function TaskDetails({
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const dateStr = new Date(selectedTask?.dueDate).toLocaleDateString(
     undefined,
@@ -100,6 +103,10 @@ function TaskDetails({
         : list
     );
     setAllLists(listsAfterAddition);
+  };
+
+  const handleOpenAlert = () => {
+    setOpenAlert(true);
   };
 
   const handleEditNote = async () => {
@@ -202,7 +209,9 @@ function TaskDetails({
           ))}
         </Menu>
 
-        <IconButton onClick={handleRemoveTask}>
+        <IconButton
+          onClick={listToShow === "Trash" ? handleOpenAlert : handleRemoveTask}
+        >
           <DeleteIcon color="primary"></DeleteIcon>
         </IconButton>
       </Stack>
@@ -226,19 +235,6 @@ function TaskDetails({
         ></InputBase>
       </Paper>
 
-      {/* <TextField
-        id="outlined-multiline-flexible"
-        label="Task note"
-        multiline
-        value={selectedTask.taskNote}
-        onChange={(e) =>
-          setSelectedTask({ ...selectedTask, taskNote: e.target.value })
-        }
-        rows={10}
-        fullWidth
-        sx={{ mt: "1em" }}
-      ></TextField> */}
-
       <Button
         variant="outlined"
         endIcon={<CheckIcon />}
@@ -247,6 +243,15 @@ function TaskDetails({
       >
         Change Note
       </Button>
+
+      <AlertDialog
+        openAlert={openAlert}
+        setOpenAlert={setOpenAlert}
+        taskId={selectedTask.id}
+        allTasks={allTasks}
+        setAllTasks={setAllTasks}
+        token={token}
+      ></AlertDialog>
     </Box>
   ) : (
     <Stack

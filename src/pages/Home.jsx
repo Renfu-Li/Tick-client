@@ -77,6 +77,7 @@ export default function Home({ token, setToken }) {
         <Grid item xs={6} sx={{ height: "100vh" }}>
           <TaskDetails
             token={token}
+            listToShow={listToShow}
             selectedTask={selectedTask}
             setSelectedTask={setSelectedTask}
             allTasks={allTasks}
