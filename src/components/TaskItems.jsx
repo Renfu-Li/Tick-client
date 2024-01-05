@@ -53,7 +53,7 @@ function TaskItems({
   const completedTasks = allExistingTasks.filter((task) => task.completed);
 
   // compute the tasktoShow from props
-  const tasksToShow =
+  const unsortedTasks =
     listToShow === "Today"
       ? todayTasks
       : listToShow === "Next 7 Days"
@@ -68,6 +68,9 @@ function TaskItems({
           (task) => task.listName === listToShow && !task.removed
         );
 
+  const tasksToShow = [...unsortedTasks].sort(
+    (task1, task2) => task1.dueDate - task2.dueDate
+  );
   const incompletedTasksInList = tasksToShow.filter((task) => !task.completed);
   const completedTasksInList = tasksToShow.filter((task) => task.completed);
 
