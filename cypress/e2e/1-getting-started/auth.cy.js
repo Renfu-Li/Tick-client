@@ -11,8 +11,10 @@ describe("user can login and signup", () => {
     cy.visit("http://localhost:5173/");
     cy.get("input:first").clear();
     cy.get("input:first").type("newUser");
+
     cy.get("input:last").clear();
     cy.get("input:last").type("pass");
+
     cy.contains("Log in").click();
     cy.contains("Today");
   });

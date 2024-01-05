@@ -93,13 +93,14 @@ function TaskForm({
         onChange={(e) => setTaskName(e.target.value)}
         sx={{ ml: 1, flex: 1 }}
         placeholder="Add task"
-        id="task-input"
+        data-cy="task-input"
       ></InputBase>
 
       <IconButton
         onClick={(e) => {
           setCalendarAnchorEl(e.currentTarget);
         }}
+        data-cy="calendar-button"
       >
         <CalendarMonthIcon></CalendarMonthIcon>
       </IconButton>
@@ -120,6 +121,7 @@ function TaskForm({
               setDueDate(date);
               setCalendarAnchorEl(null);
             }}
+            data-cy="date-input-in-task-form"
           ></DateCalendar>
         </LocalizationProvider>
       </Popover>
@@ -128,7 +130,7 @@ function TaskForm({
         onClick={(e) => {
           setListAnchorEl(e.currentTarget);
         }}
-        id="select-list-button"
+        data-cy="select-list-button"
       >
         <FormatListBulletedIcon></FormatListBulletedIcon>
       </IconButton>
@@ -141,7 +143,7 @@ function TaskForm({
         onClose={() => {
           setListAnchorEl(null);
         }}
-        id="list-menu-in-task-form"
+        data-cy="list-menu-in-task-form"
       >
         {allLists.map((list) => (
           <MenuItem
@@ -154,7 +156,7 @@ function TaskForm({
         ))}
       </Menu>
 
-      <IconButton onClick={handleCreateTask} id="submit-task-button">
+      <IconButton onClick={handleCreateTask} data-cy="submit-task-button">
         <SendRoundedIcon></SendRoundedIcon>
       </IconButton>
     </Paper>

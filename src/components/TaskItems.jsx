@@ -118,7 +118,9 @@ function TaskItems({
                     "aria-label": "Checkbox for task completion",
                   }}
                 ></Checkbox>
-                <Typography fontSize="0.9em">{task.taskName}</Typography>
+                <Typography data-cy="name-of-task-items" fontSize="0.9em">
+                  {task.taskName}
+                </Typography>
               </Stack>
 
               <Stack direction="row" spacing={1}>

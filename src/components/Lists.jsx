@@ -39,8 +39,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
     setListName("");
   };
 
-  // console.log(allLists);
-
   return (
     <List
       dense
@@ -157,14 +155,14 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               value={listName}
               onChange={(e) => setListName(e.target.value)}
               fullWidth
-              id="new-list-input"
+              data-cy="new-list-input"
             ></TextField>
 
             <IconButton
               variant="outlined"
               onClick={handleAddList}
               sx={{ paddingLeft: "0.2em" }}
-              id="add-list"
+              data-cy="add-list-button"
             >
               <AddCircleOutlineOutlinedIcon></AddCircleOutlineOutlinedIcon>
             </IconButton>
@@ -188,7 +186,9 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
             >
               <Stack direction="row" alignItems="center">
                 <MenuIcon color="action" sx={{ mr: "0.3em" }}></MenuIcon>
-                <Typography fontSize="0.9em">{list.listName}</Typography>
+                <Typography data-cy="listName-in-Lists" fontSize="0.9em">
+                  {list.listName}
+                </Typography>
               </Stack>
 
               <Typography fontSize="0.8em" color="grey">

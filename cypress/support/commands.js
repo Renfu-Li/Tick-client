@@ -52,10 +52,12 @@ Cypress.Commands.add("loginByAPI", () => {
 
 Cypress.Commands.add("createList", (listName) => {
   cy.contains("Lists").click();
-  cy.get("#new-list-input")
+  cy.get('[data-cy="new-list-input"]')
+    .as("new-list-input")
     .should("be.visible")
-    .type(listName)
-    .should("have.value", listName);
-  cy.get("#add-list").click();
-  cy.get("#new-list-input").should("not.be.visible");
+    .type(listName);
+
+  cy.get('[data-cy="add-list-button"]').click();
+  cy.get("@new-list-input").should("not.be.visible");
+  cy.get('[data-cy="listName-in-Lists"]').contains(listName);
 });
