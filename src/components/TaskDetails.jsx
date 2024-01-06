@@ -2,6 +2,8 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import RestoreIcon from "@mui/icons-material/Restore";
 import {
   Box,
   Button,
@@ -105,10 +107,6 @@ function TaskDetails({
     setAllLists(listsAfterAddition);
   };
 
-  const handleOpenAlert = () => {
-    setOpenAlert(true);
-  };
-
   const handleEditNote = async () => {
     const newTask = {
       ...selectedTask,
@@ -150,7 +148,34 @@ function TaskDetails({
 
     // update task count in allLists state
     const updatedAllLists = allLists.map((list) =>
-      list.listName === selectedTask.listName ? returnedList : list
+      list.listName === returnedList.listName ? returnedList : list
+    );
+    setAllLists(updatedAllLists);
+  };
+
+  const handleRestoreTask = async () => {
+    // update task
+    const newTask = { ...selectedTask, removed: false };
+    const updatedTask = await taskService.updateTask(
+      selectedTask.id,
+      newTask,
+      token
+    );
+
+    const updatedAllTasks = allTasks.map((task) =>
+      task.id === selectedTask.id ? updatedTask : task
+    );
+    setAllTasks(updatedAllTasks);
+
+    // update list
+    const listToUpdate = allLists.find(
+      (list) => list.listName === selectedTask.listName
+    );
+    const updatedList = { ...listToUpdate, count: listToUpdate.count + 1 };
+    const returnedList = await listService.updateList(token, updatedList);
+
+    const updatedAllLists = allLists.map((list) =>
+      list.listName === returnedList.listName ? returnedList : list
     );
     setAllLists(updatedAllLists);
   };
@@ -209,11 +234,30 @@ function TaskDetails({
           ))}
         </Menu>
 
-        <IconButton
-          onClick={listToShow === "Trash" ? handleOpenAlert : handleRemoveTask}
-        >
-          <DeleteIcon color="primary"></DeleteIcon>
-        </IconButton>
+        {listToShow === "Trash" ? (
+          <>
+            <IconButton onClick={() => setOpenAlert(true)}>
+              <DeleteForeverIcon color="primary"></DeleteForeverIcon>
+            </IconButton>
+
+            <AlertDialog
+              openAlert={openAlert}
+              setOpenAlert={setOpenAlert}
+              taskId={selectedTask.id}
+              allTasks={allTasks}
+              setAllTasks={setAllTasks}
+              token={token}
+            ></AlertDialog>
+
+            <IconButton onClick={handleRestoreTask}>
+              <RestoreIcon color="primary"></RestoreIcon>
+            </IconButton>
+          </>
+        ) : (
+          <IconButton onClick={handleRemoveTask}>
+            <DeleteIcon color="primary"></DeleteIcon>
+          </IconButton>
+        )}
       </Stack>
 
       <Paper
@@ -243,15 +287,6 @@ function TaskDetails({
       >
         Change Note
       </Button>
-
-      <AlertDialog
-        openAlert={openAlert}
-        setOpenAlert={setOpenAlert}
-        taskId={selectedTask.id}
-        allTasks={allTasks}
-        setAllTasks={setAllTasks}
-        token={token}
-      ></AlertDialog>
     </Box>
   ) : (
     <Stack
