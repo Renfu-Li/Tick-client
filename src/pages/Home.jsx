@@ -48,8 +48,6 @@ export default function Home({ token, setToken }) {
 
   useEffect(() => setSelectedTask(null), [listToShow]);
 
-  // console.log(allLists);
-
   return (
     <Stack direction="row" height="100vh">
       <SideBar setToken={setToken}></SideBar>

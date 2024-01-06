@@ -1,7 +1,7 @@
 import { Typography, Box } from "@mui/material";
 // import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
-import TaskItems from "./TaskItems";
+import TaskSections from "./TaskSections";
 // import AddCircle from "@mui/icons-material/AddCircle";
 
 function Tasks({
@@ -35,7 +35,7 @@ function Tasks({
         ></TaskForm>
       )}
 
-      <TaskItems
+      <TaskSections
         token={token}
         listToShow={listToShow}
         allTasks={allTasks}
@@ -44,7 +44,7 @@ function Tasks({
         setAllLists={setAllLists}
         selectedTask={selectedTask}
         setSelectedTask={setSelectedTask}
-      ></TaskItems>
+      ></TaskSections>
     </Box>
   );
 }
