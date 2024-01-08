@@ -1,4 +1,4 @@
-import Home from "./pages/Home.jsx";
+import ToDoLists from "./pages/ToDoLists.jsx";
 import { Route, Routes } from "react-router-dom";
 import User from "./pages/User.jsx";
 import CalendarView from "./pages/CalendarView.jsx";
@@ -24,16 +24,10 @@ function App() {
           element={<User token={token} setToken={setToken}></User>}
         ></Route>
 
-        {/* <Route
-          path="/home"
-          element={<Home token={token} setToken={setToken}></Home>}
-        ></Route>
-        <Route path="/calendar" element={<CalendarView></CalendarView>}></Route> */}
-
         <Route element={<SideBar setToken={setToken}></SideBar>}>
           <Route
-            path="/home"
-            element={<Home token={token} setToken={setToken}></Home>}
+            path="/lists"
+            element={<ToDoLists token={token} setToken={setToken}></ToDoLists>}
           ></Route>
           <Route
             path="/calendar"

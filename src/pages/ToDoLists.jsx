@@ -2,13 +2,12 @@ import { Grid, Stack } from "@mui/material";
 
 import Lists from "../components/Lists";
 import Tasks from "../components/Tasks";
-import SideBar from "../components/SideBar";
 import taskService from "../services/taskService";
 import { useEffect, useState } from "react";
 import listService from "../services/listService";
 import TaskDetails from "../components/TaskDetails";
 
-export default function Home({ token, setToken }) {
+export default function ToDoLists({ token }) {
   const [allTasks, setAllTasks] = useState([]);
   const [allLists, setAllLists] = useState([]);
   const [listToShow, setListToShow] = useState("Today");
@@ -23,7 +22,7 @@ export default function Home({ token, setToken }) {
           setAllTasks(tasks);
         })
         .catch((error) => {
-          console.log("error from taskService in Home: ", error.message);
+          console.log("error from taskService in ToDoLists: ", error.message);
         });
 
       // get all lists
@@ -41,7 +40,7 @@ export default function Home({ token, setToken }) {
           setAllLists(listInfo);
         })
         .catch((error) => {
-          console.log("error from listService in Home: ", error.message);
+          console.log("error from listService in ToDoLists: ", error.message);
         });
     }
   }, [token]);
