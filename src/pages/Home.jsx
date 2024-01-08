@@ -50,7 +50,7 @@ export default function Home({ token, setToken }) {
 
   return (
     <Stack direction="row" height="100vh">
-      <SideBar setToken={setToken}></SideBar>
+      {/* <SideBar setToken={setToken}></SideBar> */}
 
       <Lists
         allLists={allLists}

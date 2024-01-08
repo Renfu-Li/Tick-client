@@ -56,7 +56,7 @@ function CalendarView({ localizer = mLocalizer }) {
       components: {
         timeSlotWrapper: ColoredDateCellWrapper,
       },
-      views: Object.keys(Views).map((k) => Views[k]),
+      views: [Views.MONTH, Views.WEEK, Views.DAY],
     }),
     []
   );
