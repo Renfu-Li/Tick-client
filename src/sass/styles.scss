@@ -1,5 +1,5 @@
-@import './variables';
-@import './reset';
+@import "./variables";
+@import "./reset";
 
 .rbc-calendar {
   box-sizing: border-box;
@@ -7,6 +7,8 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  font-family: "roboto", "Helvetica Neue", "sans-serif";
+  font-size: 80%;
 }
 
 .rbc-calendar *,
@@ -39,30 +41,31 @@
   color: $out-of-range-color;
 }
 
-.rbc-off-range-bg {
-  background: $out-of-range-bg-color;
-}
+// .rbc-off-range-bg {
+//   background: $out-of-range-bg-color;
+// }
 
 .rbc-header {
   overflow: hidden;
   flex: 1 0 0%;
   text-overflow: ellipsis;
+  color: lighten(#333, 40%);
   white-space: nowrap;
-  padding: 0 3px;
+  padding: 8px;
   text-align: center;
   vertical-align: middle;
-  font-weight: bold;
-  font-size: 90%;
+  // font-weight: bold;
+  // font-size: 90%;
   min-height: 0;
-  border-bottom: 1px solid $cell-border;
+  border-bottom: 0.5px solid $cell-border;
 
-  & + & {
-    border-left: 1px solid $cell-border;
-  }
+  // & + & {
+  //   border-left: 0.5px solid $cell-border;
+  // }
 
   .rbc-rtl & + & {
     border-left-width: 0;
-    border-right: 1px solid $cell-border;
+    border-right: 0.5px solid $cell-border;
   }
 
   & > a {
@@ -81,8 +84,15 @@
   margin: 0;
   padding: 0;
   border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
   user-select: text;
+}
+
+.rbc-button-link:hover {
+  background-color: rgba(71, 114, 250, 0.1);
 }
 
 .rbc-row-content {
@@ -111,12 +121,19 @@
   }
 }
 
-.rbc-today {
-  background-color: $today-highlight-bg;
+// .rbc-today {
+//   background-color: $today-highlight-bg;
+// }
+
+div.rbc-date-cell.rbc-now.rbc-current button {
+  background-color: #4772fa;
+  color: #ffffff;
+  border-radius: 50%;
+  // padding: 4px;
 }
 
-@import './toolbar';
-@import './event';
-@import './month';
-@import './agenda';
-@import './time-grid';
+@import "./toolbar";
+@import "./event";
+@import "./month";
+@import "./agenda";
+@import "./time-grid";

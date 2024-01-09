@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 
@@ -17,7 +17,7 @@ const mLocalizer = dayjsLocalizer(dayjs);
 const ColoredDateCellWrapper = ({ children }) =>
   React.cloneElement(React.Children.only(children), {
     style: {
-      backgroundColor: "lightblue",
+      backgroundColor: "white",
     },
   });
 
@@ -62,8 +62,11 @@ function CalendarView({ localizer = mLocalizer }) {
   );
 
   return (
-    <Fragment>
-      <div className="height600" style={{ height: "100vh" }}>
+    <>
+      <div
+        className="height600"
+        style={{ height: "100vh", width: "100%", padding: "0.5em" }}
+      >
         <Calendar
           components={components}
           defaultDate={today}
@@ -77,7 +80,7 @@ function CalendarView({ localizer = mLocalizer }) {
           popup
         />
       </div>
-    </Fragment>
+    </>
   );
 }
 

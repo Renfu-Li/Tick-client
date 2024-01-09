@@ -1,7 +1,7 @@
 import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
@@ -48,13 +48,17 @@ export default function SideBar({ setToken }) {
           </MenuItem>
         </Menu>
 
-        <IconButton component={Link} to={"/lists"}>
-          <CheckBoxIcon></CheckBoxIcon>
-        </IconButton>
+        <NavLink to="/lists">
+          <IconButton>
+            <CheckBoxIcon></CheckBoxIcon>
+          </IconButton>
+        </NavLink>
 
-        <IconButton component={Link} to={"/calendar"}>
-          <CalendarMonthIcon></CalendarMonthIcon>
-        </IconButton>
+        <NavLink to="/calendar">
+          <IconButton>
+            <CalendarMonthIcon></CalendarMonthIcon>
+          </IconButton>
+        </NavLink>
       </Stack>
 
       <Outlet></Outlet>

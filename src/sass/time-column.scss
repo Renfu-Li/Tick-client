@@ -1,4 +1,4 @@
-@import './variables';
+@import "./variables";
 
 .rbc-time-column {
   display: flex;
@@ -10,9 +10,8 @@
   }
 }
 
-
 .rbc-timeslot-group {
-  border-bottom: 1px solid $cell-border;
+  border-bottom: 0.5px solid $cell-border;
   min-height: 40px;
   display: flex;
   flex-flow: column nowrap;
@@ -45,7 +44,7 @@
   }
 
   .rbc-event {
-    border: 1px solid $event-border;
+    border: 0.5px solid $event-border;
     display: flex;
     max-height: 100%;
     min-height: 20px;
@@ -54,7 +53,7 @@
     overflow: hidden;
     position: absolute;
   }
-  
+
   .rbc-background-event {
     @extend .rbc-event;
     opacity: 0.75;
@@ -76,7 +75,7 @@
   }
 
   .rbc-time-slot {
-    border-top: 1px solid lighten($cell-border, 10%);
+    border-top: 0.5px solid lighten($cell-border, 10%);
   }
 }
 
@@ -86,7 +85,7 @@
     position: sticky;
     left: 0;
     background-color: white;
-    border-right: 1px solid $cell-border;
+    border-right: 0.5px solid $cell-border;
     z-index: 10;
     margin-right: -1px;
   }
@@ -112,8 +111,9 @@
   .rbc-header,
   .rbc-day-bg {
     width: 140px;
+    padding: 0.5em;
     // min-width: 0;
-    flex:  1 1 0;
+    flex: 1 1 0;
     flex-basis: 0 px;
   }
 }
