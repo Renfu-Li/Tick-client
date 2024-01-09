@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 
@@ -14,15 +14,23 @@ import axios from "axios";
 dayjs.extend(timezone);
 const mLocalizer = dayjsLocalizer(dayjs);
 
-const ColoredDateCellWrapper = ({ children }) =>
-  React.cloneElement(React.Children.only(children), {
-    style: {
-      backgroundColor: "white",
-    },
-  });
+// const ColoredDateCellWrapper = ({ children }) =>
+//   React.cloneElement(React.Children.only(children), {
+//     style: {
+//       backgroundColor: "white",
+//     },
+//   });
 
-function CalendarView({ localizer = mLocalizer }) {
-  const [events, setEvents] = useState([]);
+function CalendarView({
+  localizer = mLocalizer,
+  dayLayoutAlgorithm = "no-overlap",
+  token,
+  setToken,
+  allTasks,
+  setAllTasks,
+  allLists,
+  setAllLists,
+}) {
   const today = new Date();
   const minHour = new Date();
   minHour.setHours(6, 0, 0, 0);
@@ -30,34 +38,66 @@ function CalendarView({ localizer = mLocalizer }) {
   const maxHour = new Date();
   maxHour.setHours(23, 59, 59, 999);
 
-  useEffect(() => {
-    axios.get("http://localhost:8000/tasks").then((response) => {
-      const tasks = response.data;
-      const events = tasks.map((task) => {
-        const nextDay = new Date(task.dueDate);
-        nextDay.setDate(nextDay.getDate() + 1);
+  const allExistingTasks = allTasks.filter((task) => !task.removed);
+  const events = allExistingTasks.map((task) => {
+    const nextDay = new Date(task.dueDate);
+    nextDay.setDate(nextDay.getDate() + 1);
 
-        return {
-          id: task.id,
-          title: task.taskName,
-          allDay: true,
-          start: new Date(task.dueDate),
-          end: new Date(task.dueDate),
-          desc: task.taskNote,
-        };
-      });
+    return {
+      id: task.id,
+      title: task.taskName,
+      allDay: true,
+      start: new Date(task.dueDate),
+      end: new Date(task.dueDate),
+      desc: task.taskNote,
+    };
+  });
 
-      setEvents(events);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("http://localhost:8000/tasks").then((response) => {
+  //     const tasks = response.data;
+  // const events = tasks.map((task) => {
+  //   const nextDay = new Date(task.dueDate);
+  //   nextDay.setDate(nextDay.getDate() + 1);
 
-  const { components, views } = useMemo(
-    () => ({
-      components: {
-        timeSlotWrapper: ColoredDateCellWrapper,
-      },
-      views: [Views.MONTH, Views.WEEK, Views.DAY],
-    }),
+  //   return {
+  //     id: task.id,
+  //     title: task.taskName,
+  //     allDay: true,
+  //     start: new Date(task.dueDate),
+  //     end: new Date(task.dueDate),
+  //     desc: task.taskNote,
+  //   };
+  // });
+
+  // setEvents(events);
+  //   });
+  // }, []);
+
+  // const { components, views } = useMemo(
+  //   () => ({
+  //     components: {
+  //       timeSlotWrapper: ColoredDateCellWrapper,
+  //     },
+  //     views: [Views.MONTH, Views.WEEK, Views.DAY],
+  //   }),
+  //   []
+  // );
+
+  const views = [Views.MONTH, Views.WEEK, Views.DAY];
+
+  // const handleSelectSlot = useCallback(
+  //   ({ start, end }) => {
+  //     const title = window.prompt("New Event Name");
+  //     if (title) {
+  //       setEvents((prev) => [...prev, { start, end, title }]);
+  //     }
+  //   },
+  //   [setEvents]
+  // );
+
+  const handleSelectEvent = useCallback(
+    (event) => window.alert(event.title),
     []
   );
 
@@ -68,14 +108,18 @@ function CalendarView({ localizer = mLocalizer }) {
         style={{ height: "100vh", width: "100%", padding: "0.5em" }}
       >
         <Calendar
-          components={components}
+          // components={components}
+          dayLayoutAlgorithm={dayLayoutAlgorithm}
           defaultDate={today}
           events={events}
           localizer={localizer}
+          onSelectEvent={handleSelectEvent}
+          onSelectSlot={() => console.log("hello")}
+          selectable
           min={minHour}
           max={maxHour}
           showMultiDayTimes
-          step={60}
+          step={30}
           views={views}
           popup
         />

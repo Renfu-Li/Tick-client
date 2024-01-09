@@ -2,48 +2,18 @@ import { Grid, Stack } from "@mui/material";
 
 import Lists from "../components/Lists";
 import Tasks from "../components/Tasks";
-import taskService from "../services/taskService";
 import { useEffect, useState } from "react";
-import listService from "../services/listService";
 import TaskDetails from "../components/TaskDetails";
 
-export default function ToDoLists({ token }) {
-  const [allTasks, setAllTasks] = useState([]);
-  const [allLists, setAllLists] = useState([]);
+export default function ToDoLists({
+  token,
+  allTasks,
+  setAllTasks,
+  allLists,
+  setAllLists,
+}) {
   const [listToShow, setListToShow] = useState("Today");
   const [selectedTask, setSelectedTask] = useState(null);
-
-  useEffect(() => {
-    if (token) {
-      // get all tasks
-      taskService
-        .getAllTasks(token)
-        .then((tasks) => {
-          setAllTasks(tasks);
-        })
-        .catch((error) => {
-          console.log("error from taskService in ToDoLists: ", error.message);
-        });
-
-      // get all lists
-      listService
-        .getAllList(token)
-        .then((lists) => {
-          const listInfo = lists.map((list) => {
-            return {
-              listName: list.listName,
-              id: list.id,
-              count: list.count,
-            };
-          });
-
-          setAllLists(listInfo);
-        })
-        .catch((error) => {
-          console.log("error from listService in ToDoLists: ", error.message);
-        });
-    }
-  }, [token]);
 
   useEffect(() => setSelectedTask(null), [listToShow]);
 
