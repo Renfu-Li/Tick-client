@@ -48,7 +48,7 @@ export default function User({ token, setToken }) {
         height: "100vh",
       }}
     >
-      {token && <Navigate to="/home"></Navigate>}
+      {token && <Navigate to="/lists"></Navigate>}
 
       <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
         <LockIcon></LockIcon>

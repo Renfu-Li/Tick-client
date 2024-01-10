@@ -10,27 +10,23 @@ import {
 } from "react-big-calendar";
 
 import timezone from "dayjs/plugin/timezone";
-import axios from "axios";
+import EventDialog from "../components/EventDialog";
+
 dayjs.extend(timezone);
 const mLocalizer = dayjsLocalizer(dayjs);
-
-// const ColoredDateCellWrapper = ({ children }) =>
-//   React.cloneElement(React.Children.only(children), {
-//     style: {
-//       backgroundColor: "white",
-//     },
-//   });
 
 function CalendarView({
   localizer = mLocalizer,
   dayLayoutAlgorithm = "no-overlap",
   token,
-  setToken,
   allTasks,
   setAllTasks,
   allLists,
   setAllLists,
 }) {
+  const [open, setOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
   const today = new Date();
   const minHour = new Date();
   minHour.setHours(6, 0, 0, 0);
@@ -40,49 +36,16 @@ function CalendarView({
 
   const allExistingTasks = allTasks.filter((task) => !task.removed);
   const events = allExistingTasks.map((task) => {
-    const nextDay = new Date(task.dueDate);
-    nextDay.setDate(nextDay.getDate() + 1);
+    // const nextDay = new Date(task.dueDate);
+    // nextDay.setDate(nextDay.getDate() + 1);
 
     return {
-      id: task.id,
+      ...task,
       title: task.taskName,
-      allDay: true,
       start: new Date(task.dueDate),
       end: new Date(task.dueDate),
-      desc: task.taskNote,
     };
   });
-
-  // useEffect(() => {
-  //   axios.get("http://localhost:8000/tasks").then((response) => {
-  //     const tasks = response.data;
-  // const events = tasks.map((task) => {
-  //   const nextDay = new Date(task.dueDate);
-  //   nextDay.setDate(nextDay.getDate() + 1);
-
-  //   return {
-  //     id: task.id,
-  //     title: task.taskName,
-  //     allDay: true,
-  //     start: new Date(task.dueDate),
-  //     end: new Date(task.dueDate),
-  //     desc: task.taskNote,
-  //   };
-  // });
-
-  // setEvents(events);
-  //   });
-  // }, []);
-
-  // const { components, views } = useMemo(
-  //   () => ({
-  //     components: {
-  //       timeSlotWrapper: ColoredDateCellWrapper,
-  //     },
-  //     views: [Views.MONTH, Views.WEEK, Views.DAY],
-  //   }),
-  //   []
-  // );
 
   const views = [Views.MONTH, Views.WEEK, Views.DAY];
 
@@ -96,10 +59,10 @@ function CalendarView({
   //   [setEvents]
   // );
 
-  const handleSelectEvent = useCallback(
-    (event) => window.alert(event.title),
-    []
-  );
+  const handleSelectEvent = useCallback((event) => {
+    setOpen(true);
+    setSelectedEvent(event);
+  }, []);
 
   return (
     <>
@@ -123,6 +86,19 @@ function CalendarView({
           views={views}
           popup
         />
+
+        {open && (
+          <EventDialog
+            token={token}
+            open={open}
+            setOpen={setOpen}
+            selectedEvent={selectedEvent}
+            allTasks={allTasks}
+            setAllTasks={setAllTasks}
+            allLists={allLists}
+            setAllLists={setAllLists}
+          ></EventDialog>
+        )}
       </div>
     </>
   );
