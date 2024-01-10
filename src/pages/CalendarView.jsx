@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 
@@ -24,8 +24,10 @@ function CalendarView({
   allLists,
   setAllLists,
 }) {
-  const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openNew, setOpenNew] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [newEvent, setNewEvent] = useState(null);
 
   const today = new Date();
   const minHour = new Date();
@@ -36,9 +38,6 @@ function CalendarView({
 
   const allExistingTasks = allTasks.filter((task) => !task.removed);
   const events = allExistingTasks.map((task) => {
-    // const nextDay = new Date(task.dueDate);
-    // nextDay.setDate(nextDay.getDate() + 1);
-
     return {
       ...task,
       title: task.taskName,
@@ -49,18 +48,25 @@ function CalendarView({
 
   const views = [Views.MONTH, Views.WEEK, Views.DAY];
 
-  // const handleSelectSlot = useCallback(
-  //   ({ start, end }) => {
-  //     const title = window.prompt("New Event Name");
-  //     if (title) {
-  //       setEvents((prev) => [...prev, { start, end, title }]);
-  //     }
-  //   },
-  //   [setEvents]
-  // );
+  const handleSelectSlot = useCallback(({ start, end }) => {
+    setOpenNew(true);
+
+    setNewEvent({
+      title: "",
+      start,
+      end,
+      taskName: "",
+      dueDate: start,
+      completed: false,
+      removed: false,
+      taskNote: "",
+      listName: null,
+    });
+  }, []);
 
   const handleSelectEvent = useCallback((event) => {
-    setOpen(true);
+    setOpenEdit(true);
+
     setSelectedEvent(event);
   }, []);
 
@@ -71,13 +77,12 @@ function CalendarView({
         style={{ height: "100vh", width: "100%", padding: "0.5em" }}
       >
         <Calendar
-          // components={components}
           dayLayoutAlgorithm={dayLayoutAlgorithm}
           defaultDate={today}
           events={events}
           localizer={localizer}
           onSelectEvent={handleSelectEvent}
-          onSelectSlot={() => console.log("hello")}
+          onSelectSlot={handleSelectSlot}
           selectable
           min={minHour}
           max={maxHour}
@@ -87,16 +92,31 @@ function CalendarView({
           popup
         />
 
-        {open && (
+        {selectedEvent && (
           <EventDialog
             token={token}
-            open={open}
-            setOpen={setOpen}
-            selectedEvent={selectedEvent}
+            open={openEdit}
+            setOpen={setOpenEdit}
+            event={selectedEvent}
             allTasks={allTasks}
             setAllTasks={setAllTasks}
             allLists={allLists}
             setAllLists={setAllLists}
+            action="edit"
+          ></EventDialog>
+        )}
+
+        {newEvent && (
+          <EventDialog
+            token={token}
+            open={openNew}
+            setOpen={setOpenNew}
+            event={newEvent}
+            allTasks={allTasks}
+            setAllTasks={setAllTasks}
+            allLists={allLists}
+            setAllLists={setAllLists}
+            action="create"
           ></EventDialog>
         )}
       </div>

@@ -33,25 +33,28 @@ export default function FormDialog({
   token,
   open,
   setOpen,
-  selectedEvent,
+  event,
   allTasks,
   setAllTasks,
   allLists,
   setAllLists,
+  action,
 }) {
-  const { title, start, end, ...selectedTask } = selectedEvent;
+  const { title, start, end, ...selectedTask } = event;
 
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+
   const [dueDate, setDueDate] = useState(selectedTask.dueDate);
   const [selectedList, setSelectedList] = useState(null);
   const [taskName, setTaskName] = useState(selectedTask.taskName);
   const [taskNote, setTaskNote] = useState(selectedTask.taskNote);
 
-  const dateStr = new Date(dueDate).toLocaleDateString(undefined, {
-    month: "short",
-    day: "numeric",
-  });
+  const getDateStr = (date) =>
+    new Date(date).toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+    });
 
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };
@@ -126,19 +129,27 @@ export default function FormDialog({
     );
     setAllTasks(updatedAllTasks);
 
-    // update the task count in List collection
-    const listsAfterRemoval = allLists.map((list) =>
-      list.listName === selectedTask.listName
-        ? { ...list, count: list.count - 1 }
-        : list
-    );
+    // update the task count in List collection if task moved to another list
+    if (selectedList && selectedList.listName !== selectedTask.listName) {
+      const listsAfterRemoval = allLists.map((list) =>
+        list.listName === selectedTask.listName
+          ? { ...list, count: list.count - 1 }
+          : list
+      );
 
-    const listsAfterAddition = listsAfterRemoval.map((list) =>
-      list.listName === selectedList.listName
-        ? { ...list, count: list.count + 1 }
-        : list
-    );
-    setAllLists(listsAfterAddition);
+      const listsAfterAddition = listsAfterRemoval.map((list) =>
+        list.listName === selectedList.listName
+          ? { ...list, count: list.count + 1 }
+          : list
+      );
+      setAllLists(listsAfterAddition);
+    }
+
+    // clear local states
+    setDueDate(dayjs(new Date()));
+    setTaskName("");
+    setSelectedList(null);
+    setTaskNote("");
   };
 
   const handleRemoveTask = async () => {
@@ -169,6 +180,45 @@ export default function FormDialog({
     setAllLists(updatedAllLists);
   };
 
+  const handleCreateTask = async () => {
+    setOpen(false);
+
+    const newTask = {
+      ...selectedTask,
+      taskName,
+      listName: selectedList.listName,
+      taskNote,
+    };
+
+    const createdTask = await taskService.createTask(newTask, token);
+
+    const listToUpdate = allLists.find(
+      (list) => list.listName === selectedList.listName
+    );
+    await listService.updateList(token, {
+      ...listToUpdate,
+      count: listToUpdate.count + 1,
+    });
+
+    // update allTasks state
+    const updatedAllTasks = allTasks.concat(createdTask);
+    setAllTasks(updatedAllTasks);
+
+    // update allLists state
+    const updatedAllLists = allLists.map((list) =>
+      list.listName === selectedList.listName
+        ? { ...list, count: list.count + 1 }
+        : list
+    );
+    setAllLists(updatedAllLists);
+
+    // clear local states
+    setDueDate(dayjs(new Date()));
+    setTaskName("");
+    setSelectedList(null);
+    setTaskNote("");
+  };
+
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       {/* <DialogTitle>Add a task</DialogTitle> */}
@@ -179,11 +229,13 @@ export default function FormDialog({
             justifyContent="space-between"
             alignItems="center"
           >
-            <CheckBox
-              checked={selectedTask.completed}
-              onChange={handleCheck}
-              color="primary"
-            ></CheckBox>
+            {action === "edit" && (
+              <CheckBox
+                checked={selectedTask.completed}
+                onChange={handleCheck}
+                color="primary"
+              ></CheckBox>
+            )}
 
             <Button
               onClick={(e) => {
@@ -191,7 +243,9 @@ export default function FormDialog({
               }}
               startIcon={<CalendarMonthIcon />}
             >
-              {dateStr}
+              {action === "edit"
+                ? getDateStr(dueDate)
+                : getDateStr(selectedTask.dueDate)}
             </Button>
 
             <Popover
@@ -251,11 +305,19 @@ export default function FormDialog({
             rows={4}
           ></InputBase>
 
-          <Stack direction="row" justifyContent="space-between">
-            <IconButton onClick={handleRemoveTask}>
-              <DeleteIcon></DeleteIcon>
-            </IconButton>
-            <IconButton onClick={handleEditTask}>
+          <Stack
+            direction="row"
+            justifyContent={action === "edit" ? "space-between" : "flex-end"}
+          >
+            {action === "edit" && (
+              <IconButton onClick={handleRemoveTask}>
+                <DeleteIcon></DeleteIcon>
+              </IconButton>
+            )}
+
+            <IconButton
+              onClick={action === "edit" ? handleEditTask : handleCreateTask}
+            >
               <CheckIcon></CheckIcon>
             </IconButton>
           </Stack>
