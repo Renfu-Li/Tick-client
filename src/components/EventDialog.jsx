@@ -14,6 +14,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   InputBase,
   Menu,
@@ -33,25 +34,17 @@ export default function FormDialog({
   token,
   open,
   setOpen,
-  taskInfo,
+  targetTask,
+  setTask,
   allTasks,
   setAllTasks,
   allLists,
   setAllLists,
   action,
 }) {
-  const selectedTask =
-    action === "edit"
-      ? allTasks.find((task) => task.id === taskInfo)
-      : taskInfo;
-
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-
-  const [dueDate, setDueDate] = useState(selectedTask.dueDate);
   const [selectedList, setSelectedList] = useState(null);
-  const [taskName, setTaskName] = useState(selectedTask.taskName);
-  const [taskNote, setTaskNote] = useState(selectedTask.taskNote);
 
   const getDateStr = (date) =>
     new Date(date).toLocaleDateString(undefined, {
@@ -60,23 +53,23 @@ export default function FormDialog({
     });
 
   const handleCheck = async () => {
-    const newTask = { ...selectedTask, completed: !selectedTask.completed };
+    const newTask = { ...targetTask, completed: !targetTask.completed };
     const updatedTask = await taskService.updateTask(
-      selectedTask.id,
+      targetTask.id,
       newTask,
       token
     );
 
     // update allTasks state
     const newAllTasks = allTasks.map((t) =>
-      t.id === selectedTask.id ? updatedTask : t
+      t.id === targetTask.id ? updatedTask : t
     );
     setAllTasks(newAllTasks);
 
     const listToUpdate = allLists.find(
-      (list) => list.listName === selectedTask.listName
+      (list) => list.listName === targetTask.listName
     );
-    const updatedList = selectedTask.completed
+    const updatedList = targetTask.completed
       ? { ...listToUpdate, count: listToUpdate.count + 1 }
       : { ...listToUpdate, count: listToUpdate.count - 1 };
 
@@ -85,7 +78,7 @@ export default function FormDialog({
 
     // update task counts in allLists state
     const updatedAllLists = allLists.map((list) =>
-      list.listName === selectedTask.listName ? updatedList : list
+      list.listName === targetTask.listName ? updatedList : list
     );
 
     setAllLists(updatedAllLists);
@@ -93,7 +86,10 @@ export default function FormDialog({
 
   const handleChangeDue = async (date) => {
     setCalendarAnchorEl(null);
-    setDueDate(date);
+    setTask({
+      ...targetTask,
+      dueDate: date,
+    });
   };
 
   const handleChangeList = async (list) => {
@@ -105,19 +101,19 @@ export default function FormDialog({
     setOpen(false);
 
     const newTask = {
-      ...selectedTask,
-      dueDate: dueDate,
-      listName: selectedList?.listName || selectedTask.listName,
-      taskName,
-      taskNote,
+      ...targetTask,
+      dueDate: targetTask.dueDate,
+      listName: selectedList?.listName || targetTask.listName,
+      taskName: targetTask.taskName,
+      taskNote: targetTask.taskNote,
     };
 
     let updatedTask;
     const sourceList = allLists.find(
-      (list) => list.listName === selectedTask.listName
+      (list) => list.listName === targetTask.listName
     );
 
-    if (selectedList && selectedList.listName !== selectedTask.listName) {
+    if (selectedList && selectedList.listName !== targetTask.listName) {
       updatedTask = await taskService.moveTask(
         token,
         newTask,
@@ -125,23 +121,19 @@ export default function FormDialog({
         selectedList
       );
     } else {
-      updatedTask = await taskService.updateTask(
-        selectedTask.id,
-        newTask,
-        token
-      );
+      updatedTask = await taskService.updateTask(targetTask.id, newTask, token);
     }
 
     // update allTasks state
     const updatedAllTasks = allTasks.map((task) =>
-      task.id === selectedTask.id ? updatedTask : task
+      task.id === targetTask.id ? updatedTask : task
     );
     setAllTasks(updatedAllTasks);
 
     // update the task count in List collection if task moved to another list
-    if (selectedList && selectedList.listName !== selectedTask.listName) {
+    if (selectedList && selectedList.listName !== targetTask.listName) {
       const listsAfterRemoval = allLists.map((list) =>
-        list.listName === selectedTask.listName
+        list.listName === targetTask.listName
           ? { ...list, count: list.count - 1 }
           : list
       );
@@ -154,18 +146,14 @@ export default function FormDialog({
       setAllLists(listsAfterAddition);
     }
 
-    // clear local states
-    setDueDate(dayjs(new Date()));
-    setTaskName("");
     setSelectedList(null);
-    setTaskNote("");
   };
 
   const handleRemoveTask = async () => {
     setOpen(false);
-    const newTask = { ...selectedTask, removed: true };
+    const newTask = { ...targetTask, removed: true };
     const updatedTask = await taskService.updateTask(
-      selectedTask.id,
+      targetTask.id,
       newTask,
       token
     );
@@ -177,7 +165,7 @@ export default function FormDialog({
     setAllTasks(updatedAllTasks);
 
     const listToUpdate = allLists.find(
-      (list) => list.listName === selectedTask.listName
+      (list) => list.listName === targetTask.listName
     );
     const updatedList = { ...listToUpdate, count: listToUpdate.count - 1 };
     const returnedList = await listService.updateList(token, updatedList);
@@ -193,10 +181,10 @@ export default function FormDialog({
     setOpen(false);
 
     const newTask = {
-      ...selectedTask,
-      taskName,
+      ...targetTask,
+      // taskName,
       listName: selectedList.listName,
-      taskNote,
+      // taskNote,
     };
 
     const createdTask = await taskService.createTask(newTask, token);
@@ -222,114 +210,119 @@ export default function FormDialog({
     setAllLists(updatedAllLists);
 
     // clear local states
-    setDueDate(dayjs(new Date()));
-    setTaskName("");
     setSelectedList(null);
-    setTaskNote("");
   };
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      <DialogContent>
-        <Box>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
+      <DialogContent dividers={true} sx={{ padding: 0, minWidth: "400px" }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          padding="0.2em 0.5em"
+        >
+          {action === "edit" && (
+            <Checkbox
+              checked={targetTask.completed}
+              onChange={handleCheck}
+              color="primary"
+            ></Checkbox>
+          )}
+
+          <Button
+            onClick={(e) => {
+              setCalendarAnchorEl(e.currentTarget);
+            }}
+            startIcon={<CalendarMonthIcon />}
           >
-            {action === "edit" && (
-              <Checkbox
-                checked={selectedTask.completed}
-                onChange={handleCheck}
-                color="primary"
-              ></Checkbox>
-            )}
+            {getDateStr(targetTask.dueDate)}
+          </Button>
 
-            <Button
-              onClick={(e) => {
-                setCalendarAnchorEl(e.currentTarget);
-              }}
-              startIcon={<CalendarMonthIcon />}
-            >
-              {action === "edit"
-                ? getDateStr(dueDate)
-                : getDateStr(selectedTask.dueDate)}
-            </Button>
+          <Popover
+            open={Boolean(calendarAnchorEl)}
+            anchorEl={calendarAnchorEl}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
+            onClose={() => {
+              setCalendarAnchorEl(null);
+            }}
+          >
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                value={dayjs(targetTask.dueDate)}
+                onChange={(date) => handleChangeDue(date)}
+              ></DateCalendar>
+            </LocalizationProvider>
+          </Popover>
 
-            <Popover
-              open={Boolean(calendarAnchorEl)}
-              anchorEl={calendarAnchorEl}
-              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-              transformOrigin={{ vertical: "top", horizontal: "left" }}
-              onClose={() => {
-                setCalendarAnchorEl(null);
-              }}
-            >
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateCalendar
-                  value={dayjs(dueDate)}
-                  onChange={(date) => handleChangeDue(date)}
-                ></DateCalendar>
-              </LocalizationProvider>
-            </Popover>
+          <Button
+            startIcon={<FormatListBulletedIcon />}
+            onClick={(e) => setMenuAnchorEl(e.currentTarget)}
+          >
+            {selectedList?.listName || "List"}
+          </Button>
+          <Menu
+            anchorEl={menuAnchorEl}
+            open={Boolean(menuAnchorEl)}
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            transformOrigin={{ vertical: "top", horizontal: "left" }}
+            onClose={() => setMenuAnchorEl(null)}
+          >
+            {allLists.map((list) => (
+              <MenuItem
+                key={list.id}
+                selected={targetTask.listName === list.listName}
+                onClick={() => handleChangeList(list)}
+              >
+                {list.listName}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Stack>
 
-            <Button
-              startIcon={<FormatListBulletedIcon />}
-              onClick={(e) => setMenuAnchorEl(e.currentTarget)}
-            >
-              List
-            </Button>
-            <Menu
-              anchorEl={menuAnchorEl}
-              open={Boolean(menuAnchorEl)}
-              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-              transformOrigin={{ vertical: "top", horizontal: "left" }}
-              onClose={() => setMenuAnchorEl(null)}
-            >
-              {allLists.map((list) => (
-                <MenuItem
-                  key={list.id}
-                  selected={selectedTask.listName === list.listName}
-                  onClick={() => handleChangeList(list)}
-                >
-                  {list.listName}
-                </MenuItem>
-              ))}
-            </Menu>
-          </Stack>
+        <Divider></Divider>
 
+        <Box padding="0.2em 1.2em">
           <InputBase
             fullWidth
             placeholder="What would you like to do?"
-            value={taskName}
-            onChange={(e) => setTaskName(e.target.value)}
+            value={targetTask.taskName}
+            onChange={(e) =>
+              setTask({ ...targetTask, taskName: e.target.value })
+            }
           ></InputBase>
           <InputBase
             fullWidth
-            value={taskNote}
-            onChange={(e) => setTaskNote(e.target.value)}
+            value={targetTask.taskNote}
+            onChange={(e) =>
+              setTask({ ...targetTask, taskNote: e.target.value })
+            }
             placeholder="Description"
             multiline
-            rows={4}
+            rows={6}
           ></InputBase>
-
-          <Stack
-            direction="row"
-            justifyContent={action === "edit" ? "space-between" : "flex-end"}
-          >
-            {action === "edit" && (
-              <IconButton onClick={handleRemoveTask}>
-                <DeleteIcon></DeleteIcon>
-              </IconButton>
-            )}
-
-            <IconButton
-              onClick={action === "edit" ? handleEditTask : handleCreateTask}
-            >
-              <CheckIcon></CheckIcon>
-            </IconButton>
-          </Stack>
         </Box>
+
+        <Divider></Divider>
+
+        <Stack
+          direction="row"
+          justifyContent={action === "edit" ? "space-between" : "flex-end"}
+          padding="0.2em 0.3em"
+        >
+          {action === "edit" && (
+            <IconButton onClick={handleRemoveTask}>
+              <DeleteIcon></DeleteIcon>
+            </IconButton>
+          )}
+
+          <IconButton
+            onClick={action === "edit" ? handleEditTask : handleCreateTask}
+          >
+            <CheckIcon></CheckIcon>
+          </IconButton>
+        </Stack>
       </DialogContent>
     </Dialog>
   );
