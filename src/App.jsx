@@ -6,6 +6,7 @@ import SideBar from "./components/SideBar.jsx";
 import { useEffect, useState } from "react";
 import taskService from "./services/taskService.js";
 import listService from "./services/listService.js";
+import Focus from "./pages/Focus.jsx";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -87,6 +88,7 @@ function App() {
               ></CalendarView>
             }
           ></Route>
+          <Route path="/focus" element={<Focus></Focus>}></Route>
         </Route>
       </Routes>
     </>

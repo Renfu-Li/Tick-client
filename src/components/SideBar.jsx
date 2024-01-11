@@ -1,3 +1,4 @@
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
@@ -57,6 +58,12 @@ export default function SideBar({ setToken }) {
         <NavLink to="/calendar">
           <IconButton>
             <CalendarMonthIcon></CalendarMonthIcon>
+          </IconButton>
+        </NavLink>
+
+        <NavLink to="/focus">
+          <IconButton>
+            <AccessTimeIcon></AccessTimeIcon>
           </IconButton>
         </NavLink>
       </Stack>
