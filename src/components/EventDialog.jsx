@@ -26,21 +26,24 @@ import {
 } from "@mui/material";
 import taskService from "../services/taskService";
 import listService from "../services/listService";
-import CheckBox from "@mui/icons-material/CheckBox";
+import Checkbox from "@mui/material/Checkbox";
 import { LegendToggleOutlined } from "@mui/icons-material";
 
 export default function FormDialog({
   token,
   open,
   setOpen,
-  event,
+  taskInfo,
   allTasks,
   setAllTasks,
   allLists,
   setAllLists,
   action,
 }) {
-  const { title, start, end, ...selectedTask } = event;
+  const selectedTask =
+    action === "edit"
+      ? allTasks.find((task) => task.id === taskInfo)
+      : taskInfo;
 
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
@@ -56,18 +59,24 @@ export default function FormDialog({
       day: "numeric",
     });
 
-  const handleCheck = async (task) => {
-    const newTask = { ...task, completed: !task.completed };
-    await taskService.updateTask(task.id, newTask, token);
+  const handleCheck = async () => {
+    const newTask = { ...selectedTask, completed: !selectedTask.completed };
+    const updatedTask = await taskService.updateTask(
+      selectedTask.id,
+      newTask,
+      token
+    );
 
     // update allTasks state
-    const newAllTasks = allTasks.map((t) => (t.id === task.id ? newTask : t));
+    const newAllTasks = allTasks.map((t) =>
+      t.id === selectedTask.id ? updatedTask : t
+    );
     setAllTasks(newAllTasks);
 
     const listToUpdate = allLists.find(
-      (list) => list.listName === task.listName
+      (list) => list.listName === selectedTask.listName
     );
-    const updatedList = task.completed
+    const updatedList = selectedTask.completed
       ? { ...listToUpdate, count: listToUpdate.count + 1 }
       : { ...listToUpdate, count: listToUpdate.count - 1 };
 
@@ -76,7 +85,7 @@ export default function FormDialog({
 
     // update task counts in allLists state
     const updatedAllLists = allLists.map((list) =>
-      list.listName === task.listName ? updatedList : list
+      list.listName === selectedTask.listName ? updatedList : list
     );
 
     setAllLists(updatedAllLists);
@@ -221,7 +230,6 @@ export default function FormDialog({
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
-      {/* <DialogTitle>Add a task</DialogTitle> */}
       <DialogContent>
         <Box>
           <Stack
@@ -230,11 +238,11 @@ export default function FormDialog({
             alignItems="center"
           >
             {action === "edit" && (
-              <CheckBox
+              <Checkbox
                 checked={selectedTask.completed}
                 onChange={handleCheck}
                 color="primary"
-              ></CheckBox>
+              ></Checkbox>
             )}
 
             <Button

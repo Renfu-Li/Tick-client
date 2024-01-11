@@ -26,7 +26,7 @@ function CalendarView({
 }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openNew, setOpenNew] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedTaskID, setSelectedTaskId] = useState(null);
   const [newEvent, setNewEvent] = useState(null);
 
   const today = new Date();
@@ -67,7 +67,7 @@ function CalendarView({
   const handleSelectEvent = useCallback((event) => {
     setOpenEdit(true);
 
-    setSelectedEvent(event);
+    setSelectedTaskId(event.id);
   }, []);
 
   return (
@@ -92,12 +92,12 @@ function CalendarView({
           popup
         />
 
-        {selectedEvent && (
+        {selectedTaskID && (
           <EventDialog
             token={token}
             open={openEdit}
             setOpen={setOpenEdit}
-            event={selectedEvent}
+            taskInfo={selectedTaskID}
             allTasks={allTasks}
             setAllTasks={setAllTasks}
             allLists={allLists}
@@ -111,7 +111,7 @@ function CalendarView({
             token={token}
             open={openNew}
             setOpen={setOpenNew}
-            event={newEvent}
+            taskInfo={newEvent}
             allTasks={allTasks}
             setAllTasks={setAllTasks}
             allLists={allLists}
