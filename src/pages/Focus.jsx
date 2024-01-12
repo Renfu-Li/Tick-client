@@ -53,7 +53,7 @@ function Focus() {
             width={260}
             height={260}
           >
-            <Typography fontSize="2.5em">50:00</Typography>
+            <Typography fontSize="2.5em">00:00</Typography>
           </Stack>
 
           <Button variant="outlined" sx={{ borderRadius: "24px" }}>
