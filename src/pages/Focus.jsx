@@ -11,10 +11,24 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import focusService from "../services/focusService";
 
-function Focus() {
+function Focus({ token, allTasks }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [task, setTask] = useState(null);
+  const [start, setStart] = useState(null);
+  const [focusNote, setFocusNote] = useState("");
+  const [allFocuses, setAllFocuses] = useState([]);
+
+  useEffect(() => {
+    if (token) {
+      focusService
+        .getAllFocuses(token)
+        .then((focuses) => setAllFocuses(focuses));
+    }
+  }, [token]);
+
   const open = Boolean(anchorEl);
 
   const handleClick = (e) => {
@@ -24,6 +38,30 @@ function Focus() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleFocusStatus = async () => {
+    if (!start) {
+      setStart(new Date());
+    } else {
+      const newFocus = {
+        taskId: task.id,
+        start,
+        end: new Date(),
+        focusNote,
+      };
+      const createdFocus = await focusService.createFocus(token, newFocus);
+      const updatedAllFocuses = allFocuses.concat(createdFocus);
+      setAllFocuses(updatedAllFocuses);
+      setStart(null);
+    }
+  };
+
+  const handleSelectTask = (task) => {
+    setTask(task);
+    setAnchorEl(null);
+  };
+
+  console.log(allFocuses);
 
   return (
     <Grid container>
@@ -37,12 +75,14 @@ function Focus() {
             endIcon={<KeyboardArrowRightIcon />}
             sx={{ borderRadius: "24px" }}
           >
-            Task
+            {task?.taskName || "Task"}
           </Button>
           <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-            <MenuItem>task example</MenuItem>
-            <MenuItem>task example</MenuItem>
-            <MenuItem>task example</MenuItem>
+            {allTasks.map((task) => (
+              <MenuItem key={task.id} onClick={() => handleSelectTask(task)}>
+                {task.taskName}
+              </MenuItem>
+            ))}
           </Menu>
 
           <Stack
@@ -56,8 +96,12 @@ function Focus() {
             <Typography fontSize="2.5em">00:00</Typography>
           </Stack>
 
-          <Button variant="outlined" sx={{ borderRadius: "24px" }}>
-            Start
+          <Button
+            variant="outlined"
+            sx={{ borderRadius: "24px" }}
+            onClick={handleFocusStatus}
+          >
+            {start ? "End" : "Start"}
           </Button>
         </Stack>
       </Grid>

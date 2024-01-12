@@ -88,7 +88,10 @@ function App() {
               ></CalendarView>
             }
           ></Route>
-          <Route path="/focus" element={<Focus></Focus>}></Route>
+          <Route
+            path="/focus"
+            element={<Focus token={token} allTasks={allTasks}></Focus>}
+          ></Route>
         </Route>
       </Routes>
     </>
