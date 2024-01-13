@@ -52,7 +52,7 @@ function TaskSections({
         );
 
   const tasksToShow = [...unsortedTasks].sort(
-    (task1, task2) => task1.dueDate - task2.dueDate
+    (task1, task2) => new Date(task1.dueDate) - new Date(task2.dueDate)
   );
 
   const uncompletedTasksInList = tasksToShow.filter((task) => !task.completed);

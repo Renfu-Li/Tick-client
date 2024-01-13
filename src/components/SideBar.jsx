@@ -1,3 +1,4 @@
+import BarChartIcon from "@mui/icons-material/BarChart";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -26,7 +27,43 @@ export default function SideBar({ setToken }) {
 
   return (
     <Stack direction="row" height="100vh">
-      <Stack>
+      <Stack
+        borderRight={0.5}
+        borderColor="lightgray"
+        width="50px"
+        height="100%"
+        justifyContent="space-between"
+        alignItems="center"
+        bgcolor="rgb(249, 249, 249)"
+        paddingY="1em"
+        boxSizing="border-box"
+        position="sticky"
+        top={0}
+      >
+        <Stack spacing={1}>
+          <NavLink to="/lists">
+            <IconButton>
+              <CheckBoxIcon></CheckBoxIcon>
+            </IconButton>
+          </NavLink>
+
+          <NavLink to="/calendar">
+            <IconButton>
+              <CalendarMonthIcon></CalendarMonthIcon>
+            </IconButton>
+          </NavLink>
+
+          <NavLink to="/focus">
+            <IconButton>
+              <AccessTimeIcon></AccessTimeIcon>
+            </IconButton>
+          </NavLink>
+
+          <IconButton>
+            <BarChartIcon></BarChartIcon>
+          </IconButton>
+        </Stack>
+
         <IconButton
           aria-label="account of current user"
           aria-controls="menu-account"
@@ -38,8 +75,8 @@ export default function SideBar({ setToken }) {
         <Menu
           id="menu-account"
           anchorEl={anchorEl}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          transformOrigin={{ vertical: "top", horizontal: "left" }}
+          anchorOrigin={{ vertical: "top", horizontal: "left" }}
+          transformOrigin={{ vertical: "bottom", horizontal: "left" }}
           keepMounted
           open={Boolean(anchorEl)}
           onClose={handleClose}
@@ -48,24 +85,6 @@ export default function SideBar({ setToken }) {
             Log out
           </MenuItem>
         </Menu>
-
-        <NavLink to="/lists">
-          <IconButton>
-            <CheckBoxIcon></CheckBoxIcon>
-          </IconButton>
-        </NavLink>
-
-        <NavLink to="/calendar">
-          <IconButton>
-            <CalendarMonthIcon></CalendarMonthIcon>
-          </IconButton>
-        </NavLink>
-
-        <NavLink to="/focus">
-          <IconButton>
-            <AccessTimeIcon></AccessTimeIcon>
-          </IconButton>
-        </NavLink>
       </Stack>
 
       <Outlet></Outlet>

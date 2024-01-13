@@ -100,12 +100,7 @@ function Focus({ token, allTasks }) {
 
   const calcuDuration = (start, end) => {
     const diffInMs = new Date(end) - new Date(start);
-    // const hourInMs = 60 * 60 * 1000;
     const minuteInMs = 60 * 1000;
-
-    // const hour = Math.floor(diffInMs / hourInMs);
-    // const diffForMinute = diffInMs - hour * hourInMs;
-    // const minute = Math.round(diffForMinute / minuteInMs);
     const durationInMinutes = Math.round(diffInMs / minuteInMs);
     const { durationStr, hour, minute } = getDurationStr(durationInMinutes);
 
@@ -125,6 +120,10 @@ function Focus({ token, allTasks }) {
         .durationInMinutes,
     };
   });
+
+  allRecords.sort(
+    (record1, record2) => new Date(record2.date) - new Date(record1.date)
+  );
 
   const todayStr = getDateStr();
   const todayRecords = allRecords.filter(
@@ -196,8 +195,20 @@ function Focus({ token, allTasks }) {
   };
 
   return (
-    <Grid container>
-      <Grid item xs={5}>
+    <Grid
+      container
+      position="relative"
+      spacing={1}
+      justifyContent="space-evenly"
+    >
+      <Grid
+        item
+        xs={6}
+        position="sticky"
+        top="0px"
+        height="100vh"
+        sx={{ borderRight: 0.5, borderColor: "lightgray" }}
+      >
         <Stack justifyContent="space-evenly" alignItems="center" height="100%">
           <Typography fontSize="1.2em">Focus</Typography>
 
@@ -229,7 +240,7 @@ function Focus({ token, allTasks }) {
           </Stack>
 
           <Button
-            variant="outlined"
+            variant="contained"
             sx={{ borderRadius: "24px" }}
             onClick={handleFocusStatus}
           >
@@ -238,81 +249,98 @@ function Focus({ token, allTasks }) {
         </Stack>
       </Grid>
 
-      <Grid item xs={5}>
-        <Box>
-          <Typography>Overview</Typography>
+      <Grid item xs={5} height="100vh" mt="2em">
+        <Typography>Overview</Typography>
+        <Grid
+          container
+          // spacing={1}
+          justifyContent="space-between"
+          margin="0.5em"
+          mx={0}
+        >
           <Grid
-            container
-            // spacing={1}
-            justifyContent="space-between"
-            margin="0.5em"
+            item
+            xs={5.5}
+            borderRadius={1.5}
+            bgcolor="rgb(245, 245, 245)"
+            padding={1.5}
           >
-            <Grid item xs={5} borderRadius={1.5} bgcolor="rgb(230, 230, 230)">
-              <Box>
-                <Typography>Today's Focus</Typography>
-                <Typography>{todayDurationStr}</Typography>
-              </Box>
-            </Grid>
-
-            <Grid item xs={5} borderRadius={1.5} bgcolor="rgb(230, 230, 230)">
-              <Box>
-                <Typography>This week's Focus</Typography>
-                <Typography>{weeklyDurationStr}</Typography>
-              </Box>
-            </Grid>
-            {/* <Grid item xs={6}></Grid>
-            <Grid item xs={6}></Grid> */}
+            <Typography color="grey" fontSize="90%">
+              Today's Focus
+            </Typography>
+            <Typography mt="0.5em" fontSize="1.5em">
+              {todayDurationStr}
+            </Typography>
           </Grid>
 
-          {start ? (
-            <Box>
-              <Typography>Focus Note</Typography>
-              <Paper
-                sx={{
-                  padding: 0.5,
-                }}
-              >
-                <InputBase
-                  value={focusNote}
-                  onChange={(e) => setFocusNote(e.target.value)}
-                  placeholder="What do you have in mind?"
-                  minRows={10}
-                  multiline
-                  fullWidth
-                  sx={{ ml: 1 }}
-                ></InputBase>
-              </Paper>
-            </Box>
-          ) : (
-            <Box>
-              <Typography>Focus record</Typography>
-              <List>
-                {allRecords.map((record) => (
-                  <ListItem key={record.id}>
-                    <Stack
-                      width="100%"
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <TimerIcon
-                        fontSize="small"
-                        color="primary"
-                        sx={{ mr: "0.5em" }}
-                      ></TimerIcon>
+          <Grid
+            item
+            xs={5.5}
+            borderRadius={1.5}
+            bgcolor="rgb(245, 245, 245)"
+            padding={1.5}
+          >
+            <Typography color="grey" fontSize="90%">
+              This week's Focus
+            </Typography>
+            <Typography mt="0.5em" fontSize="1.5em">
+              {weeklyDurationStr}
+            </Typography>
+          </Grid>
+          {/* <Grid item xs={6}></Grid>
+            <Grid item xs={6}></Grid> */}
+        </Grid>
 
-                      <ListItemText
-                        primary={record.taskName}
-                        secondary={`${record.dateStr} ${record.startTime} - ${record.endTime}`}
-                      ></ListItemText>
-                      <Typography>{record.durationStr}</Typography>
-                    </Stack>
-                  </ListItem>
-                ))}
-              </List>
-            </Box>
-          )}
-        </Box>
+        <Divider sx={{ my: "2em", color: "lightgray" }}></Divider>
+
+        {start ? (
+          <Box>
+            <Typography mb={1}>Focus Note</Typography>
+            <Paper
+              sx={{
+                padding: 0.5,
+              }}
+            >
+              <InputBase
+                value={focusNote}
+                onChange={(e) => setFocusNote(e.target.value)}
+                placeholder="What do you have in mind?"
+                minRows={10}
+                multiline
+                fullWidth
+                sx={{ ml: 1 }}
+              ></InputBase>
+            </Paper>
+          </Box>
+        ) : (
+          <Box>
+            <Typography>Focus record</Typography>
+            <List>
+              {allRecords.map((record) => (
+                <ListItem key={record.id}>
+                  <Stack
+                    width="100%"
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <TimerIcon
+                      fontSize="small"
+                      color="primary"
+                      sx={{ mr: "0.5em" }}
+                    ></TimerIcon>
+
+                    <ListItemText
+                      primary={record.taskName}
+                      secondary={`${record.dateStr} ${record.startTime} - ${record.endTime}`}
+                    ></ListItemText>
+                    <Typography>{record.durationStr}</Typography>
+                  </Stack>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        )}
       </Grid>
     </Grid>
   );

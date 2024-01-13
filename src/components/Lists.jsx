@@ -43,7 +43,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
     <List
       dense
       sx={{
-        borderLeft: 0.5,
         borderRight: 0.5,
         borderColor: "lightgray",
         height: "100%",

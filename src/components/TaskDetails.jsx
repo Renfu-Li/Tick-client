@@ -271,7 +271,7 @@ function TaskDetails({
             setSelectedTask({ ...selectedTask, taskNote: e.target.value })
           }
           placeholder="Task note"
-          minRows={12}
+          minRows={16}
           multiline
           fullWidth
           sx={{ ml: 1 }}

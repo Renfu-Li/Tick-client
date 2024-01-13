@@ -18,7 +18,7 @@ export default function ToDoLists({
   useEffect(() => setSelectedTask(null), [listToShow]);
 
   return (
-    <Stack direction="row" height="100vh">
+    <Stack direction="row" height="100vh" width="100%">
       {/* <SideBar setToken={setToken}></SideBar> */}
 
       <Lists
@@ -28,7 +28,7 @@ export default function ToDoLists({
         token={token}
       ></Lists>
 
-      <Grid container sx={{ height: "100vh" }}>
+      <Grid container sx={{ height: "100vh" }} justifyContent="space-evenly">
         <Grid item xs={6} sx={{ height: "100vh" }}>
           <Tasks
             listToShow={listToShow}
