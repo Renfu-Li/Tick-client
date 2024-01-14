@@ -59,9 +59,11 @@ export default function SideBar({ setToken }) {
             </IconButton>
           </NavLink>
 
-          <IconButton>
-            <BarChartIcon></BarChartIcon>
-          </IconButton>
+          <NavLink to="/statistics">
+            <IconButton>
+              <BarChartIcon></BarChartIcon>
+            </IconButton>
+          </NavLink>
         </Stack>
 
         <IconButton

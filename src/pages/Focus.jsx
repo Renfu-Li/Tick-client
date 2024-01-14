@@ -1,3 +1,4 @@
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TimerIcon from "@mui/icons-material/Timer";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {
@@ -156,14 +157,6 @@ function Focus({ token, allTasks }) {
 
   const open = Boolean(anchorEl);
 
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleFocusStatus = async () => {
     if (!start) {
       setStart(new Date());
@@ -213,14 +206,18 @@ function Focus({ token, allTasks }) {
           <Typography fontSize="1.2em">Focus</Typography>
 
           <Button
-            onClick={handleClick}
+            onClick={(e) => setAnchorEl(e.currentTarget)}
             variant="outlined"
-            endIcon={<KeyboardArrowRightIcon />}
+            endIcon={<ExpandMoreIcon />}
             sx={{ borderRadius: "24px" }}
           >
             {task?.taskName || "Task"}
           </Button>
-          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={() => setAnchorEl(null)}
+          >
             {allTasks.map((task) => (
               <MenuItem key={task.id} onClick={() => handleSelectTask(task)}>
                 {task.taskName}
@@ -287,8 +284,6 @@ function Focus({ token, allTasks }) {
               {weeklyDurationStr}
             </Typography>
           </Grid>
-          {/* <Grid item xs={6}></Grid>
-            <Grid item xs={6}></Grid> */}
         </Grid>
 
         <Divider sx={{ my: "2em", color: "lightgray" }}></Divider>

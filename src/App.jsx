@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import taskService from "./services/taskService.js";
 import listService from "./services/listService.js";
 import Focus from "./pages/Focus.jsx";
+import Statistics from "./pages/Statistics.jsx";
 
 function App() {
   const [token, setToken] = useState(null);
@@ -92,6 +93,7 @@ function App() {
             path="/focus"
             element={<Focus token={token} allTasks={allTasks}></Focus>}
           ></Route>
+          <Route path="/statistics" element={<Statistics></Statistics>}></Route>
         </Route>
       </Routes>
     </>
