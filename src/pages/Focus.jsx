@@ -20,28 +20,19 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import focusService from "../services/focusService";
+import {
+  getShortDateStr,
+  getTimerStr,
+  getDurationStr,
+  getMonday,
+} from "../helper";
 
-function Focus({ token, allTasks }) {
+function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [task, setTask] = useState(null);
   const [time, setTime] = useState(0);
   const [start, setStart] = useState(null);
   const [focusNote, setFocusNote] = useState("");
-  const [allFocuses, setAllFocuses] = useState([]);
-
-  useEffect(() => {
-    if (token) {
-      focusService.getAllFocuses(token).then((focuses) => {
-        const initialFocuses = focuses.map((focus) => {
-          return {
-            ...focus,
-            taskName: focus.task.taskName,
-          };
-        });
-        setAllFocuses(initialFocuses);
-      });
-    }
-  }, [token]);
 
   useEffect(() => {
     let intervalId;
@@ -55,78 +46,7 @@ function Focus({ token, allTasks }) {
     return () => clearInterval(intervalId);
   }, [start, time]);
 
-  const getTimerStr = (time) => {
-    const hours = Math.floor(time / 3600000);
-    const minutes = Math.floor((time % 3600000) / 60000);
-    const seconds = Math.floor((time % 60000) / 1000);
-
-    const padTime = (timeData) => {
-      return timeData.toString().padStart(2, "0");
-    };
-
-    const minutesAndSeconds = `${padTime(minutes)}:${padTime(seconds)}`;
-
-    const timerStr =
-      hours === 0
-        ? minutesAndSeconds
-        : `${padTime(hours)}:${minutesAndSeconds}`;
-
-    return timerStr;
-  };
-
-  // console.log(getTimerStr);
-
-  const getDateStr = (date = new Date()) => {
-    return new Date(date).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const getTimeStr = (time) => {
-    return new Date(time).toLocaleTimeString(undefined, {
-      hour: "2-digit",
-      hour12: false,
-      minute: "2-digit",
-    });
-  };
-
-  const getDurationStr = (minutes) => {
-    const hour = Math.floor(minutes / 60);
-    const minute = minutes - hour * 60;
-    const durationStr = hour > 0 ? `${hour}h${minute}m` : `${minute}m`;
-
-    return { hour, minute, durationStr };
-  };
-
-  const calcuDuration = (start, end) => {
-    const diffInMs = new Date(end) - new Date(start);
-    const minuteInMs = 60 * 1000;
-    const durationInMinutes = Math.round(diffInMs / minuteInMs);
-    const { durationStr, hour, minute } = getDurationStr(durationInMinutes);
-
-    return { durationStr, hour, minute, durationInMinutes };
-  };
-
-  const allRecords = allFocuses.map((focus) => {
-    return {
-      id: focus.id,
-      taskName: focus.taskName,
-      date: focus.start,
-      dateStr: getDateStr(focus.start),
-      startTime: getTimeStr(focus.start),
-      endTime: getTimeStr(focus.end),
-      durationStr: calcuDuration(focus.start, focus.end).durationStr,
-      durationInMinutes: calcuDuration(focus.start, focus.end)
-        .durationInMinutes,
-    };
-  });
-
-  allRecords.sort(
-    (record1, record2) => new Date(record2.date) - new Date(record1.date)
-  );
-
-  const todayStr = getDateStr();
+  const todayStr = getShortDateStr();
   const todayRecords = allRecords.filter(
     (record) => record.dateStr === todayStr
   );
@@ -135,16 +55,6 @@ function Focus({ token, allTasks }) {
     0
   );
   const todayDurationStr = getDurationStr(todayDurationMinutes).durationStr;
-
-  const getMonday = () => {
-    const monday = new Date();
-    const dayOfWeek = monday.getDay();
-    const diff = dayOfWeek - (dayOfWeek === 0 ? -6 : 1);
-    monday.setDate(monday.getDate() - diff);
-    monday.getHours(0, 0, 0, 0);
-
-    return monday;
-  };
 
   const currentWeekFocuses = allRecords.filter(
     (record) => new Date(record.date) >= getMonday()

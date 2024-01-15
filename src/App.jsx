@@ -6,13 +6,22 @@ import SideBar from "./components/SideBar.jsx";
 import { useEffect, useState } from "react";
 import taskService from "./services/taskService.js";
 import listService from "./services/listService.js";
+import focusService from "./services/focusService.js";
 import Focus from "./pages/Focus.jsx";
 import Statistics from "./pages/Statistics.jsx";
+import Loading from "./components/Loading.jsx";
+import {
+  getShortDateStr,
+  getTimeStr,
+  calcuDuration,
+  getNumericDateStr,
+} from "./helper.js";
 
 function App() {
   const [token, setToken] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
   const [allLists, setAllLists] = useState([]);
+  const [allFocuses, setAllFocuses] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,7 +40,10 @@ function App() {
           setAllTasks(tasks);
         })
         .catch((error) => {
-          console.log("error from taskService in ToDoLists: ", error.message);
+          console.log(
+            "error from taskService in App component: ",
+            error.message
+          );
         });
 
       // get all lists
@@ -49,10 +61,53 @@ function App() {
           setAllLists(listInfo);
         })
         .catch((error) => {
-          console.log("error from listService in ToDoLists: ", error.message);
+          console.log(
+            "error from listService in App component: ",
+            error.message
+          );
+        });
+
+      // get all focuses
+      focusService
+        .getAllFocuses(token)
+        .then((focuses) => {
+          const initialFocuses = focuses.map((focus) => {
+            return {
+              ...focus,
+              taskName: focus.task.taskName,
+            };
+          });
+
+          setAllFocuses(initialFocuses);
+        })
+        .catch((error) => {
+          console.log(
+            "error from focusService in App component: ",
+            error.message
+          );
         });
     }
   }, [token]);
+
+  const allRecords = allFocuses.map((focus) => {
+    const focusDate = new Date(focus.start);
+    focusDate.setHours(0, 0, 0, 0);
+
+    return {
+      id: focus.id,
+      taskName: focus.taskName,
+      date: focusDate,
+      dateStr: getShortDateStr(focus.start),
+      numericDateStr: getNumericDateStr(focus.start),
+      startTime: getTimeStr(focus.start),
+      endTime: getTimeStr(focus.end),
+      durationStr: calcuDuration(focus.start, focus.end).durationStr,
+      durationInMinutes: calcuDuration(focus.start, focus.end)
+        .durationInMinutes,
+    };
+  });
+
+  allRecords.sort((record1, record2) => record2.date - record1.date);
 
   return (
     <>
@@ -91,9 +146,26 @@ function App() {
           ></Route>
           <Route
             path="/focus"
-            element={<Focus token={token} allTasks={allTasks}></Focus>}
+            element={
+              <Focus
+                token={token}
+                allTasks={allTasks}
+                allRecords={allRecords}
+                allFocuses={allFocuses}
+                setAllFocuses={setAllFocuses}
+              ></Focus>
+            }
           ></Route>
-          <Route path="/statistics" element={<Statistics></Statistics>}></Route>
+          <Route
+            path="/statistics"
+            element={
+              allRecords.length > 0 ? (
+                <Statistics allRecords={allRecords}></Statistics>
+              ) : (
+                <Loading />
+              )
+            }
+          ></Route>
         </Route>
       </Routes>
     </>
