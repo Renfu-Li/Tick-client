@@ -68,10 +68,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <TodayIcon color="action" sx={{ mr: "0.3em" }}></TodayIcon>
               <Typography fontSize="0.9em">Today</Typography>
             </Stack>
-
-            {/* <Typography fontSize="0.8em" color="grey">
-              3
-            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>

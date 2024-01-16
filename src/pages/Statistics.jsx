@@ -1,7 +1,3 @@
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { LineChart } from "@mui/x-charts/LineChart";
 import {
   Button,
   Container,
@@ -28,25 +24,18 @@ import MonthlyTrend from "../components/MonthlyTrend";
 import YearlyTrend from "../components/YearlyTrend";
 
 function Statistics({ allRecords }) {
-  const [weekInTrends, setWeekInTrends] = useState(0);
-
-  const [categoryAnchEl, setCategoryAnchEl] = useState(null);
-  const openCategory = Boolean(categoryAnchEl);
-
-  const [timeInBarAnchEl, setTimeInBarAnchEl] = useState(null);
-  const openTimeInBar = Boolean(timeInBarAnchEl);
-
-  // const [timeInLineAnchEl, setTimeInLineAnchEl] = useState(null);
-  // const openTimeInLine = Boolean(timeInLineAnchEl);
-
   const ascendingRecords = [...allRecords].sort(
     (record1, record2) => record1.date - record2.date
   );
 
   return (
     <Container>
-      <Paper>
-        <Typography>Overview</Typography>
+      <Typography fontSize="1.8em" my="0.5em">
+        Statistics
+      </Typography>
+
+      <Paper sx={{ padding: "1em", mb: "1.5em" }}>
+        <Typography mb="0.5em">Overview</Typography>
 
         <Stack direction="row">
           <Container>
@@ -84,61 +73,18 @@ function Statistics({ allRecords }) {
         </Stack>
       </Paper>
 
-      <Paper>
-        <Stack direction="row" justifyContent="space-between">
-          <Typography>Focus distribution</Typography>
-          <Stack direction="row" spacing={1}>
-            <Button
-              variant="outlined"
-              endIcon={<ExpandMoreIcon />}
-              sx={{ borderRadius: "24px" }}
-              onClick={(e) => setCategoryAnchEl(e.currentTarget)}
-            >
-              Task
-            </Button>
-            <Menu
-              anchorEl={categoryAnchEl}
-              open={openCategory}
-              onClose={() => setCategoryAnchEl(null)}
-            >
-              <MenuItem>Task</MenuItem>
-              <MenuItem>List</MenuItem>
-            </Menu>
-
-            <Button
-              variant="outlined"
-              endIcon={<ExpandMoreIcon />}
-              sx={{ borderRadius: "24px" }}
-              onClick={(e) => setTimeInBarAnchEl(e.currentTarget)}
-            >
-              Day
-            </Button>
-            <Menu
-              anchorEl={timeInBarAnchEl}
-              open={openTimeInBar}
-              onClose={() => setTimeInBarAnchEl(null)}
-            >
-              <MenuItem>Day</MenuItem>
-              <MenuItem>Week</MenuItem>
-              <MenuItem>Month</MenuItem>
-              <MenuItem>Year</MenuItem>
-            </Menu>
-          </Stack>
-        </Stack>
-        <Typography>Distribution</Typography>
-      </Paper>
-
-      <Grid container justifyContent="space-around">
-        <Grid item xs={4}>
+      <Grid container justifyContent="space-between" spacing={3} mb="1.5em">
+        <Grid item xs={5.5}>
           <WeeklyTrend ascendingRecords={ascendingRecords} />
         </Grid>
-        <Grid item xs={7}>
+
+        <Grid item xs={6.5}>
+          <YearlyTrend ascendingRecords={ascendingRecords} />
+        </Grid>
+
+        <Grid item xs={12}>
           <MonthlyTrend ascendingRecords={ascendingRecords} />
         </Grid>
-      </Grid>
-
-      <Grid item>
-        <YearlyTrend ascendingRecords={ascendingRecords} />
       </Grid>
     </Container>
   );

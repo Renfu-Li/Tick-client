@@ -1,20 +1,19 @@
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { LineChart } from "@mui/x-charts/LineChart";
+
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import {
-  getMonday,
-  calcuDateDiff,
-  getAllMondays,
-  addDays,
-  getNumericDateStr,
-  getDateStrsInAWeek,
-  getDurationStr,
-  getFirstDayOfMonth,
-  getFirstDayOfNextMonth,
-  getMonthStr,
-} from "../helper";
+import { getDurationStr, getMonthStr } from "../helper";
 
 function YearlyTrend({ ascendingRecords }) {
   const firstYear = ascendingRecords[0].date.getFullYear();
@@ -71,6 +70,13 @@ function YearlyTrend({ ascendingRecords }) {
     "Dec",
   ];
 
+  const data = shortMonthName.map((month, index) => {
+    return {
+      month,
+      duration: durations[index],
+    };
+  });
+
   const handlePrevYear = () => {
     setYearIndex(yearIndex - 1);
   };
@@ -88,10 +94,8 @@ function YearlyTrend({ ascendingRecords }) {
       ? "Last year"
       : years[yearIndex];
 
-  console.log(yearIndex);
-
   return (
-    <Paper>
+    <Paper sx={{ padding: "1em" }}>
       <Stack direction="row" justifyContent="space-between">
         <Typography>Trends</Typography>
         <Stack direction="row" alignItems="center">
@@ -106,30 +110,38 @@ function YearlyTrend({ ascendingRecords }) {
       </Stack>
 
       <Typography>Daily average: **</Typography>
-      <LineChart
-        xAxis={[{ scaleType: "point", data: shortMonthName }]}
-        series={[
-          {
-            data: durations,
-            area: true,
-            color: "cornflowerblue",
-          },
-        ]}
-        width={650}
-        height={300}
-        sx={{
-          ".MuiLineElement-root": {
-            stroke: "cornflowerblue",
-            strokeWidth: 3,
-          },
-          ".MuiMarkElement-root": {
-            stroke: "#8884d8",
-            scale: "0.6",
-            fill: "#fff",
-            strokeWidth: 2,
-          },
-        }}
-      ></LineChart>
+
+      <ResponsiveContainer width="100%" height={300}>
+        <AreaChart
+          width={1000}
+          height={400}
+          data={data}
+          margin={{
+            top: 10,
+            right: 30,
+            left: 0,
+            bottom: 0,
+          }}
+          style={{ fontFamily: "roboto", fontSize: "75%" }}
+        >
+          <defs>
+            <linearGradient id="blueGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="cornflowerblue" stopOpacity={0.8} />
+              <stop offset="100%" stopColor="#FFFFFF" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="4 4" vertical={false} />
+          <XAxis dataKey="month" />
+          <YAxis />
+          <Tooltip />
+          <Area
+            type="monotone"
+            dataKey="duration"
+            stroke="#8884d8"
+            fill="url(#blueGradient)"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
     </Paper>
   );
 }
