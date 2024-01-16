@@ -15,46 +15,22 @@ import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { getDurationStr, getMonthStr } from "../helper";
 
-function YearlyTrend({ ascendingRecords }) {
-  const firstYear = ascendingRecords[0].date.getFullYear();
-  const thisYear = new Date().getFullYear();
-  const numOfYears = thisYear - firstYear + 1;
-
+function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
   const [yearIndex, setYearIndex] = useState(numOfYears - 1);
 
-  const years = [];
-  const monthStrs = [];
-  const monthlyRecords = new Map();
-
-  for (let year = firstYear; year <= thisYear; year++) {
-    years.push(year);
-
-    for (let month = 1; month <= 12; month++) {
-      const monthStr = `${year}-${month}`;
-      if (!monthlyRecords.has(monthStr)) {
-        monthlyRecords.set(monthStr, 0);
-        monthStrs.push(monthStr);
-      }
-    }
-  }
-
-  // console.log(monthlyRecords.get("2024-1"));
-
-  for (let record of ascendingRecords) {
-    const monthStr = getMonthStr(record.date);
-
-    const newValue = monthlyRecords.get(monthStr) + record.durationInMinutes;
-    monthlyRecords.set(monthStr, newValue);
-  }
-
-  const numOfMonths = monthStrs.length;
+  const numOfMonths = numOfYears * 12;
   const sliceStart = numOfMonths - (numOfYears - yearIndex) * 12;
   const sliceEnd = numOfMonths - (numOfYears - yearIndex - 1) * 12;
 
-  const selectedMonths = monthStrs.slice(sliceStart, sliceEnd);
-  const durations = selectedMonths.map(
-    (monthStr) => getDurationStr(monthlyRecords.get(monthStr)).roundedHour
+  const durations = allDurationsByMonth.slice(sliceStart, sliceEnd);
+  const durationHours = durations.map(
+    (duration) => getDurationStr(duration).roundedHour
   );
+
+  // const selectedMonths = monthStrs.slice(sliceStart, sliceEnd);
+  // const durations = selectedMonths.map(
+  //   (monthStr) => getDurationStr(monthlyRecords.get(monthStr)).roundedHour
+  // );
   const shortMonthName = [
     "Jan",
     "Feb",
@@ -73,7 +49,7 @@ function YearlyTrend({ ascendingRecords }) {
   const data = shortMonthName.map((month, index) => {
     return {
       month,
-      duration: durations[index],
+      duration: durationHours[index],
     };
   });
 

@@ -9,8 +9,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { IconButton, Paper, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { IconButton, Paper, Stack, Typography, duration } from "@mui/material";
+import { useEffect, useState } from "react";
 import {
   getMonday,
   calcuDateDiff,
@@ -21,73 +21,49 @@ import {
   getDurationStr,
 } from "../helper";
 
-function WeeklyTrend({ ascendingRecords }) {
-  const [weekInTrends, setWeekInTrends] = useState(0);
+function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
+  const [weekIndex, setWeekIndex] = useState(numOfWeeks - 1);
 
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const firstDay = ascendingRecords[0].date;
-  const firstMonday = getMonday(firstDay);
-  const nextMonday = addDays(7, getMonday());
-
-  // create a hashmap with all dates between the first day and the last day with records
-  // use hash map because: 1. preserves the order of insersion, unlike object; 2. faster access by key compared to array
-  const dailyRecords = new Map();
-  for (let date = firstMonday; date < nextMonday; date = addDays(1, date)) {
-    const dateStr = getNumericDateStr(date);
-    if (!dailyRecords.get(dateStr)) {
-      dailyRecords.set(dateStr, {
-        date,
-        duration: 0,
-      });
-    }
-  }
-
-  // add the records data to teh hashmap
-  for (let record of ascendingRecords) {
-    const mapValue = dailyRecords.get(record.numericDateStr);
-
-    const newMapValue = {
-      date: record.date,
-      duration: mapValue.duration + record.durationInMinutes,
-    };
-    dailyRecords.set(record.numericDateStr, newMapValue);
-  }
-
-  const numOfWeeks = calcuDateDiff(firstMonday, nextMonday) / 7;
   const mondays = getAllMondays(firstMonday, numOfWeeks);
   const dateStrsInAWeek = getDateStrsInAWeek(
-    mondays[numOfWeeks - weekInTrends - 1]
+    mondays[numOfWeeks - weekIndex - 1]
   );
 
-  const weeklyDurations = dateStrsInAWeek.map((dateStr) => {
-    const durationInMinutes = dailyRecords.get(dateStr.numericStr).duration;
-    return getDurationStr(durationInMinutes).roundedHour;
-  });
+  const numOfDays = numOfWeeks * 7;
+  const sliceStart = numOfDays - 7 * (numOfWeeks - weekIndex);
+  const sliceEnd = numOfDays - 7 * (numOfWeeks - weekIndex - 1);
+  const durations = allDuratoins.slice(sliceStart, sliceEnd);
+
+  // const durations = dateStrsInAWeek.map((dateStr) => {
+  //   const durationInMinutes = dailyRecords.get(dateStr.numericStr).duration;
+  //   return getDurationStr(durationInMinutes).roundedHour;
+  // });
 
   const data = weekDays.map((day, index) => {
     return {
       day,
-      duration: weeklyDurations[index],
+      duration: durations[index],
     };
   });
 
   const handlePrevWeek = () => {
-    setWeekInTrends(weekInTrends + 1);
+    setWeekIndex(weekIndex - 1);
   };
 
   const handleNextWeek = () => {
-    setWeekInTrends(weekInTrends - 1);
+    setWeekIndex(weekIndex + 1);
   };
 
   const weekLabel =
-    weekInTrends === 0
+    weekIndex === numOfWeeks - 1
       ? "This week"
-      : weekInTrends === 1
+      : weekIndex === numOfWeeks - 2
       ? "Last week"
       : `${dateStrsInAWeek[0].longStr} - ${dateStrsInAWeek[6].longStr}`;
 
-  const disablePrevWeek = weekInTrends === numOfWeeks - 1;
-  const disableNextWeek = weekInTrends === 0;
+  const disablePrevWeek = weekIndex === 0;
+  const disableNextWeek = weekIndex === numOfWeeks - 1;
 
   return (
     <Paper sx={{ padding: "1em" }}>
