@@ -13,7 +13,7 @@ import {
 
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { getDurationStr, getMonthStr } from "../helper";
+import { getDurationStr } from "../helper";
 
 function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
   const [yearIndex, setYearIndex] = useState(numOfYears - 1);
@@ -72,8 +72,8 @@ function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
 
   return (
     <Paper sx={{ padding: "1em" }}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography>Trends</Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography>Yearly trend</Typography>
         <Stack direction="row" alignItems="center">
           <IconButton onClick={handlePrevYear} disabled={disablePrevYear}>
             <NavigateBeforeIcon color={disablePrevYear ? "grey" : "primary"} />
@@ -84,8 +84,6 @@ function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
           </IconButton>
         </Stack>
       </Stack>
-
-      <Typography>Daily average: **</Typography>
 
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart

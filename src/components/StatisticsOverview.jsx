@@ -1,24 +1,6 @@
-import {
-  Button,
-  Container,
-  Grid,
-  IconButton,
-  Menu,
-  MenuItem,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { useState } from "react";
-import {
-  getMonday,
-  calcuDateDiff,
-  getAllMondays,
-  addDays,
-  getNumericDateStr,
-  getDateStrsInAWeek,
-  getDurationStr,
-} from "../helper";
+import { Container, Paper, Stack, Typography } from "@mui/material";
+
+import { getDurationStr } from "../helper";
 
 function StatisticsOverview({ currentWeekDurations, currentYearDurations }) {
   const today = new Date();

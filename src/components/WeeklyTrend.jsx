@@ -9,17 +9,9 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { IconButton, Paper, Stack, Typography, duration } from "@mui/material";
-import { useEffect, useState } from "react";
-import {
-  getMonday,
-  calcuDateDiff,
-  getAllMondays,
-  addDays,
-  getNumericDateStr,
-  getDateStrsInAWeek,
-  getDurationStr,
-} from "../helper";
+import { IconButton, Paper, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import { getAllMondays, getDateStrsInAWeek, getDurationStr } from "../helper";
 
 function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const [weekIndex, setWeekIndex] = useState(numOfWeeks - 1);
@@ -34,6 +26,9 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const sliceStart = numOfDays - 7 * (numOfWeeks - weekIndex);
   const sliceEnd = numOfDays - 7 * (numOfWeeks - weekIndex - 1);
   const durations = allDuratoins.slice(sliceStart, sliceEnd);
+  const durationHours = durations.map(
+    (duration) => getDurationStr(duration).roundedHour
+  );
 
   // const durations = dateStrsInAWeek.map((dateStr) => {
   //   const durationInMinutes = dailyRecords.get(dateStr.numericStr).duration;
@@ -43,7 +38,7 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const data = weekDays.map((day, index) => {
     return {
       day,
-      duration: durations[index],
+      duration: durationHours[index],
     };
   });
 
@@ -67,8 +62,8 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
 
   return (
     <Paper sx={{ padding: "1em" }}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography>Trends</Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography>Weekly trend</Typography>
         <Stack direction="row" alignItems="center">
           <IconButton onClick={handlePrevWeek} disabled={disablePrevWeek}>
             <NavigateBeforeIcon color={disablePrevWeek ? "grey" : "primary"} />
@@ -80,11 +75,8 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
         </Stack>
       </Stack>
 
-      <Typography>Daily average: **</Typography>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart
-          width={500}
-          height={400}
           data={data}
           margin={{
             top: 10,

@@ -3,12 +3,9 @@ import { useState } from "react";
 import {
   getMonday,
   calcuDateDiff,
-  getAllMondays,
   getMonthStr,
   addDays,
   getNumericDateStr,
-  getDateStrsInAWeek,
-  getDurationStr,
 } from "../helper";
 import WeeklyTrend from "../components/WeeklyTrend";
 import MonthlyTrend from "../components/MonthlyTrend";

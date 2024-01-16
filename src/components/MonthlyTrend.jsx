@@ -112,8 +112,8 @@ function MonthlyTrend({ ascendingRecords }) {
 
   return (
     <Paper sx={{ padding: "1em" }}>
-      <Stack direction="row" justifyContent="space-between">
-        <Typography>Trends</Typography>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography>Monthly trend</Typography>
         <Stack direction="row" alignItems="center">
           <IconButton onClick={handlePrevWeek} disabled={disablePrevMonth}>
             <NavigateBeforeIcon color={disablePrevMonth ? "grey" : "primary"} />
@@ -125,7 +125,6 @@ function MonthlyTrend({ ascendingRecords }) {
         </Stack>
       </Stack>
 
-      <Typography>Daily average: **</Typography>
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart
           width={500}
