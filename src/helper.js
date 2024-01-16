@@ -117,3 +117,19 @@ export const addDays = (dateDiff, date = new Date()) => {
 
   return newDate;
 };
+
+export const getFirstDayOfMonth = (date = new Date()) => {
+  const newDate = new Date(date);
+  newDate.setDate(1);
+  newDate.setHours(0, 0, 0, 0);
+
+  return newDate;
+};
+
+export const getFirstDayOfNextMonth = (date = new Date()) => {
+  const newDate = new Date(date);
+  newDate.setMonth(newDate.getMonth() + 1, 1);
+  newDate.setHours(0, 0, 0, 0);
+
+  return newDate;
+};
