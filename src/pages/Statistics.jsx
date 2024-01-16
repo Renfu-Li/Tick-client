@@ -25,6 +25,7 @@ import {
 } from "../helper";
 import WeeklyTrend from "../components/WeeklyTrend";
 import MonthlyTrend from "../components/MonthlyTrend";
+import YearlyTrend from "../components/YearlyTrend";
 
 function Statistics({ allRecords }) {
   const [weekInTrends, setWeekInTrends] = useState(0);
@@ -134,6 +135,10 @@ function Statistics({ allRecords }) {
         <Grid item xs={7}>
           <MonthlyTrend ascendingRecords={ascendingRecords} />
         </Grid>
+      </Grid>
+
+      <Grid item>
+        <YearlyTrend ascendingRecords={ascendingRecords} />
       </Grid>
     </Container>
   );

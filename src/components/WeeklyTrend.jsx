@@ -18,9 +18,7 @@ function WeeklyTrend({ ascendingRecords }) {
 
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const firstDay = ascendingRecords[0].date;
-  // const lastDay = ascendingRecords[ascendingRecords.length - 1].date;
   const firstMonday = getMonday(firstDay);
-  // const lastMonday = getMonday(lastDay);
   const nextMonday = addDays(7, getMonday());
 
   // create a hashmap with all dates between the first day and the last day with records

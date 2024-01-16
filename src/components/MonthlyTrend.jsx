@@ -4,26 +4,19 @@ import { LineChart } from "@mui/x-charts/LineChart";
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import {
-  getMonday,
-  calcuDateDiff,
-  getAllMondays,
   addDays,
   getNumericDateStr,
-  getDateStrsInAWeek,
   getDurationStr,
   getFirstDayOfMonth,
   getFirstDayOfNextMonth,
 } from "../helper";
 
 function MonthlyTrend({ ascendingRecords }) {
-  const today = new Date();
-
   const [monthIndex, setMonthIndex] = useState(0);
 
-  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const firstDay = ascendingRecords[0].date;
-  // const lastDay = ascendingRecords[ascendingRecords.length - 1].date;
   const firstDayOfMonth = getFirstDayOfMonth(firstDay);
+  // get first day of next month to show data until this month
   const firstDayOfNextMonth = getFirstDayOfNextMonth();
 
   // create a hashmap with all dates between the first day and the last day with records
@@ -36,7 +29,7 @@ function MonthlyTrend({ ascendingRecords }) {
   ) {
     const dateStr = getNumericDateStr(date);
 
-    if (!dailyRecords.get(dateStr)) {
+    if (!dailyRecords.has(dateStr)) {
       dailyRecords.set(dateStr, {
         date,
         monthStr: `${date.getFullYear()}-${date.getMonth() + 1}`,
@@ -45,7 +38,7 @@ function MonthlyTrend({ ascendingRecords }) {
     }
   }
 
-  // add the records data to teh hashmap
+  // add daily duration data the dailyRecords hash map
   for (let record of ascendingRecords) {
     const dateStr = getNumericDateStr(record.date);
     const mapValue = dailyRecords.get(dateStr);
@@ -56,11 +49,10 @@ function MonthlyTrend({ ascendingRecords }) {
     });
   }
 
-  // console.log(dailyRecords);
-
   let monthlyRecords = new Map();
   let months = [];
 
+  // group daily durations by month
   for (let dateStr of dailyRecords.keys()) {
     const { monthStr, duration } = dailyRecords.get(dateStr);
 
@@ -79,7 +71,6 @@ function MonthlyTrend({ ascendingRecords }) {
 
   const numOfMonths = months.length;
   const durations = monthlyRecords.get(months[numOfMonths - monthIndex - 1]);
-  // console.log(dailyRecords);
 
   let days = [];
   for (let i = 1; i <= durations.length; i++) {
