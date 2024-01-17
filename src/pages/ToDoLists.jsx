@@ -1,4 +1,4 @@
-import { Grid, Stack } from "@mui/material";
+import { Container, Grid, Stack } from "@mui/material";
 
 import Lists from "../components/Lists";
 import Tasks from "../components/Tasks";
@@ -18,9 +18,14 @@ export default function ToDoLists({
   useEffect(() => setSelectedTask(null), [listToShow]);
 
   return (
-    <Stack direction="row" height="100vh" width="100%">
-      {/* <SideBar setToken={setToken}></SideBar> */}
-
+    <Stack
+      direction="row"
+      height="100%"
+      width="100%"
+      paddingTop="0.8em"
+      boxSizing="border-box"
+      // overflow="auto"
+    >
       <Lists
         allLists={allLists}
         setAllLists={setAllLists}
@@ -28,8 +33,8 @@ export default function ToDoLists({
         token={token}
       ></Lists>
 
-      <Grid container sx={{ height: "100vh" }} justifyContent="space-evenly">
-        <Grid item xs={6} sx={{ height: "100vh" }}>
+      <Grid container sx={{ height: "100%" }} justifyContent="space-evenly">
+        <Grid item xs={6} sx={{ height: "100%" }}>
           <Tasks
             listToShow={listToShow}
             token={token}
@@ -41,7 +46,7 @@ export default function ToDoLists({
             setSelectedTask={setSelectedTask}
           ></Tasks>
         </Grid>
-        <Grid item xs={6} sx={{ height: "100vh" }}>
+        <Grid item xs={6} sx={{ height: "100%" }}>
           <TaskDetails
             token={token}
             listToShow={listToShow}

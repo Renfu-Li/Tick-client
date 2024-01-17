@@ -23,7 +23,7 @@ function StatisticsOverview({ currentWeekDurations, currentYearDurations }) {
   const thisYearDurationStr = getDurationStr(thisYearDuration).durationStr;
 
   return (
-    <Paper sx={{ padding: "1em", mb: "1.5em" }}>
+    <Paper sx={{ padding: "1em", mb: "1.5em" }} elevation={2}>
       <Typography mb="0.5em">Overview</Typography>
 
       <Stack direction="row">

@@ -1,5 +1,7 @@
+import { Container } from "@mui/material";
+
 function Loading() {
-  return <p>loading...</p>;
+  return <Container>No data yet...</Container>;
 }
 
 export default Loading;

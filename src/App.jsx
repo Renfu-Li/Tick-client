@@ -2,7 +2,7 @@ import ToDoLists from "./pages/ToDoLists.jsx";
 import { Route, Routes } from "react-router-dom";
 import User from "./pages/User.jsx";
 import CalendarView from "./pages/CalendarView.jsx";
-import SideBar from "./components/SideBar.jsx";
+import Layout from "./components/Layout.jsx";
 import { useEffect, useState } from "react";
 import taskService from "./services/taskService.js";
 import listService from "./services/listService.js";
@@ -117,7 +117,7 @@ function App() {
           element={<User token={token} setToken={setToken}></User>}
         ></Route>
 
-        <Route element={<SideBar setToken={setToken}></SideBar>}>
+        <Route element={<Layout setToken={setToken}></Layout>}>
           <Route
             path="/lists"
             element={

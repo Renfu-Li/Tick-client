@@ -85,7 +85,7 @@ function TaskSections({
   };
 
   return (
-    <List dense sx={{ mt: "0.5em", p: 0 }}>
+    <List dense sx={{ mt: "0.5em", p: 0, overflow: "auto" }}>
       <TaskItems
         sectionName={listToShow === "Trash" ? "Uncompleted" : "Ongoing"}
         tasks={uncompletedTasksInList}

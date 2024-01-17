@@ -61,7 +61,7 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const disableNextWeek = weekIndex === numOfWeeks - 1;
 
   return (
-    <Paper sx={{ padding: "1em" }}>
+    <Paper sx={{ padding: "1em" }} elevation={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography>Weekly trend</Typography>
         <Stack direction="row" alignItems="center">

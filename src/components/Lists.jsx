@@ -46,9 +46,11 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
         borderRight: 0.5,
         borderColor: "lightgray",
         height: "100%",
-        minWidth: "280px",
-        paddingY: "8px",
+        minWidth: "250px",
+        paddingTop: 0,
+        paddingBottom: 0,
         display: "inline-block",
+        overflow: "auto",
       }}
     >
       <ListItem>

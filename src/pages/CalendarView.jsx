@@ -73,7 +73,12 @@ function CalendarView({
     <>
       <div
         className="height600"
-        style={{ height: "100vh", width: "100%", padding: "0.5em" }}
+        style={{
+          height: "100vh",
+          width: "100%",
+          padding: "1.1em",
+          boxSizing: "border-box",
+        }}
       >
         <Calendar
           dayLayoutAlgorithm={dayLayoutAlgorithm}

@@ -4,6 +4,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import {
   Box,
   Button,
+  Container,
   Divider,
   Grid,
   InputBase,
@@ -98,28 +99,38 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
   };
 
   return (
+    // <Container sx={{ height: "100%" }}>
     <Grid
       container
-      position="relative"
-      spacing={1}
-      justifyContent="space-evenly"
+      // spacing={2}
+      // gap={1}
+      justifyContent="space-between"
+      height="100%"
+      margin={0}
+      // paddingTop="1em"
     >
       <Grid
         item
         xs={6}
-        position="sticky"
-        top="0px"
-        height="100vh"
+        // position="sticky"
+        // top="0px"
+        height="100%"
+        paddingY="0.7em"
         sx={{ borderRight: 0.5, borderColor: "lightgray" }}
       >
-        <Stack justifyContent="space-evenly" alignItems="center" height="100%">
-          <Typography fontSize="1.2em">Focus</Typography>
+        <Stack
+          justifyContent="flex-start"
+          alignItems="center"
+          height="100%"
+          // position="sticky"
+        >
+          <Typography variant="h5">Focus</Typography>
 
           <Button
             onClick={(e) => setAnchorEl(e.currentTarget)}
             variant="outlined"
             endIcon={<ExpandMoreIcon />}
-            sx={{ borderRadius: "24px" }}
+            sx={{ borderRadius: "24px", marginY: "2em" }}
           >
             {task?.taskName || "Task"}
           </Button>
@@ -142,6 +153,7 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
             border="5px solid rgb(230, 230, 230)"
             width={260}
             height={260}
+            mb="2em"
           >
             <Typography fontSize="2.5em">{getTimerStr(time)}</Typography>
           </Stack>
@@ -156,7 +168,14 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
         </Stack>
       </Grid>
 
-      <Grid item xs={5} height="100vh" mt="2em">
+      <Grid
+        item
+        xs={6}
+        height="100%"
+        paddingX="1em"
+        paddingY="0.7em"
+        overflow="auto"
+      >
         <Typography>Overview</Typography>
         <Grid
           container
@@ -248,6 +267,7 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
         )}
       </Grid>
     </Grid>
+    // </Container>
   );
 }
 

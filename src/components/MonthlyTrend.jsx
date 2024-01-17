@@ -111,7 +111,7 @@ function MonthlyTrend({ ascendingRecords }) {
       : months[numOfMonths - monthIndex - 1];
 
   return (
-    <Paper sx={{ padding: "1em" }}>
+    <Paper sx={{ padding: "1em" }} elevation={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography>Monthly trend</Typography>
         <Stack direction="row" alignItems="center">

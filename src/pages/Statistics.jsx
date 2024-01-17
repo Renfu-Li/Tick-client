@@ -96,8 +96,8 @@ function Statistics({ allRecords }) {
   );
 
   return (
-    <Container>
-      <Typography fontSize="1.8em" my="0.5em">
+    <Container sx={{ height: "100vh", overflow: "auto" }}>
+      <Typography variant="h5" my="0.3em" textAlign="center">
         Statistics
       </Typography>
 

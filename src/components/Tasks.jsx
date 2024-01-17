@@ -17,7 +17,8 @@ function Tasks({
   return (
     <Box
       paddingX="16px"
-      paddingY="8px"
+      // paddingY="8px"
+      overflow="auto"
       sx={{ borderRight: 0.5, borderColor: "lightgray", height: "100%" }}
     >
       <Typography ml={1.4} mb="0.5em" variant="h5">
