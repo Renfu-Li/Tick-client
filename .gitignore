@@ -1,0 +1,28 @@
+# Node.js
+node_modules/
+
+# Dependency directories
+package-lock.json
+
+# Build output
+dist/
+build/
+
+# Environment variables
+.env
+
+# Log files
+logs/
+*.log
+
+# Editor configuration
+.vscode/
+
+# npm
+*.npmrc
+
+# macOS
+.DS_Store
+
+# Output of 'npm pack'
+*.tgz
