@@ -1,7 +1,7 @@
 import axios from "axios";
-import { RENDER_URL } from "../constants";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-const baseURL = `${RENDER_URL}/api/lists`;
+const url = `${baseURL}/lists`;
 
 const generateConfig = (token) => {
   return {
@@ -12,24 +12,20 @@ const generateConfig = (token) => {
 };
 
 const getAllList = async (token) => {
-  const response = await axios.get(baseURL, generateConfig(token));
+  const response = await axios.get(url, generateConfig(token));
   return response.data;
 };
 
 // return all lists
 const createList = async (token, listName) => {
-  const response = await axios.post(
-    baseURL,
-    { listName },
-    generateConfig(token)
-  );
+  const response = await axios.post(url, { listName }, generateConfig(token));
   return response.data;
 };
 
 // update a list
 const updateList = async (token, newList) => {
   const response = await axios.put(
-    `${baseURL}/${newList.id}`,
+    `${url}/${newList.id}`,
     newList,
     generateConfig(token)
   );
@@ -40,7 +36,7 @@ const updateList = async (token, newList) => {
 // delete a list and return all lists
 const deleteList = async (token, listId) => {
   const response = await axios.delete(
-    `${baseURL}/${listId}`,
+    `${url}/${listId}`,
     generateConfig(token)
   );
 

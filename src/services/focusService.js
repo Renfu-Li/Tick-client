@@ -1,7 +1,7 @@
 import axios from "axios";
-import { RENDER_URL } from "../constants";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-const baseURL = `${RENDER_URL}/api/focus`;
+const url = `${baseURL}/focus`;
 
 const generateConfig = (token) => {
   return {
@@ -12,13 +12,13 @@ const generateConfig = (token) => {
 };
 
 const getAllFocuses = async (token) => {
-  const response = await axios.get(baseURL, generateConfig(token));
+  const response = await axios.get(url, generateConfig(token));
 
   return response.data;
 };
 
 const createFocus = async (token, newFocus) => {
-  const response = await axios.post(baseURL, newFocus, generateConfig(token));
+  const response = await axios.post(url, newFocus, generateConfig(token));
 
   return response.data;
 };

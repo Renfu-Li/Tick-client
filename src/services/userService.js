@@ -1,10 +1,10 @@
 import axios from "axios";
-import { RENDER_URL } from "../constants";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-const baseURL = `${RENDER_URL}/api/user`;
+const url = `${baseURL}/user`;
 
 const createUser = async (newUser) => {
-  const createdUser = await axios.post(`${baseURL}/signup`, newUser);
+  const createdUser = await axios.post(`${url}/signup`, newUser);
 
   if (createdUser) {
     const token = await loginUser(newUser);
@@ -13,7 +13,7 @@ const createUser = async (newUser) => {
 };
 
 const loginUser = async (user) => {
-  const response = await axios.post(`${baseURL}/login`, user);
+  const response = await axios.post(`${url}/login`, user);
   const token = response.data.token;
 
   return token;

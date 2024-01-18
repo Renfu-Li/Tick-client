@@ -1,8 +1,8 @@
 import axios from "axios";
-import { RENDER_URL } from "../constants";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-const baseURL = `${RENDER_URL}/api/tasks`;
-const listURL = `${RENDER_URL}/api/lists`;
+const taskURL = `${baseURL}/tasks`;
+const listURL = `${baseURL}/lists`;
 
 const generateConfig = (token) => {
   return {
@@ -13,18 +13,18 @@ const generateConfig = (token) => {
 };
 
 const getAllTasks = async (token) => {
-  const response = await axios.get(baseURL, generateConfig(token));
+  const response = await axios.get(taskURL, generateConfig(token));
   return response.data;
 };
 
 const createTask = async (newTask, token) => {
-  const response = await axios.post(baseURL, newTask, generateConfig(token));
+  const response = await axios.post(taskURL, newTask, generateConfig(token));
   return response.data;
 };
 
 const updateTask = async (id, newTask, token) => {
   const response = await axios.put(
-    `${baseURL}/${id}`,
+    `${taskURL}/${id}`,
     newTask,
     generateConfig(token)
   );
@@ -33,7 +33,7 @@ const updateTask = async (id, newTask, token) => {
 
 const moveTask = async (token, task, sourceList, targetList) => {
   const response = await axios.put(
-    `${baseURL}/${task.id}`,
+    `${taskURL}/${task.id}`,
     { ...task, listName: targetList.listName },
     generateConfig(token)
   );
@@ -57,7 +57,7 @@ const moveTask = async (token, task, sourceList, targetList) => {
 const removeTask = async (id, task, list, token) => {
   const updatedTask = { ...task, removed: true };
   const response = await axios.put(
-    `${baseURL}/${id}`,
+    `${taskURL}/${id}`,
     updatedTask,
     generateConfig(token)
   );
@@ -70,7 +70,7 @@ const removeTask = async (id, task, list, token) => {
 
 const deleteTask = async (token, id) => {
   const response = await axios.delete(
-    `${baseURL}/${id}`,
+    `${taskURL}/${id}`,
     generateConfig(token)
   );
 
