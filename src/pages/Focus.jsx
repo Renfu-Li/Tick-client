@@ -4,6 +4,7 @@ import TimerIcon from "@mui/icons-material/Timer";
 import {
   Box,
   Button,
+  Container,
   Divider,
   Grid,
   InputBase,
@@ -104,17 +105,21 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
         paddingY="0.7em"
         sx={{ borderRight: 0.5, borderColor: "lightgray" }}
       >
-        <Stack justifyContent="flex-start" alignItems="center" height="100%">
-          <Typography variant="h5">Focus</Typography>
+        <Typography textAlign="center" variant="h5">
+          Focus
+        </Typography>
 
+        <Stack justifyContent="space-evenly" alignItems="center" height="90%">
           <Button
             onClick={(e) => setAnchorEl(e.currentTarget)}
             variant="outlined"
             endIcon={<ExpandMoreIcon />}
-            sx={{ borderRadius: "24px", marginY: "2em" }}
+            sx={{ borderRadius: "24px" }}
+            // marginY: "2em"
           >
             {task?.taskName || "Task"}
           </Button>
+
           <Menu
             anchorEl={anchorEl}
             open={open}
@@ -134,7 +139,7 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
             border="5px solid rgb(230, 230, 230)"
             width={260}
             height={260}
-            mb="2em"
+            // mb="2em"
           >
             <Typography fontSize="2.5em">{getTimerStr(time)}</Typography>
           </Stack>
@@ -158,13 +163,7 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
         overflow="auto"
       >
         <Typography>Overview</Typography>
-        <Grid
-          container
-          // spacing={1}
-          justifyContent="space-between"
-          margin="0.5em"
-          mx={0}
-        >
+        <Grid container justifyContent="space-between" margin="0.5em" mx={0}>
           <Grid
             item
             xs={5.5}

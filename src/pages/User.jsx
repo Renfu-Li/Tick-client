@@ -7,7 +7,7 @@ import { Navigate } from "react-router-dom";
 
 export default function User({ token, setToken }) {
   const [username, setUsername] = useState("public_user");
-  const [password, setPassword] = useState("password");
+  const [password, setPassword] = useState("pass");
   const [action, setAction] = useState("Log in");
 
   const linkButtonStyle = {
