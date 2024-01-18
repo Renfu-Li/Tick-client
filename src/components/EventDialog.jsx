@@ -1,10 +1,7 @@
 import CheckIcon from "@mui/icons-material/Check";
 import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
@@ -19,16 +16,12 @@ import {
   InputBase,
   Menu,
   MenuItem,
-  Paper,
   Popover,
   Stack,
-  TextField,
-  Typography,
 } from "@mui/material";
 import taskService from "../services/taskService";
 import listService from "../services/listService";
 import Checkbox from "@mui/material/Checkbox";
-import { LegendToggleOutlined } from "@mui/icons-material";
 
 export default function FormDialog({
   token,

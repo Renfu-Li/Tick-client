@@ -32,7 +32,6 @@ export default function User({ token, setToken }) {
       if (token) {
         setToken(token);
         localStorage.setItem("token", token);
-        // console.log("token from User.js", token);
       }
     } catch (error) {
       console.log(error.message);

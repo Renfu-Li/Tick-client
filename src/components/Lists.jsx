@@ -91,10 +91,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <ViewWeekIcon color="action" sx={{ mr: "0.3em" }}></ViewWeekIcon>
               <Typography fontSize="0.9em">Next 7 Days</Typography>
             </Stack>
-
-            {/* <Typography fontSize="0.8em" color="grey">
-              3
-            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -116,10 +112,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <InboxIcon color="action" sx={{ mr: "0.3em" }}></InboxIcon>
               <Typography fontSize="0.9em">All</Typography>
             </Stack>
-
-            {/* <Typography fontSize="0.8em" color="grey">
-              3
-            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -215,10 +207,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <CheckBoxIcon color="action" sx={{ mr: "0.3em" }}></CheckBoxIcon>
               <Typography fontSize="0.9em">Completed</Typography>
             </Stack>
-
-            {/* <Typography fontSize="0.8em" color="grey">
-              3
-            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -240,10 +228,6 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
               <DeleteIcon color="action" sx={{ mr: "0.3em" }}></DeleteIcon>
               <Typography fontSize="0.9em">Trash</Typography>
             </Stack>
-
-            {/* <Typography fontSize="0.8em" color="grey">
-              3
-            </Typography> */}
           </Stack>
         </ListItemButton>
       </ListItem>

@@ -1,8 +1,6 @@
 import { Typography, Box } from "@mui/material";
-// import { useState, useEffect } from "react";
 import TaskForm from "./TaskForm";
 import TaskSections from "./TaskSections";
-// import AddCircle from "@mui/icons-material/AddCircle";
 
 function Tasks({
   token,
@@ -17,7 +15,6 @@ function Tasks({
   return (
     <Box
       paddingX="16px"
-      // paddingY="8px"
       overflow="auto"
       sx={{ borderRight: 0.5, borderColor: "lightgray", height: "100%" }}
     >

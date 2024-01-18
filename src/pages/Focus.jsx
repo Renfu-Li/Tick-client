@@ -1,22 +1,19 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TimerIcon from "@mui/icons-material/Timer";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+
 import {
   Box,
   Button,
-  Container,
   Divider,
   Grid,
   InputBase,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -99,31 +96,15 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
   };
 
   return (
-    // <Container sx={{ height: "100%" }}>
-    <Grid
-      container
-      // spacing={2}
-      // gap={1}
-      justifyContent="space-between"
-      height="100%"
-      margin={0}
-      // paddingTop="1em"
-    >
+    <Grid container justifyContent="space-between" height="100%" margin={0}>
       <Grid
         item
         xs={6}
-        // position="sticky"
-        // top="0px"
         height="100%"
         paddingY="0.7em"
         sx={{ borderRight: 0.5, borderColor: "lightgray" }}
       >
-        <Stack
-          justifyContent="flex-start"
-          alignItems="center"
-          height="100%"
-          // position="sticky"
-        >
+        <Stack justifyContent="flex-start" alignItems="center" height="100%">
           <Typography variant="h5">Focus</Typography>
 
           <Button
@@ -267,7 +248,6 @@ function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
         )}
       </Grid>
     </Grid>
-    // </Container>
   );
 }
 

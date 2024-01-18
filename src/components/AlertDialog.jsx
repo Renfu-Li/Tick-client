@@ -1,4 +1,3 @@
-// import { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -22,7 +21,6 @@ function AlertDialog({
     setAllTasks(updatedAllTasks);
 
     // no need to update allLists as the count has been decreased when the task was removed
-
     setOpenAlert(false);
   };
 

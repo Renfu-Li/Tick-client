@@ -1,14 +1,6 @@
 import BarChartIcon from "@mui/icons-material/BarChart";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import {
-  Box,
-  Container,
-  IconButton,
-  Menu,
-  MenuItem,
-  Paper,
-  Stack,
-} from "@mui/material";
+import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
@@ -34,18 +26,6 @@ export default function Sidebar({ setToken }) {
   };
 
   return (
-    // <Container
-    //   sx={{
-    //     position: "sticky",
-    //     top: 0,
-    //     height: "100vh",
-    //     width: "50px",
-    //     borderRight: 0.5,
-    //     borderColor: "lightgray",
-    //     bgcolor: "rgb(249, 249, 249)",
-    //     paddingY: "1em",
-    //   }}
-    // >
     <Stack
       borderRight={0.5}
       borderColor="lightgray"
@@ -57,8 +37,6 @@ export default function Sidebar({ setToken }) {
       bgcolor="rgb(249, 249, 249)"
       paddingY="0.5em"
       boxSizing="border-box"
-      // position="sticky"
-      // top={0}
     >
       <Stack spacing={1}>
         <NavLink to="/lists">
@@ -108,6 +86,5 @@ export default function Sidebar({ setToken }) {
         </MenuItem>
       </Menu>
     </Stack>
-    // </Container>
   );
 }

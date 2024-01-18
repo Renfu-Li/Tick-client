@@ -27,10 +27,6 @@ function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
     (duration) => getDurationStr(duration).roundedHour
   );
 
-  // const selectedMonths = monthStrs.slice(sliceStart, sliceEnd);
-  // const durations = selectedMonths.map(
-  //   (monthStr) => getDurationStr(monthlyRecords.get(monthStr)).roundedHour
-  // );
   const shortMonthName = [
     "Jan",
     "Feb",

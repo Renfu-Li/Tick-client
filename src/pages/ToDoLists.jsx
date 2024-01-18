@@ -1,4 +1,4 @@
-import { Container, Grid, Stack } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 
 import Lists from "../components/Lists";
 import Tasks from "../components/Tasks";
@@ -24,7 +24,6 @@ export default function ToDoLists({
       width="100%"
       paddingTop="0.8em"
       boxSizing="border-box"
-      // overflow="auto"
     >
       <Lists
         allLists={allLists}

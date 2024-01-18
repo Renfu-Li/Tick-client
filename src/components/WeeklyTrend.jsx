@@ -30,11 +30,6 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
     (duration) => getDurationStr(duration).roundedHour
   );
 
-  // const durations = dateStrsInAWeek.map((dateStr) => {
-  //   const durationInMinutes = dailyRecords.get(dateStr.numericStr).duration;
-  //   return getDurationStr(durationInMinutes).roundedHour;
-  // });
-
   const data = weekDays.map((day, index) => {
     return {
       day,
