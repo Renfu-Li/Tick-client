@@ -1,6 +1,7 @@
 import axios from "axios";
+import { RENDER_URL } from "../constants";
 
-const baseURL = "http://localhost:3003/api/user";
+const baseURL = `${RENDER_URL}/api/user`;
 
 const createUser = async (newUser) => {
   const createdUser = await axios.post(`${baseURL}/signup`, newUser);

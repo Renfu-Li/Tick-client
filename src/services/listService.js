@@ -1,6 +1,7 @@
 import axios from "axios";
+import { RENDER_URL } from "../constants";
 
-const baseURL = "http://localhost:3003/api/lists";
+const baseURL = `${RENDER_URL}/api/lists`;
 
 const generateConfig = (token) => {
   return {
