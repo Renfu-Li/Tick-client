@@ -102,7 +102,7 @@ function TaskSections({
         setSelectedTask={setSelectedTask}
         handleCheck={handleCheck}
         listToShow={listToShow}
-        initialOpen={false}
+        initialOpen={listToShow === "Completed" ? true : false}
       ></TaskItems>
     </List>
   );
