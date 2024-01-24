@@ -4,11 +4,16 @@ import { useState } from "react";
 
 import userService from "../services/userService";
 import { Navigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken } from "../reducers/tokenReducer";
 
-export default function User({ token, setToken }) {
+export default function User() {
   const [username, setUsername] = useState("public_user");
   const [password, setPassword] = useState("pass");
   const [action, setAction] = useState("Log in");
+
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.token);
 
   const linkButtonStyle = {
     backgroundColor: "transparent",
@@ -30,7 +35,7 @@ export default function User({ token, setToken }) {
           : await userService.createUser({ username, password });
 
       if (token) {
-        setToken(token);
+        dispatch(setToken(token));
         localStorage.setItem("token", token);
       }
     } catch (error) {

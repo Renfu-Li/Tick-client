@@ -7,9 +7,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import taskService from "../services/taskService";
 import { useDispatch, useSelector } from "react-redux";
 
-function AlertDialog({ openAlert, setOpenAlert, taskId, token }) {
-  // const allTasks = useSelector(state => state.allTasks)
+function AlertDialog({ openAlert, setOpenAlert, taskId }) {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.token);
 
   const handleDeleteTask = async () => {
     const deletedTask = await taskService.deleteTask(token, taskId);

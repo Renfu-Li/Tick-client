@@ -22,13 +22,14 @@ import listService from "../services/listService";
 import { useDispatch, useSelector } from "react-redux";
 import { createList } from "../reducers/listReducer";
 
-function Lists({ setListToShow, token }) {
+function Lists({ setListToShow }) {
   const [selectedList, setSelectedList] = useState("Today");
   const [listAddition, setListAddition] = useState(false);
   const [listName, setListName] = useState("");
 
   const dispatch = useDispatch();
   const allLists = useSelector((state) => state.allLists);
+  const token = useSelector((state) => state.token);
 
   const handleSelect = (listName) => {
     setSelectedList(listName);

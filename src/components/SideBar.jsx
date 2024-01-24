@@ -3,13 +3,16 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { useDispatch } from "react-redux";
+import { setToken } from "../reducers/tokenReducer";
 
-export default function Sidebar({ setToken }) {
+export default function Sidebar() {
   // anchorEl and Menu related learned from App Bar in MUI
   const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
 
   const handleMenu = (e) => {
     setAnchorEl(e.currentTarget);
@@ -21,7 +24,7 @@ export default function Sidebar({ setToken }) {
 
   const handleLogout = () => {
     setAnchorEl(null);
-    setToken(null);
+    dispatch(setToken(null));
     localStorage.removeItem("token");
   };
 

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const listSlice = createSlice({
+const listSlice = createSlice({
   name: "allLists",
   initialState: [],
   reducers: {

@@ -26,8 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTask, updateTask } from "../reducers/taskReducer";
 import { changeCount, updateList } from "../reducers/listReducer";
 
-export default function FormDialog({
-  token,
+export default function EventDialog({
   open,
   setOpen,
   targetTask,
@@ -40,6 +39,7 @@ export default function FormDialog({
 
   const dispatch = useDispatch();
   const allLists = useSelector((state) => state.allLists);
+  const token = useSelector((state) => state.token);
 
   const getDateStr = (date) =>
     new Date(date).toLocaleDateString(undefined, {
@@ -97,9 +97,6 @@ export default function FormDialog({
     };
 
     let updatedTask;
-    const sourceList = allLists.find(
-      (list) => list.listName === targetTask.listName
-    );
 
     if (selectedList && selectedList.listName !== targetTask.listName) {
       updatedTask = await taskService.moveTask(

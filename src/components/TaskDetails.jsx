@@ -29,13 +29,14 @@ import { updateTask } from "../reducers/taskReducer";
 import { changeCount, updateList } from "../reducers/listReducer";
 import { useDispatch, useSelector } from "react-redux";
 
-function TaskDetails({ token, listToShow, selectedTask, setSelectedTask }) {
+function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
 
   const dispatch = useDispatch();
   const allLists = useSelector((state) => state.allLists);
+  const token = useSelector((state) => state.token);
 
   const dateStr = new Date(selectedTask?.dueDate).toLocaleDateString(
     undefined,

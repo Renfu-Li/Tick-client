@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateTask } from "../reducers/taskReducer";
 import { updateList } from "../reducers/listReducer";
 
-function TaskSections({ token, listToShow, selectedTask, setSelectedTask }) {
+function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
@@ -14,6 +14,7 @@ function TaskSections({ token, listToShow, selectedTask, setSelectedTask }) {
   const disPatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
   const allLists = useSelector((state) => state.allLists);
+  const token = useSelector((state) => state.token);
 
   // find existing and removed tasks
   const allExistingTasks = allTasks.filter((task) => !task.removed);

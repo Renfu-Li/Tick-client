@@ -21,20 +21,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "./reducers/taskReducer.js";
 import { setLists } from "./reducers/listReducer.js";
 import { setFocuses } from "./reducers/focusReducer.js";
+import { setToken } from "./reducers/tokenReducer.js";
 
 function App() {
-  const [token, setToken] = useState(null);
-
   const dispatch = useDispatch();
   const allFocuses = useSelector((state) => state.allFocuses);
+  const token = useSelector((state) => state.token);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      setToken(token);
+      dispatch(setToken(token));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (token) {
@@ -117,23 +117,17 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={<User token={token} setToken={setToken}></User>}
-        ></Route>
+        <Route path="/" element={<User></User>}></Route>
 
-        <Route element={<Layout setToken={setToken}></Layout>}>
-          <Route
-            path="/lists"
-            element={<ToDoLists token={token}></ToDoLists>}
-          ></Route>
+        <Route element={<Layout></Layout>}>
+          <Route path="/lists" element={<ToDoLists></ToDoLists>}></Route>
           <Route
             path="/calendar"
-            element={<CalendarView token={token}></CalendarView>}
+            element={<CalendarView></CalendarView>}
           ></Route>
           <Route
             path="/focus"
-            element={<Focus token={token} allRecords={allRecords}></Focus>}
+            element={<Focus allRecords={allRecords}></Focus>}
           ></Route>
           <Route
             path="/statistics"

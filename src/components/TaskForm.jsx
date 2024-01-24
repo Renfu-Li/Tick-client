@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTask } from "../reducers/taskReducer";
 import { updateList } from "../reducers/listReducer";
 
-function TaskForm({ listToShow, token }) {
+function TaskForm({ listToShow }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [listAnchorEl, setListAnchorEl] = useState(null);
 
@@ -30,6 +30,7 @@ function TaskForm({ listToShow, token }) {
 
   const dispatch = useDispatch();
   const allLists = useSelector((state) => state.allLists);
+  const token = useSelector((state) => state.token);
 
   const handleSelectList = (listName) => {
     setSelectedList(listName);
