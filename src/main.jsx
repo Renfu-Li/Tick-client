@@ -10,6 +10,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import taskReducer from "./reducers/taskReducer.js";
 import listReducer from "./reducers/listReducer.js";
+import focusReducer from "./reducers/focusReducer.js";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
@@ -17,6 +18,7 @@ const store = configureStore({
   reducer: {
     allTasks: taskReducer,
     allLists: listReducer,
+    allFocuses: focusReducer,
   },
 });
 

@@ -25,15 +25,16 @@ import {
   getDurationStr,
   getMonday,
 } from "../helper";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-function Focus({ token, allFocuses, setAllFocuses, allRecords }) {
+function Focus({ token, allRecords }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [task, setTask] = useState(null);
   const [time, setTime] = useState(0);
   const [start, setStart] = useState(null);
   const [focusNote, setFocusNote] = useState("");
 
+  const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
 
   useEffect(() => {
@@ -81,13 +82,13 @@ function Focus({ token, allFocuses, setAllFocuses, allRecords }) {
       };
       const createdFocus = await focusService.createFocus(token, newFocus);
       // manually add the taskName because task isn't populated in backend after creating a focus
-      const updatedAllFocuses = allFocuses.concat({
+      const createdFocusInfo = {
         ...createdFocus,
         taskName: task.taskName,
-      });
+      };
+      dispatch(createdFocus(createdFocusInfo));
 
       // clear up local states
-      setAllFocuses(updatedAllFocuses);
       setTask(null);
       setStart(null);
       setTime(0);

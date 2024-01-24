@@ -17,17 +17,16 @@ import {
   getNumericDateStr,
 } from "./helper.js";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "./reducers/taskReducer.js";
 import { setLists } from "./reducers/listReducer.js";
+import { setFocuses } from "./reducers/focusReducer.js";
 
 function App() {
   const [token, setToken] = useState(null);
-  const [allTasks, setAllTasks] = useState([]);
-  const [allLists, setAllLists] = useState([]);
-  const [allFocuses, setAllFocuses] = useState([]);
 
   const dispatch = useDispatch();
+  const allFocuses = useSelector((state) => state.allFocuses);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -84,7 +83,7 @@ function App() {
             };
           });
 
-          setAllFocuses(initialFocuses);
+          dispatch(setFocuses(initialFocuses));
         })
         .catch((error) => {
           console.log(
@@ -126,41 +125,15 @@ function App() {
         <Route element={<Layout setToken={setToken}></Layout>}>
           <Route
             path="/lists"
-            element={
-              <ToDoLists
-                token={token}
-                setToken={setToken}
-                allTasks={allTasks}
-                setAllTasks={setAllTasks}
-                allLists={allLists}
-                setAllLists={setAllLists}
-              ></ToDoLists>
-            }
+            element={<ToDoLists token={token}></ToDoLists>}
           ></Route>
           <Route
             path="/calendar"
-            element={
-              <CalendarView
-                token={token}
-                setToken={setToken}
-                allTasks={allTasks}
-                setAllTasks={setAllTasks}
-                allLists={allLists}
-                setAllLists={setAllLists}
-              ></CalendarView>
-            }
+            element={<CalendarView token={token}></CalendarView>}
           ></Route>
           <Route
             path="/focus"
-            element={
-              <Focus
-                token={token}
-                allTasks={allTasks}
-                allRecords={allRecords}
-                allFocuses={allFocuses}
-                setAllFocuses={setAllFocuses}
-              ></Focus>
-            }
+            element={<Focus token={token} allRecords={allRecords}></Focus>}
           ></Route>
           <Route
             path="/statistics"
