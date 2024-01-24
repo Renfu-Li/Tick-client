@@ -5,20 +5,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import taskService from "../services/taskService";
+import { useDispatch, useSelector } from "react-redux";
 
-function AlertDialog({
-  openAlert,
-  setOpenAlert,
-  taskId,
-  allTasks,
-  setAllTasks,
-  token,
-}) {
+function AlertDialog({ openAlert, setOpenAlert, taskId, token }) {
+  // const allTasks = useSelector(state => state.allTasks)
+  const dispatch = useDispatch();
+
   const handleDeleteTask = async () => {
-    await taskService.deleteTask(token, taskId);
+    const deletedTask = await taskService.deleteTask(token, taskId);
 
-    const updatedAllTasks = allTasks.filter((task) => task.id !== taskId);
-    setAllTasks(updatedAllTasks);
+    dispatch(deletedTask);
 
     // no need to update allLists as the count has been decreased when the task was removed
     setOpenAlert(false);

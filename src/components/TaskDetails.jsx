@@ -25,19 +25,17 @@ import taskService from "../services/taskService";
 import listService from "../services/listService";
 import AlertDialog from "./AlertDialog";
 
-function TaskDetails({
-  token,
-  listToShow,
-  selectedTask,
-  setSelectedTask,
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
-}) {
+import { updateTask } from "../reducers/taskReducer";
+import { changeCount, updateList } from "../reducers/listReducer";
+import { useDispatch, useSelector } from "react-redux";
+
+function TaskDetails({ token, listToShow, selectedTask, setSelectedTask }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
+
+  const dispatch = useDispatch();
+  const allLists = useSelector((state) => state.allLists);
 
   const dateStr = new Date(selectedTask?.dueDate).toLocaleDateString(
     undefined,
@@ -65,10 +63,7 @@ function TaskDetails({
     );
 
     // update allTasks state
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === selectedTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
+    dispatch(updateTask(updatedTask));
   };
 
   const handleChangeList = async (selectedList) => {
@@ -86,24 +81,22 @@ function TaskDetails({
     );
 
     // update allTasks state
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === selectedTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
+    dispatch(updateTask(updatedTask));
 
     // update allLists state
-    const listsAfterRemoval = allLists.map((list) =>
-      list.listName === selectedTask.listName
-        ? { ...list, count: list.count - 1 }
-        : list
+    dispatch(
+      changeCount({
+        type: "DECREASE",
+        payload: sourceList,
+      })
     );
 
-    const listsAfterAddition = listsAfterRemoval.map((list) =>
-      list.listName === selectedList.listName
-        ? { ...list, count: list.count + 1 }
-        : list
+    dispatch(
+      changeCount({
+        type: "INCREASE",
+        payload: selectedList,
+      })
     );
-    setAllLists(listsAfterAddition);
   };
 
   const handleEditNote = async () => {
@@ -119,10 +112,7 @@ function TaskDetails({
     );
 
     // update allTasks state
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === selectedTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
+    dispatch(updateTask(updatedTask));
   };
 
   const handleRemoveTask = async () => {
@@ -134,22 +124,16 @@ function TaskDetails({
     );
 
     // update allTasks state
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === updatedTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
+    dispatch(updateTask(updatedTask));
 
     const listToUpdate = allLists.find(
       (list) => list.listName === selectedTask.listName
     );
-    const updatedList = { ...listToUpdate, count: listToUpdate.count - 1 };
-    const returnedList = await listService.updateList(token, updatedList);
+    const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
+    const updatedList = await listService.updateList(token, newList);
 
     // update task count in allLists state
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === returnedList.listName ? returnedList : list
-    );
-    setAllLists(updatedAllLists);
+    dispatch(updateList(updatedList));
   };
 
   const handleRestoreTask = async () => {
@@ -161,22 +145,16 @@ function TaskDetails({
       token
     );
 
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === selectedTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
+    dispatch(updateTask(updatedTask));
 
     // update list
     const listToUpdate = allLists.find(
       (list) => list.listName === selectedTask.listName
     );
-    const updatedList = { ...listToUpdate, count: listToUpdate.count + 1 };
-    const returnedList = await listService.updateList(token, updatedList);
+    const newList = { ...listToUpdate, count: listToUpdate.count + 1 };
+    const updatedList = await listService.updateList(token, newList);
 
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === returnedList.listName ? returnedList : list
-    );
-    setAllLists(updatedAllLists);
+    dispatch(updateList(updatedList));
   };
 
   return selectedTask ? (
@@ -243,8 +221,6 @@ function TaskDetails({
               openAlert={openAlert}
               setOpenAlert={setOpenAlert}
               taskId={selectedTask.id}
-              allTasks={allTasks}
-              setAllTasks={setAllTasks}
               token={token}
             ></AlertDialog>
 

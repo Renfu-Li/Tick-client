@@ -2,20 +2,18 @@ import { List } from "@mui/material";
 import taskService from "../services/taskService";
 import listService from "../services/listService";
 import TaskItems from "./TaskItems";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTask } from "../reducers/taskReducer";
+import { updateList } from "../reducers/listReducer";
 
-function TaskSections({
-  token,
-  listToShow,
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
-  selectedTask,
-  setSelectedTask,
-}) {
+function TaskSections({ token, listToShow, selectedTask, setSelectedTask }) {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
+
+  const disPatch = useDispatch();
+  const allTasks = useSelector((state) => state.allTasks);
+  const allLists = useSelector((state) => state.allLists);
 
   // find existing and removed tasks
   const allExistingTasks = allTasks.filter((task) => !task.removed);
@@ -59,28 +57,23 @@ function TaskSections({
 
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };
-    await taskService.updateTask(task.id, newTask, token);
+    const updatedTask = await taskService.updateTask(task.id, newTask, token);
 
     // update allTasks state
-    const newAllTasks = allTasks.map((t) => (t.id === task.id ? newTask : t));
-    setAllTasks(newAllTasks);
+    disPatch(updateTask(updatedTask));
 
     const listToUpdate = allLists.find(
       (list) => list.listName === task.listName
     );
-    const updatedList = task.completed
+    const newList = task.completed
       ? { ...listToUpdate, count: listToUpdate.count + 1 }
       : { ...listToUpdate, count: listToUpdate.count - 1 };
 
     // update count in List collection
-    await listService.updateList(token, updatedList);
+    const updatedList = await listService.updateList(token, newList);
 
     // update task counts in allLists state
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === task.listName ? updatedList : list
-    );
-
-    setAllLists(updatedAllLists);
+    disPatch(updateList(updatedList));
   };
 
   return (

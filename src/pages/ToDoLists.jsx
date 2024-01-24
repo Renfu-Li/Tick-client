@@ -5,13 +5,7 @@ import Tasks from "../components/Tasks";
 import { useEffect, useState } from "react";
 import TaskDetails from "../components/TaskDetails";
 
-export default function ToDoLists({
-  token,
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
-}) {
+export default function ToDoLists({ token }) {
   const [listToShow, setListToShow] = useState("Today");
   const [selectedTask, setSelectedTask] = useState(null);
 
@@ -25,22 +19,13 @@ export default function ToDoLists({
       paddingTop="0.8em"
       boxSizing="border-box"
     >
-      <Lists
-        allLists={allLists}
-        setAllLists={setAllLists}
-        setListToShow={setListToShow}
-        token={token}
-      ></Lists>
+      <Lists setListToShow={setListToShow} token={token}></Lists>
 
       <Grid container sx={{ height: "100%" }} justifyContent="space-evenly">
         <Grid item xs={6} sx={{ height: "100%" }}>
           <Tasks
             listToShow={listToShow}
             token={token}
-            allTasks={allTasks}
-            setAllTasks={setAllTasks}
-            allLists={allLists}
-            setAllLists={setAllLists}
             selectedTask={selectedTask}
             setSelectedTask={setSelectedTask}
           ></Tasks>
@@ -51,10 +36,6 @@ export default function ToDoLists({
             listToShow={listToShow}
             selectedTask={selectedTask}
             setSelectedTask={setSelectedTask}
-            allTasks={allTasks}
-            setAllTasks={setAllTasks}
-            allLists={allLists}
-            setAllLists={setAllLists}
           ></TaskDetails>
         </Grid>
       </Grid>

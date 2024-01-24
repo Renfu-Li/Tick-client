@@ -11,6 +11,7 @@ import {
 
 import timezone from "dayjs/plugin/timezone";
 import EventDialog from "../components/EventDialog";
+import { useSelector } from "react-redux";
 
 dayjs.extend(timezone);
 const mLocalizer = dayjsLocalizer(dayjs);
@@ -19,14 +20,12 @@ function CalendarView({
   localizer = mLocalizer,
   dayLayoutAlgorithm = "no-overlap",
   token,
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
 }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openNew, setOpenNew] = useState(false);
   const [task, setTask] = useState(null);
+
+  const allTasks = useSelector((state) => state.allTasks);
 
   const today = new Date();
   const minHour = new Date();
@@ -103,10 +102,6 @@ function CalendarView({
             setOpen={setOpenEdit}
             targetTask={task}
             setTask={setTask}
-            allTasks={allTasks}
-            setAllTasks={setAllTasks}
-            allLists={allLists}
-            setAllLists={setAllLists}
             action="edit"
           ></EventDialog>
         )}
@@ -118,10 +113,6 @@ function CalendarView({
             setOpen={setOpenNew}
             targetTask={task}
             setTask={setTask}
-            allTasks={allTasks}
-            setAllTasks={setAllTasks}
-            allLists={allLists}
-            setAllLists={setAllLists}
             action="create"
           ></EventDialog>
         )}

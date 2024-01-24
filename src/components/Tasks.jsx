@@ -2,16 +2,7 @@ import { Typography, Box } from "@mui/material";
 import TaskForm from "./TaskForm";
 import TaskSections from "./TaskSections";
 
-function Tasks({
-  token,
-  listToShow,
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
-  selectedTask,
-  setSelectedTask,
-}) {
+function Tasks({ token, listToShow, selectedTask, setSelectedTask }) {
   return (
     <Box
       paddingX="16px"
@@ -23,23 +14,12 @@ function Tasks({
       </Typography>
 
       {listToShow !== "Completed" && listToShow !== "Trash" && (
-        <TaskForm
-          allTasks={allTasks}
-          setAllTasks={setAllTasks}
-          allLists={allLists}
-          setAllLists={setAllLists}
-          listToShow={listToShow}
-          token={token}
-        ></TaskForm>
+        <TaskForm listToShow={listToShow} token={token}></TaskForm>
       )}
 
       <TaskSections
         token={token}
         listToShow={listToShow}
-        allTasks={allTasks}
-        setAllTasks={setAllTasks}
-        allLists={allLists}
-        setAllLists={setAllLists}
         selectedTask={selectedTask}
         setSelectedTask={setSelectedTask}
       ></TaskSections>

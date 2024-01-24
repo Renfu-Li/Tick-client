@@ -19,11 +19,16 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import listService from "../services/listService";
+import { useDispatch, useSelector } from "react-redux";
+import { createList } from "../reducers/listReducer";
 
-function Lists({ allLists, setAllLists, setListToShow, token }) {
+function Lists({ setListToShow, token }) {
   const [selectedList, setSelectedList] = useState("Today");
   const [listAddition, setListAddition] = useState(false);
   const [listName, setListName] = useState("");
+
+  const dispatch = useDispatch();
+  const allLists = useSelector((state) => state.allLists);
 
   const handleSelect = (listName) => {
     setSelectedList(listName);
@@ -33,8 +38,7 @@ function Lists({ allLists, setAllLists, setListToShow, token }) {
   const handleAddList = async () => {
     setListAddition(false);
     const createdList = await listService.createList(token, listName);
-    const updatedAllLists = allLists.concat(createdList);
-    setAllLists(updatedAllLists);
+    dispatch(createList(createdList));
 
     setListName("");
   };

@@ -17,11 +17,17 @@ import {
   getNumericDateStr,
 } from "./helper.js";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setTasks } from "./reducers/taskReducer.js";
+import { setLists } from "./reducers/listReducer.js";
+
 function App() {
   const [token, setToken] = useState(null);
   const [allTasks, setAllTasks] = useState([]);
   const [allLists, setAllLists] = useState([]);
   const [allFocuses, setAllFocuses] = useState([]);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -37,7 +43,7 @@ function App() {
       taskService
         .getAllTasks(token)
         .then((tasks) => {
-          setAllTasks(tasks);
+          dispatch(setTasks(tasks));
         })
         .catch((error) => {
           console.log(
@@ -58,7 +64,7 @@ function App() {
             };
           });
 
-          setAllLists(listInfo);
+          dispatch(setLists(listInfo));
         })
         .catch((error) => {
           console.log(
@@ -87,7 +93,7 @@ function App() {
           );
         });
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   const allRecords = allFocuses.map((focus) => {
     const focusDate = new Date(focus.start);

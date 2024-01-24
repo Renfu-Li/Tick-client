@@ -16,21 +16,20 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
 import listService from "../services/listService";
+import { useDispatch, useSelector } from "react-redux";
+import { createTask } from "../reducers/taskReducer";
+import { updateList } from "../reducers/listReducer";
 
-function TaskForm({
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
-  listToShow,
-  token,
-}) {
+function TaskForm({ listToShow, token }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [listAnchorEl, setListAnchorEl] = useState(null);
 
   const [taskName, setTaskName] = useState("");
   const [dueDate, setDueDate] = useState(dayjs(new Date()));
   const [selectedList, setSelectedList] = useState(null);
+
+  const dispatch = useDispatch();
+  const allLists = useSelector((state) => state.allLists);
 
   const handleSelectList = (listName) => {
     setSelectedList(listName);
@@ -54,22 +53,16 @@ function TaskForm({
       const createdTask = await taskService.createTask(newTask, token);
 
       const listToUpdate = allLists.find((list) => list.listName === listName);
-      await listService.updateList(token, {
+      const updatedList = await listService.updateList(token, {
         ...listToUpdate,
         count: listToUpdate.count + 1,
       });
 
       // update allTasks state
-      const updatedAllTasks = allTasks.concat(createdTask);
-      setAllTasks(updatedAllTasks);
+      dispatch(createTask(createdTask));
 
       // update allLists state
-      const updatedAllLists = allLists.map((list) =>
-        list.listName === selectedList
-          ? { ...list, count: list.count + 1 }
-          : list
-      );
-      setAllLists(updatedAllLists);
+      dispatch(updateList(updatedList));
 
       setTaskName("");
       setDueDate(dayjs(new Date()));

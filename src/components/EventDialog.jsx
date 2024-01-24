@@ -22,6 +22,9 @@ import {
 import taskService from "../services/taskService";
 import listService from "../services/listService";
 import Checkbox from "@mui/material/Checkbox";
+import { useDispatch, useSelector } from "react-redux";
+import { createTask, updateTask } from "../reducers/taskReducer";
+import { changeCount, updateList } from "../reducers/listReducer";
 
 export default function FormDialog({
   token,
@@ -29,15 +32,14 @@ export default function FormDialog({
   setOpen,
   targetTask,
   setTask,
-  allTasks,
-  setAllTasks,
-  allLists,
-  setAllLists,
   action,
 }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [selectedList, setSelectedList] = useState(null);
+
+  const dispatch = useDispatch();
+  const allLists = useSelector((state) => state.allLists);
 
   const getDateStr = (date) =>
     new Date(date).toLocaleDateString(undefined, {
@@ -54,27 +56,20 @@ export default function FormDialog({
     );
 
     // update allTasks state
-    const newAllTasks = allTasks.map((t) =>
-      t.id === targetTask.id ? updatedTask : t
-    );
-    setAllTasks(newAllTasks);
+    dispatch(updateTask(updatedTask));
 
     const listToUpdate = allLists.find(
       (list) => list.listName === targetTask.listName
     );
-    const updatedList = targetTask.completed
+    const newList = targetTask.completed
       ? { ...listToUpdate, count: listToUpdate.count + 1 }
       : { ...listToUpdate, count: listToUpdate.count - 1 };
 
     // update count in List collection
-    await listService.updateList(token, updatedList);
+    const updatedList = await listService.updateList(token, newList);
 
     // update task counts in allLists state
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === targetTask.listName ? updatedList : list
-    );
-
-    setAllLists(updatedAllLists);
+    dispatch(updateList(updatedList));
   };
 
   const handleChangeDue = async (date) => {
@@ -113,31 +108,30 @@ export default function FormDialog({
         sourceList,
         selectedList
       );
+
+      // update the task count in List collection if task moved to another list
+      const sourceList = allLists.find(
+        (list) => (list.listName = targetTask.listName)
+      );
+      dispatch(
+        changeCount({
+          type: "DECREASE",
+          payload: sourceList,
+        })
+      );
+
+      dispatch(
+        changeCount({
+          type: "INCREASE",
+          payload: selectedList,
+        })
+      );
     } else {
       updatedTask = await taskService.updateTask(targetTask.id, newTask, token);
     }
 
     // update allTasks state
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === targetTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
-
-    // update the task count in List collection if task moved to another list
-    if (selectedList && selectedList.listName !== targetTask.listName) {
-      const listsAfterRemoval = allLists.map((list) =>
-        list.listName === targetTask.listName
-          ? { ...list, count: list.count - 1 }
-          : list
-      );
-
-      const listsAfterAddition = listsAfterRemoval.map((list) =>
-        list.listName === selectedList.listName
-          ? { ...list, count: list.count + 1 }
-          : list
-      );
-      setAllLists(listsAfterAddition);
-    }
+    dispatch(updateTask(updatedTask));
 
     setSelectedList(null);
   };
@@ -152,22 +146,16 @@ export default function FormDialog({
     );
 
     // update allTasks state
-    const updatedAllTasks = allTasks.map((task) =>
-      task.id === updatedTask.id ? updatedTask : task
-    );
-    setAllTasks(updatedAllTasks);
+    dispatch(updateTask(updatedTask));
 
     const listToUpdate = allLists.find(
       (list) => list.listName === targetTask.listName
     );
-    const updatedList = { ...listToUpdate, count: listToUpdate.count - 1 };
-    const returnedList = await listService.updateList(token, updatedList);
+    const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
+    const updatedList = await listService.updateList(token, newList);
 
     // update task count in allLists state
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === returnedList.listName ? returnedList : list
-    );
-    setAllLists(updatedAllLists);
+    dispatch(updateList(updatedList));
   };
 
   const handleCreateTask = async () => {
@@ -185,22 +173,16 @@ export default function FormDialog({
     const listToUpdate = allLists.find(
       (list) => list.listName === selectedList.listName
     );
-    await listService.updateList(token, {
+    const updatedList = await listService.updateList(token, {
       ...listToUpdate,
       count: listToUpdate.count + 1,
     });
 
     // update allTasks state
-    const updatedAllTasks = allTasks.concat(createdTask);
-    setAllTasks(updatedAllTasks);
+    dispatch(createTask(createdTask));
 
     // update allLists state
-    const updatedAllLists = allLists.map((list) =>
-      list.listName === selectedList.listName
-        ? { ...list, count: list.count + 1 }
-        : list
-    );
-    setAllLists(updatedAllLists);
+    dispatch(updateList(updatedList));
 
     // clear local states
     setSelectedList(null);

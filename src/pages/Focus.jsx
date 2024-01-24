@@ -25,13 +25,16 @@ import {
   getDurationStr,
   getMonday,
 } from "../helper";
+import { useSelector } from "react-redux";
 
-function Focus({ token, allTasks, allFocuses, setAllFocuses, allRecords }) {
+function Focus({ token, allFocuses, setAllFocuses, allRecords }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [task, setTask] = useState(null);
   const [time, setTime] = useState(0);
   const [start, setStart] = useState(null);
   const [focusNote, setFocusNote] = useState("");
+
+  const allTasks = useSelector((state) => state.allTasks);
 
   useEffect(() => {
     let intervalId;
