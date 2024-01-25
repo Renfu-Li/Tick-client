@@ -19,6 +19,10 @@ import listService from "../services/listService";
 import { useDispatch, useSelector } from "react-redux";
 import { createTask } from "../reducers/taskReducer";
 import { updateList } from "../reducers/listReducer";
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
 
 function TaskForm({ listToShow }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
@@ -65,10 +69,15 @@ function TaskForm({ listToShow }) {
       // update allLists state
       dispatch(updateList(updatedList));
 
+      // notify user
+      dispatch(setNotification(`Successfully add a task: ${taskName}`));
+      setTimeout(() => dispatch(removeNotification()), 3000);
+
       setTaskName("");
       setDueDate(dayjs(new Date()));
     } catch (error) {
-      console.log("error from handleCreateTask: ", error.message);
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => dispatch(removeNotification()), 3000);
     }
   };
 
