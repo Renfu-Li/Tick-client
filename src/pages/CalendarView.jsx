@@ -13,19 +13,15 @@ import timezone from "dayjs/plugin/timezone";
 import EventDialog from "../components/EventDialog";
 import { useSelector } from "react-redux";
 
-dayjs.extend(timezone);
-const mLocalizer = dayjsLocalizer(dayjs);
-
-function CalendarView({
-  localizer = mLocalizer,
-  dayLayoutAlgorithm = "no-overlap",
-  token,
-}) {
+function CalendarView({ token }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openNew, setOpenNew] = useState(false);
   const [task, setTask] = useState(null);
 
   const allTasks = useSelector((state) => state.allTasks);
+
+  dayjs.extend(timezone);
+  const mLocalizer = dayjsLocalizer(dayjs);
 
   const today = new Date();
   const minHour = new Date();
@@ -68,6 +64,16 @@ function CalendarView({
     setTask(event);
   }, []);
 
+  const eventPropGetter = useCallback(
+    (event) => ({
+      style: {
+        backgroundColor: event.completed && "rgba(71, 114, 250, 0.18)",
+        border: event.completed && "1px solid rgba(71, 114, 250, 0.3)",
+      },
+    }),
+    []
+  );
+
   return (
     <>
       <div
@@ -80,12 +86,13 @@ function CalendarView({
         }}
       >
         <Calendar
-          dayLayoutAlgorithm={dayLayoutAlgorithm}
+          dayLayoutAlgorithm="no-overlap"
           defaultDate={today}
           events={events}
-          localizer={localizer}
+          localizer={mLocalizer}
           onSelectEvent={handleSelectEvent}
           onSelectSlot={handleSelectSlot}
+          eventPropGetter={eventPropGetter}
           selectable
           min={minHour}
           max={maxHour}
