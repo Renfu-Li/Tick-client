@@ -1,4 +1,12 @@
-import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { useState } from "react";
 
@@ -44,59 +52,84 @@ export default function User() {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      {token && <Navigate to="/lists"></Navigate>}
+    <Grid container height="100vh">
+      <Grid
+        item
+        xs={false}
+        sm={6}
+        md={7}
+        sx={{
+          backgroundImage: "url(https://source.unsplash.com/random?wallpapers)",
+          backgroundRepeat: "no-repeat",
+          backgroundColor: (t) =>
+            t.palette.mode === "light"
+              ? t.palette.grey[50]
+              : t.palette.grey[900],
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></Grid>
 
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <LockIcon></LockIcon>
-      </Avatar>
-
-      <Box component="form" sx={{ mt: 1 }}>
-        <TextField
-          fullWidth
-          label="Username"
-          value={username}
-          required
-          margin="normal"
-          onChange={(e) => setUsername(e.target.value)}
-        ></TextField>
-        <TextField
-          fullWidth
-          label="Password"
-          value={password}
-          type="password"
-          required
-          margin="normal"
-          onChange={(e) => setPassword(e.target.value)}
-        ></TextField>
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          onClick={handleSubmit}
+      <Grid item xs={12} sm={6} md={5} component={Paper} elevation={6}>
+        <Box
+          sx={{
+            my: 8,
+            mx: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
         >
-          {action}
-        </Button>
-      </Box>
+          {token && <Navigate to="/lists"></Navigate>}
 
-      <Typography variant="body2" textAlign="center">
-        Or{" "}
-        <button
-          style={linkButtonStyle}
-          type="button"
-          onClick={() => setAction(action === "Log in" ? "Sign up" : "Log in")}
-        >
-          {action === "Log in" ? "Sign up" : "Log in"}
-        </button>{" "}
-        with your own account
-      </Typography>
-    </Box>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockIcon></LockIcon>
+          </Avatar>
+
+          <Box component="form" sx={{ mt: 1 }}>
+            <TextField
+              fullWidth
+              label="Username"
+              value={username}
+              required
+              margin="normal"
+              onChange={(e) => setUsername(e.target.value)}
+            ></TextField>
+            <TextField
+              fullWidth
+              label="Password"
+              value={password}
+              type="password"
+              required
+              margin="normal"
+              onChange={(e) => setPassword(e.target.value)}
+            ></TextField>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={handleSubmit}
+              sx={{ my: 2 }}
+            >
+              {action}
+            </Button>
+          </Box>
+
+          <Typography variant="body2" textAlign="center">
+            Or{" "}
+            <button
+              style={linkButtonStyle}
+              type="button"
+              onClick={() =>
+                setAction(action === "Log in" ? "Sign up" : "Log in")
+              }
+            >
+              {action === "Log in" ? "Sign up" : "Log in"}
+            </button>{" "}
+            with your own account
+          </Typography>
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
