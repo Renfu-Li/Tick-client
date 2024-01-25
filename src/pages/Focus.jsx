@@ -35,6 +35,9 @@ function Focus({ token, allRecords }) {
 
   const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
+  const availableTasks = allTasks.filter(
+    (task) => !task.completed && !task.removed
+  );
 
   useEffect(() => {
     let intervalId;
@@ -128,7 +131,7 @@ function Focus({ token, allRecords }) {
             open={open}
             onClose={() => setAnchorEl(null)}
           >
-            {allTasks.map((task) => (
+            {availableTasks.map((task) => (
               <MenuItem key={task.id} onClick={() => handleSelectTask(task)}>
                 {task.taskName}
               </MenuItem>
