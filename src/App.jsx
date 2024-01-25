@@ -112,6 +112,7 @@ function App() {
     };
   });
 
+  // sort records to descending to be used in Focus component
   allRecords.sort((record1, record2) => record2.date - record1.date);
 
   return (

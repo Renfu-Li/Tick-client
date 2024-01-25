@@ -72,6 +72,20 @@ function Focus({ token, allRecords }) {
 
   const open = Boolean(anchorEl);
 
+  const dailyRecords = new Map();
+  for (let record of allRecords) {
+    const numericDateStr = record.numericDateStr;
+
+    if (!dailyRecords.has(numericDateStr)) {
+      dailyRecords.set(numericDateStr, []);
+    }
+
+    const mapValue = dailyRecords.get(numericDateStr);
+    mapValue.push(record);
+
+    dailyRecords.set(numericDateStr, mapValue);
+  }
+
   const handleFocusStatus = async () => {
     if (!start) {
       setStart(new Date());
@@ -168,7 +182,7 @@ function Focus({ token, allRecords }) {
         paddingY="0.7em"
         overflow="auto"
       >
-        <Typography>Overview</Typography>
+        <Typography variant="h6">Overview</Typography>
         <Grid container justifyContent="space-between" margin="0.5em" mx={0}>
           <Grid
             item
@@ -178,7 +192,7 @@ function Focus({ token, allRecords }) {
             padding={1.5}
           >
             <Typography color="grey" fontSize="90%">
-              Today's Focus
+              Today&lsquo;s Focus
             </Typography>
             <Typography mt="0.5em" fontSize="1.5em">
               {todayDurationStr}
@@ -193,7 +207,7 @@ function Focus({ token, allRecords }) {
             padding={1.5}
           >
             <Typography color="grey" fontSize="90%">
-              This week's Focus
+              This week&lsquo;s Focus
             </Typography>
             <Typography mt="0.5em" fontSize="1.5em">
               {weeklyDurationStr}
@@ -201,11 +215,13 @@ function Focus({ token, allRecords }) {
           </Grid>
         </Grid>
 
-        <Divider sx={{ my: "2em", color: "lightgray" }}></Divider>
+        <Divider sx={{ my: "1.5em", color: "lightgray" }}></Divider>
 
         {start ? (
           <Box>
-            <Typography mb={1}>Focus Note</Typography>
+            <Typography variant="h6" mb={1}>
+              Focus Note
+            </Typography>
             <Paper
               sx={{
                 padding: 0.5,
@@ -224,31 +240,39 @@ function Focus({ token, allRecords }) {
           </Box>
         ) : (
           <Box>
-            <Typography>Focus record</Typography>
-            <List>
-              {allRecords.map((record) => (
-                <ListItem key={record.id}>
-                  <Stack
-                    width="100%"
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                  >
-                    <TimerIcon
-                      fontSize="small"
-                      color="primary"
-                      sx={{ mr: "0.5em" }}
-                    ></TimerIcon>
+            <Typography variant="h6" mb="0.5em">
+              Focus record
+            </Typography>
 
-                    <ListItemText
-                      primary={record.taskName}
-                      secondary={`${record.dateStr} ${record.startTime} - ${record.endTime}`}
-                    ></ListItemText>
-                    <Typography>{record.durationStr}</Typography>
-                  </Stack>
-                </ListItem>
-              ))}
-            </List>
+            {Array.from(dailyRecords).map(([key, value]) => (
+              <Box key={key}>
+                <Typography fontSize="0.9em">{getShortDateStr(key)}</Typography>
+                <List dense>
+                  {value.map((record) => (
+                    <ListItem key={record.id}>
+                      <Stack
+                        width="100%"
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <TimerIcon
+                          fontSize="small"
+                          color="primary"
+                          sx={{ mr: "0.5em" }}
+                        ></TimerIcon>
+
+                        <ListItemText
+                          primary={record.taskName}
+                          secondary={`${record.dateStr} ${record.startTime} - ${record.endTime}`}
+                        ></ListItemText>
+                        <Typography>{record.durationStr}</Typography>
+                      </Stack>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            ))}
           </Box>
         )}
       </Grid>
