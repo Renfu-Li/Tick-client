@@ -12,6 +12,8 @@ import { setToken } from "../reducers/tokenReducer";
 export default function Sidebar() {
   // anchorEl and Menu related learned from App Bar in MUI
   const [anchorEl, setAnchorEl] = useState(null);
+  const [currentPage, setCurrentPage] = useState("list");
+
   const dispatch = useDispatch();
 
   const handleMenu = (e) => {
@@ -43,26 +45,34 @@ export default function Sidebar() {
     >
       <Stack spacing={1}>
         <NavLink to="/lists">
-          <IconButton>
-            <CheckBoxIcon></CheckBoxIcon>
+          <IconButton onClick={() => setCurrentPage("lists")}>
+            <CheckBoxIcon
+              color={currentPage === "lists" ? "primary" : "default"}
+            ></CheckBoxIcon>
           </IconButton>
         </NavLink>
 
         <NavLink to="/calendar">
-          <IconButton>
-            <CalendarMonthIcon></CalendarMonthIcon>
+          <IconButton onClick={() => setCurrentPage("calendar")}>
+            <CalendarMonthIcon
+              color={currentPage === "calendar" ? "primary" : "default"}
+            ></CalendarMonthIcon>
           </IconButton>
         </NavLink>
 
         <NavLink to="/focus">
-          <IconButton>
-            <AccessTimeIcon></AccessTimeIcon>
+          <IconButton onClick={() => setCurrentPage("focus")}>
+            <AccessTimeIcon
+              color={currentPage === "focus" ? "primary" : "default"}
+            ></AccessTimeIcon>
           </IconButton>
         </NavLink>
 
         <NavLink to="/statistics">
-          <IconButton>
-            <BarChartIcon></BarChartIcon>
+          <IconButton onClick={() => setCurrentPage("statistics")}>
+            <BarChartIcon
+              color={currentPage === "statistics" ? "primary" : "default"}
+            ></BarChartIcon>
           </IconButton>
         </NavLink>
       </Stack>

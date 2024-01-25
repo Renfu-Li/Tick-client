@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import User from "./pages/User.jsx";
 import CalendarView from "./pages/CalendarView.jsx";
 import Layout from "./components/Layout.jsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import taskService from "./services/taskService.js";
 import listService from "./services/listService.js";
 import focusService from "./services/focusService.js";
