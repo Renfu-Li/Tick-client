@@ -40,7 +40,7 @@ function CalendarView({ token }) {
     };
   });
 
-  const views = [Views.MONTH, Views.WEEK, Views.DAY];
+  const views = [Views.MONTH];
 
   const handleSelectSlot = useCallback(({ start, end }) => {
     setOpenNew(true);
