@@ -12,6 +12,7 @@ import taskReducer from "./reducers/taskReducer.js";
 import listReducer from "./reducers/listReducer.js";
 import focusReducer from "./reducers/focusReducer.js";
 import tokenReducer from "./reducers/tokenReducer.js";
+import notificationReducer from "./reducers/notificationReducer.js";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
@@ -21,6 +22,7 @@ const store = configureStore({
     allTasks: taskReducer,
     allLists: listReducer,
     allFocuses: focusReducer,
+    notification: notificationReducer,
   },
 });
 

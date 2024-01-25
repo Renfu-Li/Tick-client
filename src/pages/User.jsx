@@ -14,6 +14,10 @@ import userService from "../services/userService";
 import { Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../reducers/tokenReducer";
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
 
 export default function User() {
   const [username, setUsername] = useState("public_user");
@@ -45,9 +49,16 @@ export default function User() {
       if (token) {
         dispatch(setToken(token));
         localStorage.setItem("token", token);
+        dispatch(setNotification(`Successfully logged in as ${username}`));
+        setTimeout(() => {
+          dispatch(removeNotification());
+        }, 3000);
       }
     } catch (error) {
-      console.log(error.message);
+      dispatch(setNotification("Error: Incorrect username or password"));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
     }
   };
 
