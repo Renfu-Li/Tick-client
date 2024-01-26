@@ -16,7 +16,7 @@ function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
-  const disPatch = useDispatch();
+  const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
   const allLists = useSelector((state) => state.allLists);
   const token = useSelector((state) => state.token);
@@ -68,7 +68,7 @@ function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
       const updatedTask = await taskService.updateTask(task.id, newTask, token);
 
       // update allTasks state
-      disPatch(updateTask(updatedTask));
+      dispatch(updateTask(updatedTask));
 
       const listToUpdate = allLists.find(
         (list) => list.listName === task.listName
@@ -81,11 +81,11 @@ function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
       const updatedList = await listService.updateList(token, newList);
 
       // update task counts in allLists state
-      disPatch(updateList(updatedList));
+      dispatch(updateList(updatedList));
     } catch (error) {
-      disPatch(setNotification(`Error: ${error.message}`));
+      dispatch(setNotification(`Error: ${error.message}`));
       setTimeout(() => {
-        disPatch(removeNotification());
+        dispatch(removeNotification());
       }, 3000);
     }
   };
