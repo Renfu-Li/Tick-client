@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const taskSlice = createSlice({
   name: "allTasks",
-  initialState: ["hello", "world"],
+  initialState: [],
   reducers: {
     setTasks(state, action) {
       return action.payload;
