@@ -12,7 +12,7 @@ import { setToken } from "../reducers/tokenReducer";
 export default function Sidebar() {
   // anchorEl and Menu related learned from App Bar in MUI
   const [anchorEl, setAnchorEl] = useState(null);
-  const [currentPage, setCurrentPage] = useState("list");
+  const [currentPage, setCurrentPage] = useState("lists");
 
   const dispatch = useDispatch();
 
