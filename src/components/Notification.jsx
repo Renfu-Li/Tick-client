@@ -6,7 +6,7 @@ function Notification() {
   const notification = useSelector((state) => state.notification);
 
   return (
-    <Slide direction="up" in={notification} mountOnEnter unmountOnExit>
+    <Slide direction="up" in={Boolean(notification)} mountOnEnter unmountOnExit>
       <Alert
         icon={<CheckCircleOutlineIcon />}
         severity="success"

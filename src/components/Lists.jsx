@@ -22,6 +22,11 @@ import listService from "../services/listService";
 import { useDispatch, useSelector } from "react-redux";
 import { createList } from "../reducers/listReducer";
 
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
+
 function Lists({ setListToShow }) {
   const [selectedList, setSelectedList] = useState("Today");
   const [listAddition, setListAddition] = useState(false);
@@ -38,10 +43,17 @@ function Lists({ setListToShow }) {
 
   const handleAddList = async () => {
     setListAddition(false);
-    const createdList = await listService.createList(token, listName);
-    dispatch(createList(createdList));
+    try {
+      const createdList = await listService.createList(token, listName);
+      dispatch(createList(createdList));
 
-    setListName("");
+      setListName("");
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   return (

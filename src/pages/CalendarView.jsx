@@ -13,7 +13,7 @@ import timezone from "dayjs/plugin/timezone";
 import EventDialog from "../components/EventDialog";
 import { useSelector } from "react-redux";
 
-function CalendarView({ token }) {
+function CalendarView() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openNew, setOpenNew] = useState(false);
   const [task, setTask] = useState(null);
@@ -104,7 +104,6 @@ function CalendarView({ token }) {
 
         {openEdit && (
           <EventDialog
-            token={token}
             open={openEdit}
             setOpen={setOpenEdit}
             targetTask={task}
@@ -115,7 +114,6 @@ function CalendarView({ token }) {
 
         {openNew && (
           <EventDialog
-            token={token}
             open={openNew}
             setOpen={setOpenNew}
             targetTask={task}

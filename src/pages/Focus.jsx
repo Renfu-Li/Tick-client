@@ -24,6 +24,12 @@ import {
   getDurationStr,
   getMonday,
 } from "../helper";
+
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
+
 import { useDispatch, useSelector } from "react-redux";
 
 function Focus({ token, allRecords }) {
@@ -87,27 +93,40 @@ function Focus({ token, allRecords }) {
   }
 
   const handleFocusStatus = async () => {
-    if (!start) {
-      setStart(new Date());
-    } else {
-      const newFocus = {
-        taskId: task.id,
-        start,
-        end: new Date(),
-        focusNote,
-      };
-      const createdFocus = await focusService.createFocus(token, newFocus);
-      // manually add the taskName because task isn't populated in backend after creating a focus
-      const createdFocusInfo = {
-        ...createdFocus,
-        taskName: task.taskName,
-      };
-      dispatch(createdFocus(createdFocusInfo));
+    try {
+      if (!start) {
+        setStart(new Date());
+      } else {
+        const newFocus = {
+          taskId: task.id,
+          start,
+          end: new Date(),
+          focusNote,
+        };
+        const createdFocus = await focusService.createFocus(token, newFocus);
+        // manually add the taskName because task isn't populated in backend after creating a focus
+        const createdFocusInfo = {
+          ...createdFocus,
+          taskName: task.taskName,
+        };
+        dispatch(createdFocus(createdFocusInfo));
 
-      // clear up local states
-      setTask(null);
-      setStart(null);
-      setTime(0);
+        // clear up local states
+        setTask(null);
+        setStart(null);
+        setTime(0);
+
+        // notify user
+        dispatch(
+          setNotification(`Successfully created a focus for  ${task.taskName}`)
+        );
+        setTimeout(() => dispatch(removeNotification()), 3000);
+      }
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
     }
   };
 

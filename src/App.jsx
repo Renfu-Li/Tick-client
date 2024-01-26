@@ -17,6 +17,11 @@ import {
   getNumericDateStr,
 } from "./helper.js";
 
+import {
+  removeNotification,
+  setNotification,
+} from "./reducers/notificationReducer.js";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "./reducers/taskReducer.js";
 import { setLists } from "./reducers/listReducer.js";
@@ -45,10 +50,10 @@ function App() {
           dispatch(setTasks(tasks));
         })
         .catch((error) => {
-          console.log(
-            "error from taskService in App component: ",
-            error.message
-          );
+          dispatch(setNotification(`Error: ${error.message}`));
+          setTimeout(() => {
+            dispatch(removeNotification());
+          }, 3000);
         });
 
       // get all lists
@@ -66,10 +71,10 @@ function App() {
           dispatch(setLists(listInfo));
         })
         .catch((error) => {
-          console.log(
-            "error from listService in App component: ",
-            error.message
-          );
+          dispatch(setNotification(`Error: ${error.message}`));
+          setTimeout(() => {
+            dispatch(removeNotification());
+          }, 3000);
         });
 
       // get all focuses
@@ -86,10 +91,10 @@ function App() {
           dispatch(setFocuses(initialFocuses));
         })
         .catch((error) => {
-          console.log(
-            "error from focusService in App component: ",
-            error.message
-          );
+          dispatch(setNotification(`Error: ${error.message}`));
+          setTimeout(() => {
+            dispatch(removeNotification());
+          }, 3000);
         });
     }
   }, [token, dispatch]);

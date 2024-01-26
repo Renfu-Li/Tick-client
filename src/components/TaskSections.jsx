@@ -6,6 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateTask } from "../reducers/taskReducer";
 import { updateList } from "../reducers/listReducer";
 
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
+
 function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -58,23 +63,31 @@ function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
 
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };
-    const updatedTask = await taskService.updateTask(task.id, newTask, token);
 
-    // update allTasks state
-    disPatch(updateTask(updatedTask));
+    try {
+      const updatedTask = await taskService.updateTask(task.id, newTask, token);
 
-    const listToUpdate = allLists.find(
-      (list) => list.listName === task.listName
-    );
-    const newList = task.completed
-      ? { ...listToUpdate, count: listToUpdate.count + 1 }
-      : { ...listToUpdate, count: listToUpdate.count - 1 };
+      // update allTasks state
+      disPatch(updateTask(updatedTask));
 
-    // update count in List collection
-    const updatedList = await listService.updateList(token, newList);
+      const listToUpdate = allLists.find(
+        (list) => list.listName === task.listName
+      );
+      const newList = task.completed
+        ? { ...listToUpdate, count: listToUpdate.count + 1 }
+        : { ...listToUpdate, count: listToUpdate.count - 1 };
 
-    // update task counts in allLists state
-    disPatch(updateList(updatedList));
+      // update count in List collection
+      const updatedList = await listService.updateList(token, newList);
+
+      // update task counts in allLists state
+      disPatch(updateList(updatedList));
+    } catch (error) {
+      disPatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        disPatch(removeNotification());
+      }, 3000);
+    }
   };
 
   return (

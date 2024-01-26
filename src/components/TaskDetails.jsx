@@ -25,9 +25,15 @@ import taskService from "../services/taskService";
 import listService from "../services/listService";
 import AlertDialog from "./AlertDialog";
 
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
+
 import { updateTask } from "../reducers/taskReducer";
 import { changeCount, updateList } from "../reducers/listReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { getNumericDateStr } from "../helper";
 
 function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
   const [calendarAnchorEl, setCalendarAnchorEl] = useState(null);
@@ -57,14 +63,27 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
       dueDate: date,
     };
 
-    const updatedTask = await taskService.updateTask(
-      selectedTask.id,
-      newTask,
-      token
-    );
+    try {
+      const updatedTask = await taskService.updateTask(
+        selectedTask.id,
+        newTask,
+        token
+      );
 
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
+
+      // notify user
+      dispatch(
+        setNotification(
+          `Successfully changed due to ${getNumericDateStr(date)}`
+        )
+      );
+      setTimeout(() => dispatch(removeNotification()), 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => dispatch(removeNotification()), 3000);
+    }
   };
 
   const handleChangeList = async (selectedList) => {
@@ -74,30 +93,46 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
     const sourceList = allLists.find(
       (list) => list.listName === selectedTask.listName
     );
-    const updatedTask = await taskService.moveTask(
-      token,
-      selectedTask,
-      sourceList,
-      selectedList
-    );
 
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
+    try {
+      const updatedTask = await taskService.moveTask(
+        token,
+        selectedTask,
+        sourceList,
+        selectedList
+      );
 
-    // update allLists state
-    dispatch(
-      changeCount({
-        type: "DECREASE",
-        payload: sourceList,
-      })
-    );
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
 
-    dispatch(
-      changeCount({
-        type: "INCREASE",
-        payload: selectedList,
-      })
-    );
+      // update allLists state
+      dispatch(
+        changeCount({
+          type: "DECREASE",
+          payload: sourceList,
+        })
+      );
+
+      dispatch(
+        changeCount({
+          type: "INCREASE",
+          payload: selectedList,
+        })
+      );
+
+      // notify user
+      dispatch(
+        setNotification(`Successfully moved to list ${selectedList.listName}`)
+      );
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   const handleEditNote = async () => {
@@ -106,56 +141,97 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
       taskNote: selectedTask.taskNote,
     };
 
-    const updatedTask = await taskService.updateTask(
-      selectedTask.id,
-      newTask,
-      token
-    );
+    try {
+      const updatedTask = await taskService.updateTask(
+        selectedTask.id,
+        newTask,
+        token
+      );
 
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   const handleRemoveTask = async () => {
     const newTask = { ...selectedTask, removed: true };
-    const updatedTask = await taskService.updateTask(
-      selectedTask.id,
-      newTask,
-      token
-    );
+    try {
+      const updatedTask = await taskService.updateTask(
+        selectedTask.id,
+        newTask,
+        token
+      );
 
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
 
-    const listToUpdate = allLists.find(
-      (list) => list.listName === selectedTask.listName
-    );
-    const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
-    const updatedList = await listService.updateList(token, newList);
+      const listToUpdate = allLists.find(
+        (list) => list.listName === selectedTask.listName
+      );
+      const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
 
-    // update task count in allLists state
-    dispatch(updateList(updatedList));
+      const updatedList = await listService.updateList(token, newList);
+
+      // update task count in allLists state
+      dispatch(updateList(updatedList));
+
+      // notify user
+      dispatch(
+        setNotification(`Successfully removed task ${selectedTask.taskName}`)
+      );
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   const handleRestoreTask = async () => {
     // update task
     const newTask = { ...selectedTask, removed: false };
-    const updatedTask = await taskService.updateTask(
-      selectedTask.id,
-      newTask,
-      token
-    );
 
-    dispatch(updateTask(updatedTask));
+    try {
+      const updatedTask = await taskService.updateTask(
+        selectedTask.id,
+        newTask,
+        token
+      );
 
-    // update list
-    const listToUpdate = allLists.find(
-      (list) => list.listName === selectedTask.listName
-    );
-    const newList = { ...listToUpdate, count: listToUpdate.count + 1 };
-    const updatedList = await listService.updateList(token, newList);
+      dispatch(updateTask(updatedTask));
 
-    dispatch(updateList(updatedList));
+      // update list
+      const listToUpdate = allLists.find(
+        (list) => list.listName === selectedTask.listName
+      );
+      const newList = { ...listToUpdate, count: listToUpdate.count + 1 };
+      const updatedList = await listService.updateList(token, newList);
+
+      dispatch(updateList(updatedList));
+
+      // notify user
+      dispatch(
+        setNotification(
+          `Successfully restored task to ${selectedTask.listName}`
+        )
+      );
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   return selectedTask ? (
@@ -221,8 +297,7 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
             <AlertDialog
               openAlert={openAlert}
               setOpenAlert={setOpenAlert}
-              taskId={selectedTask.id}
-              token={token}
+              task={selectedTask}
             ></AlertDialog>
 
             <IconButton onClick={handleRestoreTask}>

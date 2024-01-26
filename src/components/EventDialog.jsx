@@ -26,6 +26,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { createTask, updateTask } from "../reducers/taskReducer";
 import { changeCount, updateList } from "../reducers/listReducer";
 
+import {
+  removeNotification,
+  setNotification,
+} from "../reducers/notificationReducer";
+
 export default function EventDialog({
   open,
   setOpen,
@@ -49,27 +54,33 @@ export default function EventDialog({
 
   const handleCheck = async () => {
     const newTask = { ...targetTask, completed: !targetTask.completed };
-    const updatedTask = await taskService.updateTask(
-      targetTask.id,
-      newTask,
-      token
-    );
 
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
+    try {
+      const updatedTask = await taskService.updateTask(
+        targetTask.id,
+        newTask,
+        token
+      );
 
-    const listToUpdate = allLists.find(
-      (list) => list.listName === targetTask.listName
-    );
-    const newList = targetTask.completed
-      ? { ...listToUpdate, count: listToUpdate.count + 1 }
-      : { ...listToUpdate, count: listToUpdate.count - 1 };
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
 
-    // update count in List collection
-    const updatedList = await listService.updateList(token, newList);
+      const listToUpdate = allLists.find(
+        (list) => list.listName === targetTask.listName
+      );
+      const newList = targetTask.completed
+        ? { ...listToUpdate, count: listToUpdate.count + 1 }
+        : { ...listToUpdate, count: listToUpdate.count - 1 };
 
-    // update task counts in allLists state
-    dispatch(updateList(updatedList));
+      // update count in List collection
+      const updatedList = await listService.updateList(token, newList);
+
+      // update task counts in allLists state
+      dispatch(updateList(updatedList));
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => dispatch(removeNotification()), 3000);
+    }
   };
 
   const handleChangeDue = async (date) => {
@@ -96,63 +107,93 @@ export default function EventDialog({
       taskNote: targetTask.taskNote,
     };
 
-    let updatedTask;
+    try {
+      let updatedTask;
+      if (selectedList && selectedList.listName !== targetTask.listName) {
+        updatedTask = await taskService.moveTask(
+          token,
+          newTask,
+          sourceList,
+          selectedList
+        );
 
-    if (selectedList && selectedList.listName !== targetTask.listName) {
-      updatedTask = await taskService.moveTask(
-        token,
-        newTask,
-        sourceList,
-        selectedList
-      );
+        // update the task count in List collection if task moved to another list
+        const sourceList = allLists.find(
+          (list) => (list.listName = targetTask.listName)
+        );
+        dispatch(
+          changeCount({
+            type: "DECREASE",
+            payload: sourceList,
+          })
+        );
 
-      // update the task count in List collection if task moved to another list
-      const sourceList = allLists.find(
-        (list) => (list.listName = targetTask.listName)
-      );
-      dispatch(
-        changeCount({
-          type: "DECREASE",
-          payload: sourceList,
-        })
-      );
+        dispatch(
+          changeCount({
+            type: "INCREASE",
+            payload: selectedList,
+          })
+        );
+      } else {
+        updatedTask = await taskService.updateTask(
+          targetTask.id,
+          newTask,
+          token
+        );
+      }
 
-      dispatch(
-        changeCount({
-          type: "INCREASE",
-          payload: selectedList,
-        })
-      );
-    } else {
-      updatedTask = await taskService.updateTask(targetTask.id, newTask, token);
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
+
+      setSelectedList(null);
+
+      // notify user
+      dispatch(setNotification(`Successfully updated task`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
     }
-
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
-
-    setSelectedList(null);
   };
 
   const handleRemoveTask = async () => {
     setOpen(false);
     const newTask = { ...targetTask, removed: true };
-    const updatedTask = await taskService.updateTask(
-      targetTask.id,
-      newTask,
-      token
-    );
 
-    // update allTasks state
-    dispatch(updateTask(updatedTask));
+    try {
+      const updatedTask = await taskService.updateTask(
+        targetTask.id,
+        newTask,
+        token
+      );
 
-    const listToUpdate = allLists.find(
-      (list) => list.listName === targetTask.listName
-    );
-    const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
-    const updatedList = await listService.updateList(token, newList);
+      // update allTasks state
+      dispatch(updateTask(updatedTask));
 
-    // update task count in allLists state
-    dispatch(updateList(updatedList));
+      const listToUpdate = allLists.find(
+        (list) => list.listName === targetTask.listName
+      );
+      const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
+      const updatedList = await listService.updateList(token, newList);
+
+      // update task count in allLists state
+      dispatch(updateList(updatedList));
+
+      //notify user
+      dispatch(setNotification(`Successfully removed task`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   const handleCreateTask = async () => {
@@ -165,24 +206,39 @@ export default function EventDialog({
       // taskNote,
     };
 
-    const createdTask = await taskService.createTask(newTask, token);
+    try {
+      const createdTask = await taskService.createTask(newTask, token);
 
-    const listToUpdate = allLists.find(
-      (list) => list.listName === selectedList.listName
-    );
-    const updatedList = await listService.updateList(token, {
-      ...listToUpdate,
-      count: listToUpdate.count + 1,
-    });
+      const listToUpdate = allLists.find(
+        (list) => list.listName === selectedList.listName
+      );
+      const updatedList = await listService.updateList(token, {
+        ...listToUpdate,
+        count: listToUpdate.count + 1,
+      });
 
-    // update allTasks state
-    dispatch(createTask(createdTask));
+      // update allTasks state
+      dispatch(createTask(createdTask));
 
-    // update allLists state
-    dispatch(updateList(updatedList));
+      // update allLists state
+      dispatch(updateList(updatedList));
 
-    // clear local states
-    setSelectedList(null);
+      // clear local states
+      setSelectedList(null);
+
+      // notify user
+      dispatch(
+        setNotification(`Successfully created a task ${createdTask.taskName}`)
+      );
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    } catch (error) {
+      dispatch(setNotification(`Error: ${error.message}`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
+    }
   };
 
   return (
