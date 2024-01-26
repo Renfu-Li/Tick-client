@@ -18,7 +18,6 @@ import { deleteByTask } from "../reducers/focusReducer";
 function AlertDialog({ openAlert, setOpenAlert, task }) {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.token);
-  console.log(task);
 
   const handleDeleteTask = async () => {
     try {

@@ -9,7 +9,7 @@ function Notification() {
     <Slide direction="up" in={Boolean(notification)} mountOnEnter unmountOnExit>
       <Alert
         icon={<CheckCircleOutlineIcon />}
-        severity="success"
+        severity={notification[0] === "S" ? "success" : "error"}
         variant="filled"
         style={{
           position: "absolute",
