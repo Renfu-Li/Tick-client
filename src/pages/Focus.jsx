@@ -31,8 +31,9 @@ import {
 } from "../reducers/notificationReducer";
 
 import { useDispatch, useSelector } from "react-redux";
+import { createFocus } from "../reducers/focusReducer";
 
-function Focus({ token, allRecords }) {
+function Focus({ allRecords }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [task, setTask] = useState(null);
   const [time, setTime] = useState(0);
@@ -41,6 +42,7 @@ function Focus({ token, allRecords }) {
 
   const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
+  const token = useSelector((state) => state.token);
   const availableTasks = allTasks.filter(
     (task) => !task.completed && !task.removed
   );
@@ -94,6 +96,13 @@ function Focus({ token, allRecords }) {
 
   const handleFocusStatus = async () => {
     try {
+      if (!task) {
+        dispatch(setNotification("Error: Please select a task"));
+        setTimeout(() => dispatch(removeNotification()), 3000);
+
+        return;
+      }
+
       if (!start) {
         setStart(new Date());
       } else {
@@ -109,7 +118,7 @@ function Focus({ token, allRecords }) {
           ...createdFocus,
           taskName: task.taskName,
         };
-        dispatch(createdFocus(createdFocusInfo));
+        dispatch(createFocus(createdFocusInfo));
 
         // clear up local states
         setTask(null);
