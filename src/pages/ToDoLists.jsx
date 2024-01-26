@@ -12,13 +12,7 @@ export default function ToDoLists({ token }) {
   useEffect(() => setSelectedTask(null), [listToShow]);
 
   return (
-    <Stack
-      direction="row"
-      height="100%"
-      width="100%"
-      paddingTop="0.8em"
-      boxSizing="border-box"
-    >
+    <Stack direction="row" height="100%" width="100%" boxSizing="border-box">
       <Lists setListToShow={setListToShow} token={token}></Lists>
 
       <Grid container sx={{ height: "100%" }} justifyContent="space-evenly">
@@ -30,7 +24,7 @@ export default function ToDoLists({ token }) {
             setSelectedTask={setSelectedTask}
           ></Tasks>
         </Grid>
-        <Grid item xs={6} sx={{ height: "100%" }}>
+        <Grid item xs={6} sx={{ height: "100%" }} paddingTop="0.8em">
           <TaskDetails
             token={token}
             listToShow={listToShow}

@@ -9,7 +9,7 @@ function Tasks({ listToShow, selectedTask, setSelectedTask }) {
       overflow="auto"
       sx={{ borderRight: 0.5, borderColor: "lightgray", height: "100%" }}
     >
-      <Typography ml={1.4} mb="0.5em" variant="h5">
+      <Typography ml={1.4} mt="0.8em" mb="0.5em" variant="h5">
         {listToShow}
       </Typography>
 

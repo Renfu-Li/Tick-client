@@ -64,10 +64,11 @@ function Lists({ setListToShow }) {
         borderColor: "lightgray",
         height: "100%",
         minWidth: "250px",
-        paddingTop: 0,
+        paddingTop: "0.8em",
         paddingBottom: 0,
         display: "inline-block",
         overflow: "auto",
+        boxSizing: "border-box",
       }}
     >
       <ListItem>
