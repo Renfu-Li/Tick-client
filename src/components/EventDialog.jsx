@@ -54,6 +54,7 @@ export default function EventDialog({
 
   const handleCheck = async () => {
     const newTask = { ...targetTask, completed: !targetTask.completed };
+    setTask(newTask);
 
     try {
       const updatedTask = await taskService.updateTask(
@@ -77,6 +78,9 @@ export default function EventDialog({
 
       // update task counts in allLists state
       dispatch(updateList(updatedList));
+
+      // close the dialog
+      setOpen(false);
     } catch (error) {
       dispatch(setNotification(`Error: ${error.message}`));
       setTimeout(() => dispatch(removeNotification()), 3000);
@@ -94,6 +98,7 @@ export default function EventDialog({
   const handleChangeList = async (list) => {
     setMenuAnchorEl(null);
     setSelectedList(list);
+    setTask({ ...targetTask, listName: list.listName });
   };
 
   const handleEditTask = async () => {
