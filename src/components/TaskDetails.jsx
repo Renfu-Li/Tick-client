@@ -173,12 +173,15 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
       const listToUpdate = allLists.find(
         (list) => list.listName === selectedTask.listName
       );
-      const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
 
-      const updatedList = await listService.updateList(token, newList);
+      // only decrease the count when the task is not completed
+      if (!selectedTask.completed) {
+        const newList = { ...listToUpdate, count: listToUpdate.count - 1 };
+        const updatedList = await listService.updateList(token, newList);
 
-      // update task count in allLists state
-      dispatch(updateList(updatedList));
+        // update task count in allLists state
+        dispatch(updateList(updatedList));
+      }
 
       // notify user
       dispatch(
@@ -208,14 +211,16 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
 
       dispatch(updateTask(updatedTask));
 
-      // update list
-      const listToUpdate = allLists.find(
-        (list) => list.listName === selectedTask.listName
-      );
-      const newList = { ...listToUpdate, count: listToUpdate.count + 1 };
-      const updatedList = await listService.updateList(token, newList);
+      // only increase the count when the task is not completed
+      if (!selectedTask.completed) {
+        const listToUpdate = allLists.find(
+          (list) => list.listName === selectedTask.listName
+        );
+        const newList = { ...listToUpdate, count: listToUpdate.count + 1 };
+        const updatedList = await listService.updateList(token, newList);
 
-      dispatch(updateList(updatedList));
+        dispatch(updateList(updatedList));
+      }
 
       // notify user
       dispatch(
