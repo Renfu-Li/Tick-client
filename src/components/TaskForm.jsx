@@ -30,20 +30,30 @@ function TaskForm({ listToShow }) {
 
   const [taskName, setTaskName] = useState("");
   const [dueDate, setDueDate] = useState(dayjs(new Date()));
-  const [selectedList, setSelectedList] = useState(null);
+  const [selectedListName, setSelectedListName] = useState(null);
 
   const dispatch = useDispatch();
   const allLists = useSelector((state) => state.allLists);
   const token = useSelector((state) => state.token);
 
   const handleSelectList = (listName) => {
-    setSelectedList(listName);
+    setSelectedListName(listName);
     setListAnchorEl(null);
   };
 
   // create new task
   const handleCreateTask = async () => {
-    const listName = selectedList || listToShow;
+    const listName = selectedListName || listToShow;
+
+    console.log(selectedListName);
+
+    const allListNames = allLists.map((list) => list.listName);
+    if (!taskName || !allListNames.includes(listName)) {
+      dispatch(setNotification(`Error: No task or list provided`));
+      setTimeout(() => dispatch(removeNotification()), 3000);
+
+      return;
+    }
 
     const newTask = {
       taskName,
@@ -73,8 +83,10 @@ function TaskForm({ listToShow }) {
       dispatch(setNotification(`Successfully add a task: ${taskName}`));
       setTimeout(() => dispatch(removeNotification()), 3000);
 
+      // clear up local states
       setTaskName("");
       setDueDate(dayjs(new Date()));
+      setSelectedListName(null);
     } catch (error) {
       dispatch(setNotification(`Error: ${error.message}`));
       setTimeout(() => dispatch(removeNotification()), 3000);
