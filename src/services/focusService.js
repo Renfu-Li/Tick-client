@@ -24,7 +24,10 @@ const createFocus = async (token, newFocus) => {
 };
 
 const deleteFocusByTask = async (token, taskId) => {
-  const response = await axios.delete(url, { taskId }, generateConfig(token));
+  const response = await axios.delete(
+    `${url}/${taskId}`,
+    generateConfig(token)
+  );
 
   return response.data;
 };
