@@ -280,6 +280,7 @@ export default function EventDialog({
               <DateCalendar
                 value={dayjs(targetTask.dueDate)}
                 onChange={(date) => handleChangeDue(date)}
+                disablePast
               ></DateCalendar>
             </LocalizationProvider>
           </Popover>

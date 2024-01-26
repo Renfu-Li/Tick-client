@@ -264,6 +264,7 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
             <DateCalendar
               value={dayjs(selectedTask?.dueDate)}
               onChange={(date) => handleChangeDue(date)}
+              disablePast
             ></DateCalendar>
           </LocalizationProvider>
         </Popover>
