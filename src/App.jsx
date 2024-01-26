@@ -121,33 +121,28 @@ function App() {
   allRecords.sort((record1, record2) => record2.date - record1.date);
 
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<User></User>}></Route>
+    <Routes>
+      <Route path="/" element={<User></User>}></Route>
 
-        <Route element={<Layout></Layout>}>
-          <Route path="/lists" element={<ToDoLists></ToDoLists>}></Route>
-          <Route
-            path="/calendar"
-            element={<CalendarView></CalendarView>}
-          ></Route>
-          <Route
-            path="/focus"
-            element={<Focus allRecords={allRecords}></Focus>}
-          ></Route>
-          <Route
-            path="/statistics"
-            element={
-              allRecords.length > 0 ? (
-                <Statistics allRecords={allRecords}></Statistics>
-              ) : (
-                <Loading />
-              )
-            }
-          ></Route>
-        </Route>
-      </Routes>
-    </>
+      <Route element={<Layout></Layout>}>
+        <Route path="/lists" element={<ToDoLists></ToDoLists>}></Route>
+        <Route path="/calendar" element={<CalendarView></CalendarView>}></Route>
+        <Route
+          path="/focus"
+          element={<Focus allRecords={allRecords}></Focus>}
+        ></Route>
+        <Route
+          path="/statistics"
+          element={
+            allRecords.length > 0 ? (
+              <Statistics allRecords={allRecords}></Statistics>
+            ) : (
+              <Loading />
+            )
+          }
+        ></Route>
+      </Route>
+    </Routes>
   );
 }
 

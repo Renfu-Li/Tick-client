@@ -64,6 +64,8 @@ export default function User() {
 
   return (
     <Grid container height="100vh">
+      {token && <Navigate to="/lists"></Navigate>}
+
       <Grid
         item
         xs={false}
@@ -91,8 +93,6 @@ export default function User() {
             alignItems: "center",
           }}
         >
-          {token && <Navigate to="/lists"></Navigate>}
-
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockIcon></LockIcon>
           </Avatar>
