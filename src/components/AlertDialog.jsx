@@ -12,6 +12,8 @@ import {
   setNotification,
 } from "../reducers/notificationReducer";
 import { deleteTask } from "../reducers/taskReducer";
+import focusService from "../services/focusService";
+import { deleteByTask } from "../reducers/focusReducer";
 
 function AlertDialog({ openAlert, setOpenAlert, task }) {
   const dispatch = useDispatch();
@@ -25,6 +27,10 @@ function AlertDialog({ openAlert, setOpenAlert, task }) {
       dispatch(deleteTask(deletedTask));
 
       // no need to update allLists as the count has been decreased when the task was removed
+      // but need to delete the related focuses
+      await focusService.deleteFocusByTask(token, task.id);
+      dispatch(deleteByTask(task.id));
+
       setOpenAlert(false);
 
       // notify user
@@ -51,7 +57,7 @@ function AlertDialog({ openAlert, setOpenAlert, task }) {
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           The task will be permanently deleted. Are you sure you want to delete
-          it?
+          it? All related focuses will also be deleted
         </DialogContentText>
       </DialogContent>
       <DialogActions>

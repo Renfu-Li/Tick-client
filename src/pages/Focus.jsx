@@ -98,7 +98,7 @@ function Focus({ token, allRecords }) {
         setStart(new Date());
       } else {
         const newFocus = {
-          taskId: task.id,
+          task: task.id,
           start,
           end: new Date(),
           focusNote,

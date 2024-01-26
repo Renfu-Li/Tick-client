@@ -11,9 +11,13 @@ const focusSlice = createSlice({
       const createdFocus = action.payload;
       state.push(createdFocus);
     },
+    deleteByTask(state, action) {
+      const taskId = action.payload;
+      return state.filter((focus) => focus.task !== taskId);
+    },
   },
 });
 
 const { actions, reducer } = focusSlice;
-export const { setFocuses, createFocus } = actions;
+export const { setFocuses, createFocus, deleteByTask } = actions;
 export default reducer;

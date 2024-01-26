@@ -23,4 +23,10 @@ const createFocus = async (token, newFocus) => {
   return response.data;
 };
 
-export default { getAllFocuses, createFocus };
+const deleteFocusByTask = async (token, taskId) => {
+  const response = await axios.delete(url, { taskId }, generateConfig(token));
+
+  return response.data;
+};
+
+export default { getAllFocuses, createFocus, deleteFocusByTask };
