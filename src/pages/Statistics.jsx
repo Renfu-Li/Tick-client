@@ -10,8 +10,6 @@ import WeeklyTrend from "../components/WeeklyTrend";
 import MonthlyTrend from "../components/MonthlyTrend";
 import YearlyTrend from "../components/YearlyTrend";
 import StatisticsOverview from "../components/StatisticsOverview";
-import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useMemo } from "react";
 
 function Statistics({ allRecords }) {
@@ -20,8 +18,6 @@ function Statistics({ allRecords }) {
       [...allRecords].sort((record1, record2) => record1.date - record2.date),
     [allRecords]
   );
-
-  const token = useSelector((state) => state.token);
 
   const firstDay = ascendingRecords[0].date;
   const firstMonday = getMonday(firstDay);
@@ -113,8 +109,6 @@ function Statistics({ allRecords }) {
 
   return (
     <Container sx={{ height: "100vh", overflow: "auto" }}>
-      {!token && <Navigate to="/" />}
-
       <Typography variant="h5" my="0.3em" textAlign="center">
         Statistics
       </Typography>

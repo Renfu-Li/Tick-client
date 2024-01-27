@@ -29,7 +29,6 @@ import {
   removeNotification,
   setNotification,
 } from "../reducers/notificationReducer";
-import { Navigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createFocus } from "../reducers/focusReducer";
@@ -161,8 +160,6 @@ function Focus({ allRecords }) {
 
   return (
     <Grid container justifyContent="space-between" height="100%" margin={0}>
-      {!token && <Navigate to="/" />}
-
       <Grid
         item
         xs={6}

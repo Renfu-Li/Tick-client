@@ -12,7 +12,6 @@ import {
 import timezone from "dayjs/plugin/timezone";
 import EventDialog from "../components/EventDialog";
 import { useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
 
 function CalendarView() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -20,7 +19,6 @@ function CalendarView() {
   const [task, setTask] = useState(null);
 
   const allTasks = useSelector((state) => state.allTasks);
-  const token = useSelector((state) => state.token);
 
   dayjs.extend(timezone);
   const mLocalizer = dayjsLocalizer(dayjs);
@@ -94,8 +92,6 @@ function CalendarView() {
         boxSizing: "border-box",
       }}
     >
-      {!token && <Navigate to="/" />}
-
       <Calendar
         dayLayoutAlgorithm="no-overlap"
         defaultDate={today}
