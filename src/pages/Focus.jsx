@@ -105,6 +105,8 @@ function Focus({ allRecords }) {
 
       records.set(numericDateStr, mapValue);
     }
+
+    return records;
   }, [allRecords]);
 
   const handleFocusStatus = async () => {
