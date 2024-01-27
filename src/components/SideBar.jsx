@@ -3,7 +3,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { IconButton, Menu, MenuItem, Stack } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useDispatch } from "react-redux";
@@ -12,8 +12,8 @@ import { setToken } from "../reducers/tokenReducer";
 export default function Sidebar() {
   // anchorEl and Menu related learned from App Bar in MUI
   const [anchorEl, setAnchorEl] = useState(null);
-  const [currentPage, setCurrentPage] = useState("lists");
 
+  const location = useLocation();
   const dispatch = useDispatch();
 
   const handleMenu = (e) => {
@@ -45,33 +45,35 @@ export default function Sidebar() {
     >
       <Stack spacing={1}>
         <NavLink to="/lists">
-          <IconButton onClick={() => setCurrentPage("lists")}>
+          <IconButton>
             <CheckBoxIcon
-              color={currentPage === "lists" ? "primary" : "default"}
+              color={location.pathname === "/lists" ? "primary" : "default"}
             ></CheckBoxIcon>
           </IconButton>
         </NavLink>
 
         <NavLink to="/calendar">
-          <IconButton onClick={() => setCurrentPage("calendar")}>
+          <IconButton>
             <CalendarMonthIcon
-              color={currentPage === "calendar" ? "primary" : "default"}
+              color={location.pathname === "/calendar" ? "primary" : "default"}
             ></CalendarMonthIcon>
           </IconButton>
         </NavLink>
 
         <NavLink to="/focus">
-          <IconButton onClick={() => setCurrentPage("focus")}>
+          <IconButton>
             <AccessTimeIcon
-              color={currentPage === "focus" ? "primary" : "default"}
+              color={location.pathname === "/focus" ? "primary" : "default"}
             ></AccessTimeIcon>
           </IconButton>
         </NavLink>
 
         <NavLink to="/statistics">
-          <IconButton onClick={() => setCurrentPage("statistics")}>
+          <IconButton>
             <BarChartIcon
-              color={currentPage === "statistics" ? "primary" : "default"}
+              color={
+                location.pathname === "/statistics" ? "primary" : "default"
+              }
             ></BarChartIcon>
           </IconButton>
         </NavLink>
