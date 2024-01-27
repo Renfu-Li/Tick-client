@@ -12,6 +12,7 @@ import {
 import timezone from "dayjs/plugin/timezone";
 import EventDialog from "../components/EventDialog";
 import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 function CalendarView() {
   const [openEdit, setOpenEdit] = useState(false);
@@ -19,6 +20,7 @@ function CalendarView() {
   const [task, setTask] = useState(null);
 
   const allTasks = useSelector((state) => state.allTasks);
+  const token = useSelector((state) => state.token);
 
   dayjs.extend(timezone);
   const mLocalizer = dayjsLocalizer(dayjs);
@@ -75,54 +77,54 @@ function CalendarView() {
   );
 
   return (
-    <>
-      <div
-        className="height600"
-        style={{
-          height: "100vh",
-          width: "100%",
-          padding: "1.1em",
-          boxSizing: "border-box",
-        }}
-      >
-        <Calendar
-          dayLayoutAlgorithm="no-overlap"
-          defaultDate={today}
-          events={events}
-          localizer={mLocalizer}
-          onSelectEvent={handleSelectEvent}
-          onSelectSlot={handleSelectSlot}
-          eventPropGetter={eventPropGetter}
-          selectable
-          min={minHour}
-          max={maxHour}
-          showMultiDayTimes
-          step={30}
-          views={views}
-          popup
-        />
+    <div
+      className="height600"
+      style={{
+        height: "100vh",
+        width: "100%",
+        padding: "1.1em",
+        boxSizing: "border-box",
+      }}
+    >
+      {!token && <Navigate to="/" />}
 
-        {openEdit && (
-          <EventDialog
-            open={openEdit}
-            setOpen={setOpenEdit}
-            targetTask={task}
-            setTask={setTask}
-            action="edit"
-          ></EventDialog>
-        )}
+      <Calendar
+        dayLayoutAlgorithm="no-overlap"
+        defaultDate={today}
+        events={events}
+        localizer={mLocalizer}
+        onSelectEvent={handleSelectEvent}
+        onSelectSlot={handleSelectSlot}
+        eventPropGetter={eventPropGetter}
+        selectable
+        min={minHour}
+        max={maxHour}
+        showMultiDayTimes
+        step={30}
+        views={views}
+        popup
+      />
 
-        {openNew && (
-          <EventDialog
-            open={openNew}
-            setOpen={setOpenNew}
-            targetTask={task}
-            setTask={setTask}
-            action="create"
-          ></EventDialog>
-        )}
-      </div>
-    </>
+      {openEdit && (
+        <EventDialog
+          open={openEdit}
+          setOpen={setOpenEdit}
+          targetTask={task}
+          setTask={setTask}
+          action="edit"
+        ></EventDialog>
+      )}
+
+      {openNew && (
+        <EventDialog
+          open={openNew}
+          setOpen={setOpenNew}
+          targetTask={task}
+          setTask={setTask}
+          action="create"
+        ></EventDialog>
+      )}
+    </div>
   );
 }
 
