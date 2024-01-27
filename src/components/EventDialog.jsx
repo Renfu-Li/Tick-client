@@ -202,16 +202,25 @@ export default function EventDialog({
   };
 
   const handleCreateTask = async () => {
-    setOpen(false);
+    if (!selectedList?.listName || !targetTask.taskName) {
+      dispatch(setNotification(`Error: No task or list provided`));
+      setTimeout(() => {
+        dispatch(removeNotification());
+      }, 3000);
 
-    const newTask = {
-      ...targetTask,
-      // taskName,
-      listName: selectedList.listName,
-      // taskNote,
-    };
+      return;
+    }
 
     try {
+      setOpen(false);
+
+      const newTask = {
+        ...targetTask,
+        // taskName,
+        listName: selectedList.listName,
+        // taskNote,
+      };
+
       const createdTask = await taskService.createTask(newTask, token);
 
       const listToUpdate = allLists.find(
