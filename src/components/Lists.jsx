@@ -15,6 +15,7 @@ import {
   ListItemButton,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -149,7 +150,9 @@ function Lists({ setListToShow }) {
           >
             <Typography fontSize="0.9em">Lists</Typography>
 
-            <AddIcon color="action"></AddIcon>
+            <Tooltip title="Add a new list">
+              <AddIcon color="action"></AddIcon>
+            </Tooltip>
           </Stack>
         </ListItemButton>
       </ListItem>
@@ -165,14 +168,16 @@ function Lists({ setListToShow }) {
               data-cy="new-list-input"
             ></TextField>
 
-            <IconButton
-              variant="outlined"
-              onClick={handleAddList}
-              sx={{ paddingLeft: "0.2em" }}
-              data-cy="add-list-button"
-            >
-              <AddCircleOutlineOutlinedIcon></AddCircleOutlineOutlinedIcon>
-            </IconButton>
+            <Tooltip title="Confirm to create">
+              <IconButton
+                variant="outlined"
+                onClick={handleAddList}
+                sx={{ paddingLeft: "0.2em" }}
+                data-cy="add-list-button"
+              >
+                <AddCircleOutlineOutlinedIcon></AddCircleOutlineOutlinedIcon>
+              </IconButton>
+            </Tooltip>
           </Stack>
         </Collapse>
       </ListItem>

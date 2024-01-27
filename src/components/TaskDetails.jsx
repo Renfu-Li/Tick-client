@@ -14,6 +14,7 @@ import {
   Paper,
   Popover,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -247,14 +248,16 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
       sx={{ textAlign: "center", height: "100%" }}
     >
       <Stack direction="row" justifyContent="space-between">
-        <Button
-          onClick={(e) => {
-            setCalendarAnchorEl(e.currentTarget);
-          }}
-          startIcon={<CalendarMonthIcon />}
-        >
-          {dateStr}
-        </Button>
+        <Tooltip title="Change due date">
+          <Button
+            onClick={(e) => {
+              setCalendarAnchorEl(e.currentTarget);
+            }}
+            startIcon={<CalendarMonthIcon />}
+          >
+            {dateStr}
+          </Button>
+        </Tooltip>
 
         <Popover
           open={Boolean(calendarAnchorEl)}
@@ -274,12 +277,14 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
           </LocalizationProvider>
         </Popover>
 
-        <Button
-          startIcon={<FormatListBulletedIcon />}
-          onClick={(e) => setMenuAnchorEl(e.currentTarget)}
-        >
-          Move to
-        </Button>
+        <Tooltip title="Choose a new list">
+          <Button
+            startIcon={<FormatListBulletedIcon />}
+            onClick={(e) => setMenuAnchorEl(e.currentTarget)}
+          >
+            Move to
+          </Button>
+        </Tooltip>
         <Menu
           anchorEl={menuAnchorEl}
           open={Boolean(menuAnchorEl)}
@@ -296,9 +301,11 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
 
         {listToShow === "Trash" ? (
           <>
-            <IconButton onClick={() => setOpenAlert(true)}>
-              <DeleteForeverIcon color="primary"></DeleteForeverIcon>
-            </IconButton>
+            <Tooltip title="Permanently delete">
+              <IconButton onClick={() => setOpenAlert(true)}>
+                <DeleteForeverIcon color="primary"></DeleteForeverIcon>
+              </IconButton>
+            </Tooltip>
 
             <AlertDialog
               openAlert={openAlert}
@@ -306,14 +313,18 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
               task={selectedTask}
             ></AlertDialog>
 
-            <IconButton onClick={handleRestoreTask}>
-              <RestoreIcon color="primary"></RestoreIcon>
-            </IconButton>
+            <Tooltip title="Restore to the original list">
+              <IconButton onClick={handleRestoreTask}>
+                <RestoreIcon color="primary"></RestoreIcon>
+              </IconButton>
+            </Tooltip>
           </>
         ) : (
-          <IconButton onClick={handleRemoveTask}>
-            <DeleteIcon color="primary"></DeleteIcon>
-          </IconButton>
+          <Tooltip title="Remove to Trash">
+            <IconButton onClick={handleRemoveTask}>
+              <DeleteIcon color="primary"></DeleteIcon>
+            </IconButton>
+          </Tooltip>
         )}
       </Stack>
 

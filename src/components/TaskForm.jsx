@@ -6,6 +6,7 @@ import {
   MenuItem,
   Paper,
   InputBase,
+  Tooltip,
 } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
@@ -111,14 +112,16 @@ function TaskForm({ listToShow }) {
         data-cy="task-input"
       ></InputBase>
 
-      <IconButton
-        onClick={(e) => {
-          setCalendarAnchorEl(e.currentTarget);
-        }}
-        data-cy="calendar-button"
-      >
-        <CalendarMonthIcon></CalendarMonthIcon>
-      </IconButton>
+      <Tooltip title="Choose a due date">
+        <IconButton
+          onClick={(e) => {
+            setCalendarAnchorEl(e.currentTarget);
+          }}
+          data-cy="calendar-button"
+        >
+          <CalendarMonthIcon></CalendarMonthIcon>
+        </IconButton>
+      </Tooltip>
 
       <Popover
         open={Boolean(calendarAnchorEl)}
@@ -142,14 +145,16 @@ function TaskForm({ listToShow }) {
         </LocalizationProvider>
       </Popover>
 
-      <IconButton
-        onClick={(e) => {
-          setListAnchorEl(e.currentTarget);
-        }}
-        data-cy="select-list-button"
-      >
-        <FormatListBulletedIcon></FormatListBulletedIcon>
-      </IconButton>
+      <Tooltip title="Choose a list">
+        <IconButton
+          onClick={(e) => {
+            setListAnchorEl(e.currentTarget);
+          }}
+          data-cy="select-list-button"
+        >
+          <FormatListBulletedIcon></FormatListBulletedIcon>
+        </IconButton>
+      </Tooltip>
 
       <Menu
         open={Boolean(listAnchorEl)}
@@ -172,9 +177,11 @@ function TaskForm({ listToShow }) {
         ))}
       </Menu>
 
-      <IconButton onClick={handleCreateTask} data-cy="submit-task-button">
-        <SendRoundedIcon></SendRoundedIcon>
-      </IconButton>
+      <Tooltip title="Confirm to create">
+        <IconButton onClick={handleCreateTask} data-cy="submit-task-button">
+          <SendRoundedIcon></SendRoundedIcon>
+        </IconButton>
+      </Tooltip>
     </Paper>
   );
 }
