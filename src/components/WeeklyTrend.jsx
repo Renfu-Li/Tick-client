@@ -17,9 +17,7 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const [weekIndex, setWeekIndex] = useState(numOfWeeks - 1);
 
   const mondays = getAllMondays(firstMonday, numOfWeeks);
-  const dateStrsInAWeek = getDateStrsInAWeek(
-    mondays[numOfWeeks - weekIndex - 1]
-  );
+  const dateStrsInAWeek = getDateStrsInAWeek(mondays[weekIndex]);
 
   const numOfDays = numOfWeeks * 7;
   const sliceStart = numOfDays - 7 * (numOfWeeks - weekIndex);
