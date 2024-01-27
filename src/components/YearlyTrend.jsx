@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getDurationStr } from "../helper";
 
 function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
@@ -23,31 +23,37 @@ function YearlyTrend({ numOfYears, years, allDurationsByMonth }) {
   const sliceEnd = numOfMonths - (numOfYears - yearIndex - 1) * 12;
 
   const durations = allDurationsByMonth.slice(sliceStart, sliceEnd);
-  const durationHours = durations.map(
-    (duration) => getDurationStr(duration).roundedHour
+
+  const durationHours = useMemo(
+    () => durations.map((duration) => getDurationStr(duration).roundedHour),
+    [durations]
   );
 
-  const shortMonthName = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const data = useMemo(() => {
+    const shortMonthName = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
 
-  const data = shortMonthName.map((month, index) => {
-    return {
-      month,
-      duration: durationHours[index],
-    };
-  });
+    const monthNames = shortMonthName.map((month, index) => {
+      return {
+        month,
+        duration: durationHours[index],
+      };
+    });
+
+    return monthNames;
+  }, [durationHours]);
 
   const handlePrevYear = () => {
     setYearIndex(yearIndex - 1);

@@ -10,13 +10,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getAllMondays, getDateStrsInAWeek, getDurationStr } from "../helper";
 
 function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const [weekIndex, setWeekIndex] = useState(numOfWeeks - 1);
 
-  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const mondays = getAllMondays(firstMonday, numOfWeeks);
   const dateStrsInAWeek = getDateStrsInAWeek(
     mondays[numOfWeeks - weekIndex - 1]
@@ -26,16 +25,23 @@ function WeeklyTrend({ numOfWeeks, firstMonday, allDuratoins }) {
   const sliceStart = numOfDays - 7 * (numOfWeeks - weekIndex);
   const sliceEnd = numOfDays - 7 * (numOfWeeks - weekIndex - 1);
   const durations = allDuratoins.slice(sliceStart, sliceEnd);
-  const durationHours = durations.map(
-    (duration) => getDurationStr(duration).roundedHour
+
+  const durationHours = useMemo(
+    () => durations.map((duration) => getDurationStr(duration).roundedHour),
+    [durations]
   );
 
-  const data = weekDays.map((day, index) => {
-    return {
-      day,
-      duration: durationHours[index],
-    };
-  });
+  const data = useMemo(() => {
+    const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const days = weekDays.map((day, index) => {
+      return {
+        day,
+        duration: durationHours[index],
+      };
+    });
+
+    return days;
+  }, [durationHours]);
 
   const handlePrevWeek = () => {
     setWeekIndex(weekIndex - 1);

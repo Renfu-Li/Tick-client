@@ -10,11 +10,16 @@ import {
   removeNotification,
   setNotification,
 } from "../reducers/notificationReducer";
+import { useMemo } from "react";
 
 function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
-  let tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  tomorrow.setHours(0, 0, 0, 0);
+  const tomorrow = useMemo(() => {
+    let date = new Date();
+    date.setDate(date.getDate() + 1);
+    date.setHours(0, 0, 0, 0);
+
+    return date;
+  }, []);
 
   const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
@@ -22,21 +27,44 @@ function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
   const token = useSelector((state) => state.token);
 
   // find existing and removed tasks
-  const allExistingTasks = allTasks.filter((task) => !task.removed);
-  const removedTasks = allTasks.filter((task) => task.removed);
+  const allExistingTasks = useMemo(
+    () => allTasks.filter((task) => !task.removed),
+    [allTasks]
+  );
+
+  const removedTasks = useMemo(
+    () => allTasks.filter((task) => task.removed),
+    [allTasks]
+  );
+
   // find and set today's tasks
-  const todayTasks = allExistingTasks.filter(
-    (task) => new Date(task.dueDate) < tomorrow
+  const todayTasks = useMemo(
+    () => allExistingTasks.filter((task) => new Date(task.dueDate) < tomorrow),
+    [allExistingTasks, tomorrow]
   );
+
   // find and set next 7 days' tasks
-  const sevenDaysLater = new Date();
-  sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
-  sevenDaysLater.setHours(0, 0, 0, 0);
-  const next7DaysTasks = allExistingTasks.filter(
-    (task) => new Date(task.dueDate) < sevenDaysLater
+  const sevenDaysLater = useMemo(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 7);
+    date.setHours(0, 0, 0, 0);
+
+    return date;
+  }, []);
+
+  const next7DaysTasks = useMemo(
+    () =>
+      allExistingTasks.filter(
+        (task) => new Date(task.dueDate) < sevenDaysLater
+      ),
+    [allExistingTasks, sevenDaysLater]
   );
+
   // find existing tasks, completed tasks and removed tasks
-  const completedTasks = allExistingTasks.filter((task) => task.completed);
+  const completedTasks = useMemo(
+    () => allExistingTasks.filter((task) => task.completed),
+    [allExistingTasks]
+  );
 
   // compute the tasktoShow from props
   const unsortedTasks =
@@ -54,12 +82,23 @@ function TaskSections({ listToShow, selectedTask, setSelectedTask }) {
           (task) => task.listName === listToShow && !task.removed
         );
 
-  const tasksToShow = [...unsortedTasks].sort(
-    (task1, task2) => new Date(task1.dueDate) - new Date(task2.dueDate)
+  const tasksToShow = useMemo(
+    () =>
+      [...unsortedTasks].sort(
+        (task1, task2) => new Date(task1.dueDate) - new Date(task2.dueDate)
+      ),
+    [unsortedTasks]
   );
 
-  const uncompletedTasksInList = tasksToShow.filter((task) => !task.completed);
-  const completedTasksInList = tasksToShow.filter((task) => task.completed);
+  const uncompletedTasksInList = useMemo(
+    () => tasksToShow.filter((task) => !task.completed),
+    [tasksToShow]
+  );
+
+  const completedTasksInList = useMemo(
+    () => tasksToShow.filter((task) => task.completed),
+    [tasksToShow]
+  );
 
   const handleCheck = async (task) => {
     const newTask = { ...task, completed: !task.completed };

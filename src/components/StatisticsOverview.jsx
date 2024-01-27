@@ -1,6 +1,7 @@
 import { Container, Paper, Stack, Typography } from "@mui/material";
 
 import { getDurationStr } from "../helper";
+import { useMemo } from "react";
 
 function StatisticsOverview({ currentWeekDurations, currentYearDurations }) {
   const today = new Date();
@@ -8,18 +9,24 @@ function StatisticsOverview({ currentWeekDurations, currentYearDurations }) {
   const todayDurationStr = getDurationStr(
     currentWeekDurations[dateIndex]
   ).durationStr;
-  const thisWeekDuration = currentWeekDurations.reduce(
-    (total, duration) => total + duration
+
+  const thisWeekDuration = useMemo(
+    () => currentWeekDurations.reduce((total, duration) => total + duration),
+    [currentWeekDurations]
   );
+
   const thisWeekDurationStr = getDurationStr(thisWeekDuration).durationStr;
 
   const monthIndex = today.getMonth();
   const thisMonthDurationStr = getDurationStr(
     currentYearDurations[monthIndex]
   ).durationStr;
-  const thisYearDuration = currentYearDurations.reduce(
-    (total, duration) => total + duration
+
+  const thisYearDuration = useMemo(
+    () => currentYearDurations.reduce((total, duration) => total + duration),
+    [currentYearDurations]
   );
+
   const thisYearDurationStr = getDurationStr(thisYearDuration).durationStr;
 
   return (

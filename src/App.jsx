@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import User from "./pages/User.jsx";
 import CalendarView from "./pages/CalendarView.jsx";
 import Layout from "./components/Layout.jsx";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import taskService from "./services/taskService.js";
 import listService from "./services/listService.js";
 import focusService from "./services/focusService.js";
@@ -99,23 +99,27 @@ function App() {
     }
   }, [token, dispatch]);
 
-  const allRecords = allFocuses.map((focus) => {
-    const focusDate = new Date(focus.start);
-    focusDate.setHours(0, 0, 0, 0);
+  const allRecords = useMemo(
+    () =>
+      allFocuses.map((focus) => {
+        const focusDate = new Date(focus.start);
+        focusDate.setHours(0, 0, 0, 0);
 
-    return {
-      id: focus.id,
-      taskName: focus.taskName,
-      date: focusDate,
-      dateStr: getShortDateStr(focus.start),
-      numericDateStr: getNumericDateStr(focus.start),
-      startTime: getTimeStr(focus.start),
-      endTime: getTimeStr(focus.end),
-      durationStr: calcuDuration(focus.start, focus.end).durationStr,
-      durationInMinutes: calcuDuration(focus.start, focus.end)
-        .durationInMinutes,
-    };
-  });
+        return {
+          id: focus.id,
+          taskName: focus.taskName,
+          date: focusDate,
+          dateStr: getShortDateStr(focus.start),
+          numericDateStr: getNumericDateStr(focus.start),
+          startTime: getTimeStr(focus.start),
+          endTime: getTimeStr(focus.end),
+          durationStr: calcuDuration(focus.start, focus.end).durationStr,
+          durationInMinutes: calcuDuration(focus.start, focus.end)
+            .durationInMinutes,
+        };
+      }),
+    [allFocuses]
+  );
 
   // sort records to descending to be used in Focus component
   allRecords.sort((record1, record2) => record2.date - record1.date);

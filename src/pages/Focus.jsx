@@ -16,7 +16,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import focusService from "../services/focusService";
 import {
   getShortDateStr,
@@ -44,8 +44,10 @@ function Focus({ allRecords }) {
   const dispatch = useDispatch();
   const allTasks = useSelector((state) => state.allTasks);
   const token = useSelector((state) => state.token);
-  const availableTasks = allTasks.filter(
-    (task) => !task.completed && !task.removed
+
+  const availableTasks = useMemo(
+    () => allTasks.filter((task) => !task.completed && !task.removed),
+    [allTasks]
   );
 
   useEffect(() => {
@@ -60,40 +62,50 @@ function Focus({ allRecords }) {
     return () => clearInterval(intervalId);
   }, [start, time]);
 
-  const todayStr = getShortDateStr();
-  const todayRecords = allRecords.filter(
-    (record) => record.dateStr === todayStr
-  );
-  const todayDurationMinutes = todayRecords.reduce(
-    (total, record) => total + record.durationInMinutes,
-    0
-  );
-  const todayDurationStr = getDurationStr(todayDurationMinutes).durationStr;
+  const todayDurationStr = useMemo(() => {
+    const todayStr = getShortDateStr();
+    const todayRecords = allRecords.filter(
+      (record) => record.dateStr === todayStr
+    );
+    const todayDurationMinutes = todayRecords.reduce(
+      (total, record) => total + record.durationInMinutes,
+      0
+    );
 
-  const currentWeekFocuses = allRecords.filter(
-    (record) => new Date(record.date) >= getMonday()
-  );
-  const weeklyDurationMinutes = currentWeekFocuses.reduce(
-    (total, record) => total + record.durationInMinutes,
-    0
-  );
-  const weeklyDurationStr = getDurationStr(weeklyDurationMinutes).durationStr;
+    const str = getDurationStr(todayDurationMinutes).durationStr;
+    return str;
+  }, [allRecords]);
+
+  const weeklyDurationStr = useMemo(() => {
+    const currentWeekFocuses = allRecords.filter(
+      (record) => new Date(record.date) >= getMonday()
+    );
+    const weeklyDurationMinutes = currentWeekFocuses.reduce(
+      (total, record) => total + record.durationInMinutes,
+      0
+    );
+
+    const str = getDurationStr(weeklyDurationMinutes).durationStr;
+    return str;
+  }, [allRecords]);
 
   const open = Boolean(anchorEl);
 
-  const dailyRecords = new Map();
-  for (let record of allRecords) {
-    const numericDateStr = record.numericDateStr;
+  const dailyRecords = useMemo(() => {
+    const records = new Map();
+    for (let record of allRecords) {
+      const numericDateStr = record.numericDateStr;
 
-    if (!dailyRecords.has(numericDateStr)) {
-      dailyRecords.set(numericDateStr, []);
+      if (!records.has(numericDateStr)) {
+        records.set(numericDateStr, []);
+      }
+
+      const mapValue = records.get(numericDateStr);
+      mapValue.push(record);
+
+      records.set(numericDateStr, mapValue);
     }
-
-    const mapValue = dailyRecords.get(numericDateStr);
-    mapValue.push(record);
-
-    dailyRecords.set(numericDateStr, mapValue);
-  }
+  }, [allRecords]);
 
   const handleFocusStatus = async () => {
     try {

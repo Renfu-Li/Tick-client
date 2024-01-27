@@ -20,7 +20,7 @@ import {
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dayjs from "dayjs";
 import taskService from "../services/taskService";
 import listService from "../services/listService";
@@ -53,9 +53,13 @@ function TaskDetails({ listToShow, selectedTask, setSelectedTask }) {
     }
   );
 
-  const availableLists = selectedTask
-    ? allLists.filter((list) => list.listName !== selectedTask.listName)
-    : [];
+  const availableLists = useMemo(
+    () =>
+      selectedTask
+        ? allLists.filter((list) => list.listName !== selectedTask.listName)
+        : [],
+    [allLists, selectedTask]
+  );
 
   const handleChangeDue = async (date) => {
     setCalendarAnchorEl(null);

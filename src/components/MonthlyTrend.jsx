@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { IconButton, Paper, Stack, Typography } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   addDays,
   getNumericDateStr,
@@ -29,68 +29,89 @@ function MonthlyTrend({ ascendingRecords }) {
 
   // create a hashmap with all dates between the first day and the last day with records
   // use hash map because: 1. preserves the order of insersion, unlike object; 2. faster access by key compared to array
-  const dailyRecords = new Map();
-  for (
-    let date = firstDayOfMonth;
-    date < firstDayOfNextMonth;
-    date = addDays(1, date)
-  ) {
-    const dateStr = getNumericDateStr(date);
 
-    if (!dailyRecords.has(dateStr)) {
-      dailyRecords.set(dateStr, {
-        date,
-        monthStr: `${date.getFullYear()}-${date.getMonth() + 1}`,
-        duration: 0,
+  const dailyRecords = useMemo(() => {
+    let records = new Map();
+
+    for (
+      let date = firstDayOfMonth;
+      date < firstDayOfNextMonth;
+      date = addDays(1, date)
+    ) {
+      const dateStr = getNumericDateStr(date);
+
+      if (!records.has(dateStr)) {
+        records.set(dateStr, {
+          date,
+          monthStr: `${date.getFullYear()}-${date.getMonth() + 1}`,
+          duration: 0,
+        });
+      }
+    }
+
+    // add daily duration data the dailyRecords hash map
+    for (let record of ascendingRecords) {
+      const dateStr = getNumericDateStr(record.date);
+      const mapValue = records.get(dateStr);
+
+      records.set(dateStr, {
+        ...mapValue,
+        duration: mapValue.duration + record.durationInMinutes,
       });
     }
-  }
 
-  // add daily duration data the dailyRecords hash map
-  for (let record of ascendingRecords) {
-    const dateStr = getNumericDateStr(record.date);
-    const mapValue = dailyRecords.get(dateStr);
+    return records;
+  }, [firstDayOfMonth, firstDayOfNextMonth, ascendingRecords]);
 
-    dailyRecords.set(dateStr, {
-      ...mapValue,
-      duration: mapValue.duration + record.durationInMinutes,
-    });
-  }
+  const recordsAndMonths = useMemo(() => {
+    const monthlyRecords = new Map();
+    const months = [];
 
-  let monthlyRecords = new Map();
-  let months = [];
+    // group daily durations by month
+    for (let dateStr of dailyRecords.keys()) {
+      const { monthStr, duration } = dailyRecords.get(dateStr);
 
-  // group daily durations by month
-  for (let dateStr of dailyRecords.keys()) {
-    const { monthStr, duration } = dailyRecords.get(dateStr);
+      if (!monthlyRecords.has(monthStr)) {
+        monthlyRecords.set(monthStr, []);
+        months.push(monthStr);
+      }
 
-    if (!monthlyRecords.has(monthStr)) {
-      monthlyRecords.set(monthStr, []);
-      months.push(monthStr);
+      const monthlyDurationArr = monthlyRecords.get(monthStr);
+
+      monthlyRecords.set(
+        monthStr,
+        monthlyDurationArr.concat(getDurationStr(duration).roundedHour)
+      );
     }
 
-    const monthlyDurationArr = monthlyRecords.get(monthStr);
+    return { monthlyRecords, months };
+  }, [dailyRecords]);
 
-    monthlyRecords.set(
-      monthStr,
-      monthlyDurationArr.concat(getDurationStr(duration).roundedHour)
-    );
-  }
+  const { monthlyRecords, months } = recordsAndMonths;
 
   const numOfMonths = months.length;
   const durations = monthlyRecords.get(months[numOfMonths - monthIndex - 1]);
 
-  let days = [];
-  for (let i = 1; i <= durations.length; i++) {
-    days.push(i);
-  }
+  const days = useMemo(() => {
+    const dates = [];
 
-  const data = days.map((day, index) => {
-    return {
-      day,
-      duration: durations[index],
-    };
-  });
+    for (let i = 1; i <= durations.length; i++) {
+      dates.push(i);
+    }
+
+    return dates;
+  }, [durations.length]);
+
+  const data = useMemo(
+    () =>
+      days.map((day, index) => {
+        return {
+          day,
+          duration: durations[index],
+        };
+      }),
+    [days, durations]
+  );
 
   const disablePrevMonth = monthIndex === numOfMonths - 1;
   const disableNextMonth = monthIndex === 0;

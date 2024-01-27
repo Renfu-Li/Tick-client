@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import dayjs from "dayjs";
 
@@ -32,15 +32,23 @@ function CalendarView() {
   const maxHour = new Date();
   maxHour.setHours(23, 59, 59, 999);
 
-  const allExistingTasks = allTasks.filter((task) => !task.removed);
-  const events = allExistingTasks.map((task) => {
-    return {
-      ...task,
-      title: task.taskName,
-      start: new Date(task.dueDate),
-      end: new Date(task.dueDate),
-    };
-  });
+  const allExistingTasks = useMemo(
+    () => allTasks.filter((task) => !task.removed),
+    [allTasks]
+  );
+
+  const events = useMemo(
+    () =>
+      allExistingTasks.map((task) => {
+        return {
+          ...task,
+          title: task.taskName,
+          start: new Date(task.dueDate),
+          end: new Date(task.dueDate),
+        };
+      }),
+    [allExistingTasks]
+  );
 
   const views = [Views.MONTH];
 
