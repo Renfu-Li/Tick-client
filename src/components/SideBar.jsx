@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 import { setToken } from "../reducers/tokenReducer";
 
 export default function Sidebar() {
-  // anchorEl and Menu related learned from App Bar in MUI
+  // anchorEl and Menu learned from App Bar in MUI
   const [anchorEl, setAnchorEl] = useState(null);
 
   const location = useLocation();
