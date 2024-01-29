@@ -38,7 +38,7 @@ function FocusRecords({ dailyRecords }) {
 
                   <ListItemText
                     primary={record.taskName}
-                    secondary={`${record.dateStr} ${record.startTime} - ${record.endTime}`}
+                    secondary={`${record.startTime} - ${record.endTime}`}
                   ></ListItemText>
                   <Typography>{record.durationStr}</Typography>
                 </Stack>
